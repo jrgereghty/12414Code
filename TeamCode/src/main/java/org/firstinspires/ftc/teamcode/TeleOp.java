@@ -114,22 +114,22 @@ public class TeleOp extends OpMode {
         rotation = gamepad1.right_stick_x;
         drivePower = Math.max(Math.max(Math.abs(yMovement), Math.abs(xMovement)), Math.abs(rotation));
 
-        if (!rightBumperLast && gamepad1.right_bumper) {
+        if (!aLast && gamepad1.a) {
             halfSpeedToggle = !halfSpeedToggle;
         }
         if (halfSpeedToggle) {
             drivePower *= 0.5;
         }
-        rightBumperLast = gamepad1.right_bumper;
+        aLast = gamepad1.a;
 
         slideLeftPos = slideLeft.getCurrentPosition() / 537.7 * 4 * Math.PI / 97;
         slideRightPos = slideRight.getCurrentPosition() / 537.7 * 4 * Math.PI / 97;
-        if (gamepad1.right_trigger > 0.1) {
+        if (gamepad1.right_trigger > 0.01) {
             slideLeftPower = getSlideVelocity(1, slideLeftPos, gamepad1.right_trigger);
             slideRightPower = getSlideVelocity(1, slideRightPos, gamepad1.right_trigger);
             slideLeft.setPower(slideLeftPower);
             slideRight.setPower(slideRightPower);
-        } else if (gamepad1.left_trigger > 0.1) {
+        } else if (gamepad1.left_trigger > 0.01) {
             slideLeftPower = getSlideVelocity(-1, slideLeftPos, gamepad1.left_trigger);
             slideRightPower = getSlideVelocity(-1, slideRightPos, gamepad1.left_trigger);
             slideLeft.setPower(slideLeftPower);
@@ -139,7 +139,7 @@ public class TeleOp extends OpMode {
             slideRight.setPower(0);
         }
 
-        if (!dpadUpLast && gamepad1.dpad_up) {
+        if (!rightBumperLast && gamepad1.right_bumper) {
             slidesUpToggle = !slidesUpToggle;
         }
         if (slidesUpToggle) {
@@ -149,7 +149,7 @@ public class TeleOp extends OpMode {
             slideAngleLeft.setPosition(1);
             slideAngleRight.setPosition(0);
         }
-        dpadUpLast = gamepad1.dpad_up;
+        rightBumperLast = gamepad1.right_bumper;
 
         if (!dpadDownLast && gamepad1.dpad_down) {
             boxLidOpenToggle = !boxLidOpenToggle;
@@ -165,7 +165,7 @@ public class TeleOp extends OpMode {
         }
         dpadDownLast = gamepad1.dpad_down;
 
-        if (!aLast && gamepad1.a) {
+        if (!dpadUpLast && gamepad1.dpad_up) {
             boxUpToggle = !boxUpToggle;
         }
         if (boxUpToggle) {
@@ -173,7 +173,7 @@ public class TeleOp extends OpMode {
         } else {
             boxAngle.setPosition(0);
         }
-        aLast = gamepad1.a;
+        dpadUpLast = gamepad1.dpad_up;
 
         if (!leftBumperLast && gamepad1.left_bumper) {
             slurpToggle = !slurpToggle;
