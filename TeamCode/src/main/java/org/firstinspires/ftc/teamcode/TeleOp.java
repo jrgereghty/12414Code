@@ -33,6 +33,8 @@ public class TeleOp extends OpMode {
     boolean boxUpToggle = true;
     boolean aLast = false;
     boolean slidesUpToggle = true;
+    boolean yLast = false;
+    boolean drivingReverse = false;
     boolean dpadUpLast = false;
     boolean slurpToggle = false;
     boolean leftBumperLast = false;
@@ -76,8 +78,8 @@ public class TeleOp extends OpMode {
 
         slideAngleLeft = hardwareMap.servo.get("slideAngleLeft");
         slideAngleRight = hardwareMap.servo.get("slideAngleRight");
-        slideAngleLeft.scaleRange(0.3, 0.43);
-        slideAngleRight.scaleRange(0.57, 0.7);
+        slideAngleLeft.scaleRange(0.32, 0.43);
+        slideAngleRight.scaleRange(0.57, 0.68);
         slideAngleLeft.setPosition(0);
         slideAngleRight.setPosition(1);
 
@@ -96,7 +98,7 @@ public class TeleOp extends OpMode {
         boxLid.setPosition(1);
 
         boxAngle = hardwareMap.servo.get("boxAngle");
-        boxAngle.scaleRange(0.4, 1);
+        boxAngle.scaleRange(0.43, 1);
         boxAngle.setPosition(1);
 
         slurp = hardwareMap.dcMotor.get("slurp");
@@ -110,7 +112,7 @@ public class TeleOp extends OpMode {
     public void loop() {
 
         xMovement = gamepad1.left_stick_x;
-        yMovement = gamepad1.left_stick_y;
+        yMovement = gamepad1.left_stick_y;//???????;
         rotation = gamepad1.right_stick_x;
         drivePower = Math.max(Math.max(Math.abs(yMovement), Math.abs(xMovement)), Math.abs(rotation));
 
@@ -124,14 +126,14 @@ public class TeleOp extends OpMode {
 
         slideLeftPos = slideLeft.getCurrentPosition() / 537.7 * 4 * Math.PI / 97;
         slideRightPos = slideRight.getCurrentPosition() / 537.7 * 4 * Math.PI / 97;
-        if (gamepad1.right_trigger > 0.01) {
-            slideLeftPower = getSlideVelocity(1, slideLeftPos, gamepad1.right_trigger);
-            slideRightPower = getSlideVelocity(1, slideRightPos, gamepad1.right_trigger);
+        if (gamepad2.right_trigger > 0.01) {
+            slideLeftPower = getSlideVelocity(1, slideLeftPos, gamepad2.right_trigger);
+            slideRightPower = getSlideVelocity(1, slideRightPos, gamepad2.right_trigger);
             slideLeft.setPower(slideLeftPower);
             slideRight.setPower(slideRightPower);
-        } else if (gamepad1.left_trigger > 0.01) {
-            slideLeftPower = getSlideVelocity(-1, slideLeftPos, gamepad1.left_trigger);
-            slideRightPower = getSlideVelocity(-1, slideRightPos, gamepad1.left_trigger);
+        } else if (gamepad2.left_trigger > 0.01) {
+            slideLeftPower = getSlideVelocity(-1, slideLeftPos, gamepad2.left_trigger);
+            slideRightPower = getSlideVelocity(-1, slideRightPos, gamepad2.left_trigger);
             slideLeft.setPower(slideLeftPower);
             slideRight.setPower(slideRightPower);
         } else {
@@ -175,15 +177,24 @@ public class TeleOp extends OpMode {
         }
         dpadUpLast = gamepad1.dpad_up;
 
-        if (!leftBumperLast && gamepad1.left_bumper) {
+        if (!leftBumperLast && gamepad2.left_bumper) {
             slurpToggle = !slurpToggle;
         }
         if (slurpToggle) {
-            slurp.setPower(0.8);
+            slurp.setPower(1);
         } else {
             slurp.setPower(0);
         }
-        leftBumperLast = gamepad1.left_bumper;
+        leftBumperLast = gamepad2.left_bumper;
+
+        if (!yLast && gamepad1.y) {
+            drivingReverse = !drivingReverse;
+        }
+        if (drivingReverse) {
+            xMovement *= -1;
+            yMovement *= -1;
+        }
+        yLast = gamepad1.y;
 
         telemetry.addData("slideLeftPos", slideLeftPos);
         telemetry.addData("slideRightPos", slideRightPos);
@@ -195,6 +206,7 @@ public class TeleOp extends OpMode {
         telemetry.addData("boxAngle", boxAngle.getPosition());
         telemetry.addData("boxLid", boxLid.getPosition());
         telemetry.addData("slidesUpToggle", slidesUpToggle);
+        telemetry.addData("drivingReverse", drivingReverse);
         updateTelemetry(telemetry);
 
         drive.moveInTeleop(xMovement, yMovement, rotation, drivePower);
