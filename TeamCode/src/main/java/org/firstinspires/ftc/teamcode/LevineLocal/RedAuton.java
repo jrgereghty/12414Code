@@ -28,6 +28,9 @@ public class RedAuton extends LinearOpMode {
     public static boolean isParkFinal = true;
     @Override
     public void runOpMode() throws InterruptedException {
+
+        sleep(30000);
+
         ArrayList<PosesAndActions> posesToGoTo = new ArrayList<>();
         PosesAndActions startingPostion = new PosesAndActions(new Pose2d(24, -35, Math.toRadians(90)), "");
 
@@ -101,9 +104,7 @@ public class RedAuton extends LinearOpMode {
             follower.init(posesToGoTo, isTest);
 
             follower.goToPoints(true);
-            unloadPixel();
             sleep(700);
-            stopLoadingPixels();
             terminateOpModeNow();
         }
     }

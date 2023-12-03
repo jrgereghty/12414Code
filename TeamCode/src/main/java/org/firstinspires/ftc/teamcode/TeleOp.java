@@ -38,6 +38,8 @@ public class TeleOp extends OpMode {
     boolean dpadUpLast = false;
     boolean slurpToggle = false;
     boolean leftBumperLast = false;
+    boolean puke = false;
+    boolean rightBumperLast2 = false;
 
     // slidePos is a fraction of the total possible slide extension.
     double slideLeftPos = 0.0;
@@ -195,6 +197,14 @@ public class TeleOp extends OpMode {
             yMovement *= -1;
         }
         yLast = gamepad1.y;
+
+        if (!rightBumperLast2 && gamepad2.right_bumper) {
+            puke = !puke;
+        }
+        if (puke) {
+            slurp.setPower(-0.4);
+        }
+        rightBumperLast2 = gamepad2.right_bumper;
 
         telemetry.addData("slideLeftPos", slideLeftPos);
         telemetry.addData("slideRightPos", slideRightPos);
