@@ -1,13 +1,17 @@
 package org.firstinspires.ftc.teamcode.drive;
 
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.opencv.core.Mat;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
+import com.acmerobotics.dashboard.FtcDashboard;
 
 
 
@@ -24,7 +28,7 @@ public class CameraInit {
         p1 = new OpenCVPipeline(); // initialize your pipeline classes
         //p2 = new samplePipeline2();
 
-        this.hardwareMap = hw;    //Configure the Camera in hardwareMap
+        hardwareMap = hw;    //Configure the Camera in hardwareMap
         int cameraMonitorViewId =
                 hardwareMap
                         .appContext
@@ -37,7 +41,7 @@ public class CameraInit {
 
         webcam.setPipeline(p1); // Setting the intial pipeline
 
-        webcam.setMillisecondsPermissionTimeout(2500);
+        webcam.setMillisecondsPermissionTimeout(10500);
 
         // Streaming Frames
         webcam.openCameraDeviceAsync(
@@ -48,7 +52,9 @@ public class CameraInit {
                     }
 
                     @Override
-                    public void onError(int errorCode) {}
+                   public void onError(int errorCode) {
+                        telemetry.addLine("THIS IS DEATH");
+                    }
                 });
     }
 
@@ -66,6 +72,7 @@ public class CameraInit {
     public String getPipeline1Output(){
         return p1.getLocation();
     }
+    public Mat getBinaryCamera(){return p1.getCamera();}
 
     // call stop at the end of the opMode.
     public void stop() {

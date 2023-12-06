@@ -10,26 +10,30 @@ import org.openftc.easyopencv.OpenCvPipeline;
 public class OpenCVPipeline extends OpenCvPipeline {
 
     private String location = "nothing"; // output
-    public Scalar lower = new Scalar(0, 0, 150); // HSV threshold bounds
-    public Scalar upper = new Scalar(30, 30, 255);
+    public Scalar lower = new Scalar(0, 70, 80); // HSV threshold bounds scaled to 255
+    public Scalar upper = new Scalar(10, 255, 255);
 
     private Mat hsvMat = new Mat(); // converted image
-    private Mat binaryMat = new Mat(); // imamge analyzed after thresholding
+    private Mat binaryMat = new Mat(); // image analyzed after thresholding
     private Mat maskedInputMat = new Mat();
 
     // Rectangle regions to be scanned
     private Point topLeft1 = new Point(0, 240), bottomRight1 = new Point(80, 480);
-    private Point topLeft2 = new Point(560, 240), bottomRight2 = new Point(640, 480);
+    private Point topLeft2 = new Point(240, 240), bottomRight2 = new Point(480, 480);
 
-    public OpenCVPipeline() {
 
-    }
 
     @Override
     public Mat processFrame(Mat input) {
         // Convert from BGR to HSV
         Imgproc.cvtColor(input, hsvMat, Imgproc.COLOR_RGB2HSV);
+        if(hsvMat.empty()){
+            return input;
+        }
         Core.inRange(hsvMat, lower, upper, binaryMat);
+        if(binaryMat.empty()) {
+            return hsvMat;
+        }
 
 
         // Scan both rectangle regions, keeping track of how many
@@ -60,7 +64,11 @@ public class OpenCVPipeline extends OpenCvPipeline {
             location = "2";
         } //else if (w1 < 20 && w2 <20){
             //location = "3"; }
+        //return hsvMat;
 
+        return binaryMat;
+    }
+    public Mat getCamera(){
         return binaryMat;
     }
 
