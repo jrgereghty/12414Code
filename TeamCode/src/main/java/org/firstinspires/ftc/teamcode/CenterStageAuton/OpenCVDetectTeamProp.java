@@ -22,9 +22,9 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
     public static final Scalar white = new Scalar(255, 255, 255);
     public static double webcamSplitDist = 160;
     public static boolean isDetected = false;
-    public static double minArea = 50;
-    public static double minWidth = 60;
-    public static double minHeight = 53;
+    public static double minArea = 30;
+    public static double minWidth = 30;
+    public static double minHeight = 27;
     public int[] lowerColor = {0,0, 0};
     public int[] upperColor = {255, 255, 255};
 
@@ -78,6 +78,7 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
             secondUpper = new Scalar(offsetForNewRanges, upperColor[1], upperColor[2]);
             telemetry.addData("secondLower", secondLower);
             telemetry.addData("secondUpper", secondUpper);
+
 
             Core.inRange(hsv, new Scalar(lowerColor[0], lowerColor[1], lowerColor[2]), new Scalar(upperColor[0], upperColor[1], upperColor[2]), mask1);
             Core.inRange(hsv, secondLower, secondUpper, mask2);

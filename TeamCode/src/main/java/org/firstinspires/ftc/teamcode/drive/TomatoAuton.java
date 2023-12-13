@@ -43,6 +43,7 @@ public class TomatoAuton extends LinearOpMode {
     public static boolean isParkFinal = true;
 
 
+
     @Override
     public void runOpMode() {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -99,7 +100,7 @@ public class TomatoAuton extends LinearOpMode {
 
          //___________________________________________________________________
 
-        if (isStopRequested()) return;
+
 
 
         slideLeft = hardwareMap.dcMotor.get("slideLeft");
@@ -117,17 +118,34 @@ public class TomatoAuton extends LinearOpMode {
         slurp.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slurp.setDirection(DcMotor.Direction.REVERSE);
 
-        int zoneDetected = 0;
 
-        while (opModeInInit()) {
-            if (!OpenCVDetectTeamProp.isDetected) {//idk why this is here, i assume just so it does SOMETHING
-                zoneDetected = 1; // if it can't find a prop for some reason
-            } else if (OpenCVDetectTeamProp.centerX < 81) {
-                zoneDetected = 2;
-            } else if (OpenCVDetectTeamProp.centerX > 559) {
+        int StopSearch = 0;
+        int zoneDetectionPing1 = 0;
+        int zoneDetectionPing2 = 0;
+        int zoneDetectionPing3 = 0;
+        int zoneDetected = 0;
+        while (opModeInInit() && StopSearch == 0) {
+
+            if (!OpenCVDetectTeamProp.isDetected) {
+                zoneDetected = 3;
+                zoneDetectionPing3++;
+
+            } else if (OpenCVDetectTeamProp.centerX < 200) {
                 zoneDetected = 1;
+                zoneDetectionPing1++;
+
+
+            } else if (OpenCVDetectTeamProp.centerX >= 200) {
+                zoneDetected = 2;
+                zoneDetectionPing2++;
+
+            } else if (zoneDetectionPing1 > 10 || zoneDetectionPing2 > 10 || zoneDetectionPing3 > 10) {
+                StopSearch = 1;
             }
+        }
         waitForStart();
+
+
 
             if (zoneDetected == 1) {
                 drive.followTrajectory(forward40);
@@ -150,7 +168,7 @@ public class TomatoAuton extends LinearOpMode {
                 drive.followTrajectory(forward10);
 
 
-            } else {
+            } else if (zoneDetected == 3) {
                 drive.followTrajectory(forward40);
                 drive.turn(Math.toRadians(-100));
                 slurp.setPower(-0.6);
@@ -161,9 +179,8 @@ public class TomatoAuton extends LinearOpMode {
 
             }
 
-            telemetry.addLine("zoneDetected: " + zoneDetected);
-            telemetry.update();
-        }
+
+
 
 
         //middle spike
