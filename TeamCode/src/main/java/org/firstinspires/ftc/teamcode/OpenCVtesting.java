@@ -40,11 +40,12 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 public class OpenCVtesting extends LinearOpMode {
 
-    //private HardwareMap hardwareMap;
-    CameraInit camera;
+    private HardwareMap hardwareMap;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
+        CameraInit camera;
         camera = new CameraInit(hardwareMap);
         camera.switchToFirstPipeline();
         telemetry.addLine("Status: Initialized");
