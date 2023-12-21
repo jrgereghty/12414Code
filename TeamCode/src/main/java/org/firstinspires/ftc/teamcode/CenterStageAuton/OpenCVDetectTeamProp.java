@@ -22,11 +22,11 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
     public static final Scalar white = new Scalar(255, 255, 255);
     public static double webcamSplitDist = 160;
     public static boolean isDetected = false;
-    public static double minArea = 50;
-    public static double minWidth = 60;
-    public static double minHeight = 53;
-    public int[] lowerColor = {0, 0, 0};
-    public int[] upperColor = {0, 0, 0};
+    public static double minArea = 30;
+    public static double minWidth = 30;
+    public static double minHeight = 27;
+    public int[] lowerColor = {0,0, 0};
+    public int[] upperColor = {255, 255, 255};
 
     public static int centerX;
     public static int centerY;
@@ -78,6 +78,7 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
             secondUpper = new Scalar(offsetForNewRanges, upperColor[1], upperColor[2]);
             telemetry.addData("secondLower", secondLower);
             telemetry.addData("secondUpper", secondUpper);
+
 
             Core.inRange(hsv, new Scalar(lowerColor[0], lowerColor[1], lowerColor[2]), new Scalar(upperColor[0], upperColor[1], upperColor[2]), mask1);
             Core.inRange(hsv, secondLower, secondUpper, mask2);
@@ -150,8 +151,8 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
 //                Imgproc.circle(hsv, new Point(center_x, center_y), circRad, red, 2);
 //                Imgproc.circle(hsv, new Point(center_x, center_y), 3, red, -1);
 
-            Imgproc.line(hsv, new Point(x, y), new Point(Math.abs(x + w), Math.abs(y + h)), blue, 1);
-            Imgproc.line(hsv, new Point(x, Math.abs(y + h)), new Point(Math.abs(x + w), y), blue, 1);
+            Imgproc.line(hsv, new Point(x, y), new Point(Math.abs(x + w), Math.abs(y + h)), red, 1);
+            Imgproc.line(hsv, new Point(x, Math.abs(y + h)), new Point(Math.abs(x + w), y), red, 1);
 
 //                Imgproc.putText(hsv, "(" + center_x + ", " + center_y + ")", new Point(frame.width(), frame.height() - 10), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0, 255, 0), 2);
             telemetry.addData("Center X: ", center_x + " Center Y: " + center_y);
