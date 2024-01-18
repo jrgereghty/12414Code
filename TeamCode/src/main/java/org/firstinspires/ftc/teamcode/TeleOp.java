@@ -5,6 +5,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "purple")
@@ -20,8 +21,13 @@ public class TeleOp extends OpMode {
     DcMotor slideLeft;
     DcMotor slideRight;
 
+    DcMotor hangLeft;
+    DcMotor hangRight;
+
     Servo clawHAngle;
     Servo clawVAngle;
+    Servo slideLAngle;
+    Servo slideRAngle;
 
     MecanumDrive drive;
 
@@ -29,7 +35,6 @@ public class TeleOp extends OpMode {
     boolean rightBumperLast = false;
 
     boolean slidesUpToggle = false;
-    boolean aLast = false;
 
     boolean drivingReverse = false;
     boolean leftBumperLast = false;
@@ -44,6 +49,7 @@ public class TeleOp extends OpMode {
     double drivePower;
     double slideLeftPower;
     double slideRightPower;
+    public static double pos;
 
     private static double getSlideVelocity(int trigger, double slidePos, double triggerDepth) {
         double velocity = 0.0;
@@ -71,6 +77,13 @@ public class TeleOp extends OpMode {
         backRight = hardwareMap.dcMotor.get("backRight");
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        hangLeft = hardwareMap.dcMotor.get("hangLeft");
+        hangLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        hangRight = hardwareMap.dcMotor.get("hangRight");
+        hangRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hangRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
         /*slideLeft = hardwareMap.dcMotor.get("slideLeft");
         slideRight = hardwareMap.dcMotor.get("slideRight");
         slideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -80,6 +93,13 @@ public class TeleOp extends OpMode {
         slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slideRight.setDirection(DcMotor.Direction.REVERSE);*/
+
+        slideLAngle = hardwareMap.servo.get("slideLAngle");
+        slideLAngle.setDirection(Servo.Direction.REVERSE);
+        slideLAngle.setPosition(0.5);
+
+        slideRAngle = hardwareMap.servo.get("slideRAngle");
+        slideRAngle.setPosition(0.5);
 
         clawHAngle = hardwareMap.servo.get("clawHAngle");
         clawHAngle.scaleRange(0.036, 1);
@@ -97,7 +117,7 @@ public class TeleOp extends OpMode {
     public void loop() {
 
         xMovement = gamepad1.left_stick_x;
-        yMovement = gamepad1.left_stick_y;;
+        yMovement = gamepad1.left_stick_y;
         rotation = gamepad1.right_stick_x;
         drivePower = Math.max(Math.max(Math.abs(yMovement), Math.abs(xMovement)), Math.abs(rotation));
 
@@ -112,13 +132,13 @@ public class TeleOp extends OpMode {
         /*slideLeftPos = slideLeft.getCurrentPosition() / 537.7 * 4 * Math.PI / 97;
         slideRightPos = slideRight.getCurrentPosition() / 537.7 * 4 * Math.PI / 97;
         if (gamepad1.right_trigger > 0.01) {
-            slideLeftPower = getSlideVelocity(1, slideLeftPos, gamepad1.right_trigger);
-            slideRightPower = getSlideVelocity(1, slideRightPos, gamepad1.right_trigger);
+            slideLeftPower = getSlideVelocity(1, slideLeftPos, Math.pow(gamepad1.right_trigger, 2));
+            slideRightPower = getSlideVelocity(1, slideRightPos, Math.pow(gamepad1.right_trigger, 2));
             slideLeft.setPower(slideLeftPower);
             slideRight.setPower(slideRightPower);
         } else if (gamepad1.left_trigger > 0.01) {
-            slideLeftPower = getSlideVelocity(-1, slideLeftPos, gamepad1.left_trigger);
-            slideRightPower = getSlideVelocity(-1, slideRightPos, gamepad1.left_trigger);
+            slideLeftPower = getSlideVelocity(-1, slideLeftPos, Math.pow(gamepad1.left_trigger, 2));
+            slideRightPower = getSlideVelocity(-1, slideRightPos, Math.pow(gamepad1.left_trigger, 2));
             slideLeft.setPower(slideLeftPower);
             slideRight.setPower(slideRightPower);
         } else {
@@ -126,17 +146,16 @@ public class TeleOp extends OpMode {
             slideRight.setPower(0);
         }*/
 
-        /*if (!aLast && gamepad1.a) {
-            slidesUpToggle = !slidesUpToggle;
+        hangLeft.setPower(0);
+        hangRight.setPower(0);
+        if (gamepad1.y) {
+            hangLeft.setPower(-1);
+            hangRight.setPower(-1);
         }
-        if (slidesUpToggle) {
-            slideAngleLeft.setPosition(0);
-            slideAngleRight.setPosition(1);
-        } else {
-            slideAngleLeft.setPosition(1);
-            slideAngleRight.setPosition(0);
+        if (gamepad1.a) {
+            hangLeft.setPower(1);
+            hangRight.setPower(1);
         }
-        aLast = gamepad1.a;*/
 
         if (!leftBumperLast && gamepad1.left_bumper) {
             drivingReverse = !drivingReverse;
@@ -160,12 +179,12 @@ public class TeleOp extends OpMode {
             clawHAngle.setPosition(clawHAngle.getPosition() + 0.001);
         }
 
+        slideLAngle.setPosition(pos);
+        slideRAngle.setPosition(pos);
+
         telemetry.addData("slideLeftPos", slideLeftPos);
         telemetry.addData("slideRightPos", slideRightPos);
         telemetry.addData("halfSpeed", halfSpeedToggle);
-        telemetry.addData("slideLeft", slideLeftPower);
-        telemetry.addData("slideRight", slideRightPower);
-        telemetry.addData("slidesUpToggle", slidesUpToggle);
         telemetry.addData("drivingReverse", drivingReverse);
         telemetry.addData("clawHAngle", clawHAngle.getPosition());
         telemetry.addData("clawVAngle", clawVAngle.getPosition());
