@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 //luh TeleOp
+//default position pos = 0.9, vpos = 1
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -18,8 +19,7 @@ public class TeleOp extends OpMode {
     DcMotor backLeft;
     DcMotor backRight;
 
-    DcMotor slideLeft;
-    DcMotor slideRight;
+    DcMotor slide;
 
     DcMotor hangLeft;
     DcMotor hangRight;
@@ -28,28 +28,30 @@ public class TeleOp extends OpMode {
     Servo clawVAngle;
     Servo slideLAngle;
     Servo slideRAngle;
+    Servo clawL;
+    Servo clawR;
 
     MecanumDrive drive;
 
     boolean halfSpeedToggle = false;
     boolean rightBumperLast = false;
 
-    boolean slidesUpToggle = false;
-
     boolean drivingReverse = false;
     boolean leftBumperLast = false;
 
     // slidePos is a fraction of the total possible slide extension.
-    double slideLeftPos = 0.0;
-    double slideRightPos = 0.0;
+    double slidePos = 0.0;
 
     double yMovement;
     double xMovement;
     double rotation;
     double drivePower;
-    double slideLeftPower;
-    double slideRightPower;
-    public static double pos;
+    double slidePower;
+    public static double pos = 0.5;
+    public static double hPos = 0.5;
+    public static double vPos = 0.5;
+    public static double lPos = 0.5;
+    public static double rPos = 0.5;
 
     private static double getSlideVelocity(int trigger, double slidePos, double triggerDepth) {
         double velocity = 0.0;
@@ -84,15 +86,10 @@ public class TeleOp extends OpMode {
         hangRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hangRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        /*slideLeft = hardwareMap.dcMotor.get("slideLeft");
-        slideRight = hardwareMap.dcMotor.get("slideRight");
-        slideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        slideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        slideRight.setDirection(DcMotor.Direction.REVERSE);*/
+        slide = hardwareMap.dcMotor.get("slide");
+        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         slideLAngle = hardwareMap.servo.get("slideLAngle");
         slideLAngle.setDirection(Servo.Direction.REVERSE);
@@ -102,13 +99,21 @@ public class TeleOp extends OpMode {
         slideRAngle.setPosition(0.5);
 
         clawHAngle = hardwareMap.servo.get("clawHAngle");
-        clawHAngle.scaleRange(0.036, 1);
-        clawHAngle.setPosition(0.5);
+        clawHAngle.scaleRange(0.04, 1);
+        clawHAngle.setPosition(hPos);
 
         clawVAngle = hardwareMap.servo.get("clawVAngle");
-        clawVAngle.scaleRange(0.27, 1);
-        clawVAngle.setPosition(0.195);
+        clawVAngle.scaleRange(0, 0.6);
+        clawVAngle.setPosition(vPos);
 
+        clawL = hardwareMap.servo.get("clawL");
+        clawL.scaleRange(0.21, 0.605);
+        clawL.setPosition(lPos);
+
+        clawR = hardwareMap.servo.get("clawR");
+        clawR.setDirection(Servo.Direction.REVERSE);
+        clawR.scaleRange(0.20, 0.595);
+        clawR.setPosition(rPos);
 
         drive = new MecanumDrive(frontLeft, frontRight, backLeft, backRight);
 
@@ -129,22 +134,16 @@ public class TeleOp extends OpMode {
         }
         rightBumperLast = gamepad1.right_bumper;
 
-        /*slideLeftPos = slideLeft.getCurrentPosition() / 537.7 * 4 * Math.PI / 97;
-        slideRightPos = slideRight.getCurrentPosition() / 537.7 * 4 * Math.PI / 97;
+        slidePos = slide.getCurrentPosition() / 537.7 * 4 * Math.PI / 54.864;
         if (gamepad1.right_trigger > 0.01) {
-            slideLeftPower = getSlideVelocity(1, slideLeftPos, Math.pow(gamepad1.right_trigger, 2));
-            slideRightPower = getSlideVelocity(1, slideRightPos, Math.pow(gamepad1.right_trigger, 2));
-            slideLeft.setPower(slideLeftPower);
-            slideRight.setPower(slideRightPower);
+            slidePower = getSlideVelocity(1, slidePos, Math.pow(gamepad1.right_trigger, 2));
+            slide.setPower(slidePower);
         } else if (gamepad1.left_trigger > 0.01) {
-            slideLeftPower = getSlideVelocity(-1, slideLeftPos, Math.pow(gamepad1.left_trigger, 2));
-            slideRightPower = getSlideVelocity(-1, slideRightPos, Math.pow(gamepad1.left_trigger, 2));
-            slideLeft.setPower(slideLeftPower);
-            slideRight.setPower(slideRightPower);
+            slidePower = getSlideVelocity(-1, slidePos, Math.pow(gamepad1.left_trigger, 2));
+            slide.setPower(slidePower);
         } else {
-            slideLeft.setPower(0);
-            slideRight.setPower(0);
-        }*/
+            slide.setPower(0);
+        }
 
         hangLeft.setPower(0);
         hangRight.setPower(0);
@@ -166,6 +165,7 @@ public class TeleOp extends OpMode {
         }
         leftBumperLast = gamepad1.left_bumper;
 
+        /*
         if (gamepad1.dpad_up) {
             clawVAngle.setPosition(clawVAngle.getPosition() + 0.001);
         }
@@ -178,12 +178,16 @@ public class TeleOp extends OpMode {
         if (gamepad1.dpad_left) {
             clawHAngle.setPosition(clawHAngle.getPosition() + 0.001);
         }
+        */
 
+        clawL.setPosition(lPos);
+        clawR.setPosition(rPos);
+        clawHAngle.setPosition(hPos);
+        clawVAngle.setPosition(vPos);
         slideLAngle.setPosition(pos);
         slideRAngle.setPosition(pos);
 
-        telemetry.addData("slideLeftPos", slideLeftPos);
-        telemetry.addData("slideRightPos", slideRightPos);
+        telemetry.addData("slidePos", slidePos);
         telemetry.addData("halfSpeed", halfSpeedToggle);
         telemetry.addData("drivingReverse", drivingReverse);
         telemetry.addData("clawHAngle", clawHAngle.getPosition());
