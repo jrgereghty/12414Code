@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 @Config
 @Autonomous(group = "Center Stage")
-public class BlueAuton extends LinearOpMode {
+public class      BlueAuton extends LinearOpMode {
     OpenCvCamera webcam; //webcam2;
     static OpenCVDetectTeamProp colorPipe;
     static OpenCVGreatestColorTest pipeline;
