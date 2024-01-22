@@ -51,7 +51,8 @@ public class TeleOp extends OpMode {
     boolean clawROpen = false;
     boolean rightBumperLast = false;
 
-    boolean intake = true;
+    public static boolean intake = true;
+    boolean psLast = false;
 
     // slidePos is a fraction of the total possible slide extension.
     double slideLength = 0.0;
@@ -79,7 +80,7 @@ public class TeleOp extends OpMode {
     }
 
     private static double getSlideAngle(double slideLength) {
-        double angle = Math.toDegrees(Math.acos(22.5 / slideLength)) / 47.8 - 1.4;
+        double angle = Math.toDegrees(Math.acos(22 / slideLength)) / 47.8 - 1.4;
         if (angle >= 0) {
             return(angle);
         } else {
@@ -87,8 +88,13 @@ public class TeleOp extends OpMode {
         }
     }
 
-    private static double getClawVAngle(double slideLength) {
-        double angle = -Math.toDegrees(Math.asin(22.5 / slideLength)) / 500 + 0.245;
+    private static double getClawVAngle1(double slideLength) {
+        double angle = -Math.toDegrees(Math.asin(22 / slideLength)) / 500 + 0.47;
+        return(angle);
+    }
+
+    private static double getClawVAngle2(double slideAngle) {
+        double angle = slideAngle / 6.5;
         return(angle);
     }
 
@@ -110,10 +116,10 @@ public class TeleOp extends OpMode {
 
         hangLeft = hardwareMap.dcMotor.get("hangLeft");
         hangLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hangLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         hangRight = hardwareMap.dcMotor.get("hangRight");
         hangRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        hangRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         slide = hardwareMap.dcMotor.get("slide");
         slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -211,10 +217,40 @@ public class TeleOp extends OpMode {
         } else {
             slide.setPower(0);
         }
-        pos = getSlideAngle(slideLength);
+
+        if (!psLast && gamepad1.ps) {
+            intake = !intake;
+            if (!intake) {
+                pos = 0.5;
+                vPos = 0.2;
+                hPos = 0.5;
+            } else {
+                hPos = 0.5;
+            }
+        }
+        if (intake) {
+            pos = getSlideAngle(slideLength);
+            vPos = getClawVAngle1(slideLength);
+        } else {
+            if (gamepad1.dpad_up && pos <= 0.995) {
+                pos += 0.005;
+                vPos = getClawVAngle2(pos);
+            }
+            if (gamepad1.dpad_down && pos >= 0.005) {
+                pos -= 0.005;
+                vPos = getClawVAngle2(pos);
+            }
+            if (gamepad1.dpad_right) {
+                hPos -= 0.005;
+            }
+            if (gamepad1.dpad_left) {
+                hPos += 0.005;
+            }
+        }
+        psLast = gamepad1.ps;
         slideLAngle.setPosition(pos);
         slideRAngle.setPosition(pos);
-        vPos = getClawVAngle(slideLength);
+        clawHAngle.setPosition(hPos);
         clawVAngle.setPosition(vPos);
 
         if (gamepad1.y) {
@@ -245,8 +281,6 @@ public class TeleOp extends OpMode {
         //*
         //clawL.setPosition(lPos);
         //clawR.setPosition(rPos);
-        clawHAngle.setPosition(hPos);
-        clawVAngle.setPosition(vPos);
         //slideLAngle.setPosition(pos);
         //slideRAngle.setPosition(pos);
         //*/
