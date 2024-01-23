@@ -40,19 +40,19 @@ public class TeleOp extends OpMode {
     MecanumDrive drive;
 
     boolean halfSpeedToggle = true;
-    boolean startLast = false;
+    boolean aLast = false;
 
     boolean drivingReverse = false;
-    boolean shareLast = false;
+    boolean yLast = false;
 
     boolean clawLOpen = false;
-    boolean leftBumperLast = false;
+    boolean leftBumper2Last = false;
 
     boolean clawROpen = false;
-    boolean rightBumperLast = false;
+    boolean rightBumper2Last = false;
 
-    public static boolean intake = true;
-    boolean psLast = false;
+    boolean intake = true;
+    boolean ps2Last = false;
 
     // slidePos is a fraction of the total possible slide extension.
     double slideLength = 0.0;
@@ -66,8 +66,6 @@ public class TeleOp extends OpMode {
     public static double pos = 0.5;
     public static double hPos = 0.5;
     public static double vPos = 0.5;
-    public static double lPos = 0.5;
-    public static double rPos = 0.5;
 
     private static double getSlideVelocity(int trigger, double slidePos, double triggerDepth) {
         double velocity = 0.0;
@@ -80,24 +78,22 @@ public class TeleOp extends OpMode {
     }
 
     private static double getSlideAngle(double slideLength) {
-        double angle = Math.toDegrees(Math.acos(22 / slideLength)) / 47.8 - 1.4;
-        if (angle >= 0) {
-            return(angle);
+        if (Math.toDegrees(Math.acos(22.5 / slideLength)) / 47.8 - 1.4 >= 0) {
+            return(Math.toDegrees(Math.acos(22.5 / slideLength)) / 47.8 - 1.4);
         } else {
             return(0);
         }
     }
 
     private static double getClawVAngle1(double slideLength) {
-        double angle = -Math.toDegrees(Math.asin(22 / slideLength)) / 500 + 0.47;
-        return(angle);
+        return(-Math.toDegrees(Math.asin(22.5 / slideLength)) / 500 + 0.47);
     }
 
     private static double getClawVAngle2(double slideAngle) {
-        double angle = slideAngle / 6.5;
-        return(angle);
+        return(slideAngle / 4 + 0.1);
     }
 
+    @Override
     public void init() {
 
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
@@ -122,9 +118,9 @@ public class TeleOp extends OpMode {
         hangRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         slide = hardwareMap.dcMotor.get("slide");
-        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         slideLAngle = hardwareMap.servo.get("slideLAngle");
         slideLAngle.setDirection(Servo.Direction.REVERSE);
@@ -143,17 +139,18 @@ public class TeleOp extends OpMode {
 
         clawL = hardwareMap.servo.get("clawL");
         clawL.scaleRange(0.21, 0.605);
-        clawL.setPosition(lPos);
+        clawL.setPosition(0.5);
 
         clawR = hardwareMap.servo.get("clawR");
         clawR.setDirection(Servo.Direction.REVERSE);
         clawR.scaleRange(0.20, 0.595);
-        clawR.setPosition(rPos);
+        clawR.setPosition(0.5);
 
         drive = new MecanumDrive(frontLeft, frontRight, backLeft, backRight);
 
     }
 
+    @Override
     public void loop() {
 
         xMovement = gamepad1.left_stick_x;
@@ -161,22 +158,22 @@ public class TeleOp extends OpMode {
         rotation = gamepad1.right_stick_x;
         drivePower = Math.max(Math.max(Math.abs(yMovement), Math.abs(xMovement)), Math.abs(rotation));
 
-        if (!shareLast && gamepad1.share) {
+        if (!aLast && gamepad1.a) {
             halfSpeedToggle = !halfSpeedToggle;
         }
         if (halfSpeedToggle) {
-            drivePower *= 0.3;
+            drivePower *= 0.5;
         }
-        shareLast = gamepad1.share;
+        aLast = gamepad1.a;
 
-        if (!startLast && gamepad1.start) {
+        if (!yLast && gamepad1.y) {
             drivingReverse = !drivingReverse;
         }
         if (drivingReverse) {
             xMovement *= -1;
             yMovement *= -1;
         }
-        startLast = gamepad1.start;
+        yLast = gamepad1.y;
 
         /*
         if (Math.abs(gamepad1.right_stick_y) > 0.01) {
@@ -186,7 +183,7 @@ public class TeleOp extends OpMode {
         slideRAngle.setPosition(pos);
         */
 
-        if (!rightBumperLast && gamepad1.right_bumper) {
+        if (!rightBumper2Last && gamepad2.right_bumper) {
             clawROpen = !clawROpen;
         }
         if (clawROpen) {
@@ -194,9 +191,9 @@ public class TeleOp extends OpMode {
         } else {
             clawR.setPosition(0);
         }
-        rightBumperLast = gamepad1.right_bumper;
+        rightBumper2Last = gamepad2.right_bumper;
 
-        if (!leftBumperLast && gamepad1.left_bumper) {
+        if (!leftBumper2Last && gamepad2.left_bumper) {
             clawLOpen = !clawLOpen;
         }
         if (clawLOpen) {
@@ -204,59 +201,62 @@ public class TeleOp extends OpMode {
         } else {
             clawL.setPosition(0);
         }
-        leftBumperLast = gamepad1.left_bumper;
+        leftBumper2Last = gamepad2.left_bumper;
 
-        slidePos = slide.getCurrentPosition() / 537.7 * 4 * Math.PI / 54.864;
-        slideLength = slidePos * 54.864 + 38.5;
-        if (gamepad1.right_trigger > 0.01) {
-            slidePower = getSlideVelocity(1, slidePos, Math.pow(gamepad1.right_trigger, 3));
+        slidePos = slide.getCurrentPosition() / 537.7 * 4 * Math.PI / 41.1;
+        slideLength = slidePos * 41.1 + 38.5;
+        if (gamepad2.right_trigger > 0.01) {
+            slidePower = getSlideVelocity(1, slidePos, Math.pow(gamepad2.right_trigger, 3));
             slide.setPower(slidePower);
-        } else if (gamepad1.left_trigger > 0.01) {
-            slidePower = getSlideVelocity(-1, slidePos, Math.pow(gamepad1.left_trigger, 3));
+        } else if (gamepad2.left_trigger > 0.01) {
+            slidePower = getSlideVelocity(-1, slidePos, Math.pow(gamepad2.left_trigger, 3));
             slide.setPower(slidePower);
         } else {
+            if (slidePos <= 0.08) {
+                slide.setPower(-0.5);
+            } else if (slidePos >= 0.92) {
+                slide.setPower(0.5);
+            }
             slide.setPower(0);
         }
 
-        if (!psLast && gamepad1.ps) {
+        if (!ps2Last && gamepad2.ps) {
             intake = !intake;
+            hPos = 0.5;
             if (!intake) {
                 pos = 0.5;
-                vPos = 0.2;
-                hPos = 0.5;
-            } else {
-                hPos = 0.5;
+                vPos = getClawVAngle2(pos);
             }
         }
         if (intake) {
             pos = getSlideAngle(slideLength);
             vPos = getClawVAngle1(slideLength);
         } else {
-            if (gamepad1.dpad_up && pos <= 0.995) {
-                pos += 0.005;
+            if (gamepad2.left_stick_y >= 0.005 && pos <= 0.99) {
+                pos += gamepad2.left_stick_y * 0.01;
                 vPos = getClawVAngle2(pos);
             }
-            if (gamepad1.dpad_down && pos >= 0.005) {
-                pos -= 0.005;
+            if (gamepad2.left_stick_y <= -0.005 && pos >= 0.01) {
+                pos += gamepad2.left_stick_y * 0.01;
                 vPos = getClawVAngle2(pos);
-            }
-            if (gamepad1.dpad_right) {
-                hPos -= 0.005;
-            }
-            if (gamepad1.dpad_left) {
-                hPos += 0.005;
             }
         }
-        psLast = gamepad1.ps;
+        if (gamepad2.right_stick_x >= 0.005 && hPos >= 0.01) {
+            hPos += -gamepad2.right_stick_x * 0.01;
+        }
+        if (gamepad2.right_stick_x <= -0.005 && hPos <= 0.99) {
+            hPos += -gamepad2.right_stick_x * 0.01;
+        }
+        ps2Last = gamepad2.ps;
         slideLAngle.setPosition(pos);
         slideRAngle.setPosition(pos);
         clawHAngle.setPosition(hPos);
         clawVAngle.setPosition(vPos);
 
-        if (gamepad1.y) {
+        if (gamepad1.right_bumper) {
             hangLeft.setPower(-1);
             hangRight.setPower(-1);
-        } else if (gamepad1.a) {
+        } else if (gamepad1.left_bumper) {
             hangLeft.setPower(1);
             hangRight.setPower(1);
         } else {
@@ -275,15 +275,8 @@ public class TeleOp extends OpMode {
         }
         if (gamepad1.dpad_left) {
             clawHAngle.setPosition(clawHAngle.getPosition() + 0.005);
-        }
+        )
         */
-
-        //*
-        //clawL.setPosition(lPos);
-        //clawR.setPosition(rPos);
-        //slideLAngle.setPosition(pos);
-        //slideRAngle.setPosition(pos);
-        //*/
 
         telemetry.addData("slidePos", slidePos);
         telemetry.addData("halfSpeed", halfSpeedToggle);
@@ -296,4 +289,5 @@ public class TeleOp extends OpMode {
         drive.moveInTeleop(xMovement, yMovement, rotation, drivePower);
 
     }
+
 }
