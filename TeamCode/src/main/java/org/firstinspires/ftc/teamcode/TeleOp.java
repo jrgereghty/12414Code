@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-//Luh TeleOp
+//luh TeleOp
 //default position pos = 0.9, vpos = 1
 
 /*flat positions:
