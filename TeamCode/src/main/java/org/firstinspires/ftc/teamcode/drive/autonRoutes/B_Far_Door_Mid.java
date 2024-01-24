@@ -81,13 +81,16 @@ public class B_Far_Door_Mid extends LinearOpMode {
         Trajectory forward30 = drive.trajectoryBuilder(startPose)
                 .forward(30)
                 .build();
-        Trajectory start2board = drive.trajectoryBuilder(new Pose2d(11.96, 53.36, Math.toRadians(5)))
-                .splineTo(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
-
-                .build();
         Trajectory line4start = drive.trajectoryBuilder(startPose)
                 .lineToSplineHeading(new Pose2d(-36, 53.36, Math.toRadians(302.00)))
                 .build();
+        Trajectory start2board = drive.trajectoryBuilder(line4start.end())
+                .splineTo(new Vector2d(-36, 13.36), Math.toRadians(0.00))
+                .splineTo(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
+
+
+                .build();
+
 
 
         Trajectory forward10 = drive.trajectoryBuilder(startPose)
@@ -260,7 +263,7 @@ public class B_Far_Door_Mid extends LinearOpMode {
             slideRAngle.setPosition(0.7);
             slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            drive.turn(Math.toRadians(73));
+
             sleep(200);
             drive.followTrajectory(start2board);
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
