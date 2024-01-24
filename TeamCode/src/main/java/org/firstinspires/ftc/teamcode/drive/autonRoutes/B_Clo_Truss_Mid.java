@@ -83,7 +83,7 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
                 .forward(30)
                 .build();
         Trajectory start2board = drive.trajectoryBuilder(new Pose2d(14, 53.36, Math.toRadians(5)))
-                .splineTo(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
+                .splineToConstantHeading(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
 
                 .build();
         Trajectory line4start = drive.trajectoryBuilder(startPose)
@@ -266,7 +266,7 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
                 clawVAngle.setPosition(0.3);
                 slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
                 slide.setPower(slidePower);
-                drive.turn(Math.toRadians(73));
+                drive.turn(Math.toRadians(90));
                 sleep(200);
                 drive.followTrajectory(start2board);
                 drive.followTrajectory(strafe5halfleft);

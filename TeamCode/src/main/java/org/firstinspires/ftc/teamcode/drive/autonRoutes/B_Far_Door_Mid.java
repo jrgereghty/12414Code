@@ -81,10 +81,8 @@ public class B_Far_Door_Mid extends LinearOpMode {
         Trajectory forward30 = drive.trajectoryBuilder(startPose)
                 .forward(30)
                 .build();
-        Trajectory start2board = drive.trajectoryBuilder(new Pose2d(11.96, 53.36, Math.toRadians(5)))
-                .splineTo(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
 
-                .build();
+
         Trajectory line4start = drive.trajectoryBuilder(startPose)
                 .lineToSplineHeading(new Pose2d(-36, 53.36, Math.toRadians(302.00)))
                 .build();
@@ -109,6 +107,14 @@ public class B_Far_Door_Mid extends LinearOpMode {
         Trajectory forward40 = drive.trajectoryBuilder(startPose)
                 .forward(40)
                 .build();
+        Trajectory pixel2truss = drive.trajectoryBuilder(line4start.end())
+                .lineToSplineHeading(new Pose2d(-36, 58.36, Math.toRadians(0)))
+                .build();
+        Trajectory forward60 = drive.trajectoryBuilder(pixel2truss.end())
+                .forward(60).build();
+        Trajectory start2board = drive.trajectoryBuilder(forward60.end())
+                .splineToConstantHeading(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
+                .build();
         Trajectory line90 = drive.trajectoryBuilder(start2board.end())
                 .lineToSplineHeading(new Pose2d(39.67, 42.47, Math.toRadians(90.00)))
                 .build();
@@ -124,6 +130,12 @@ public class B_Far_Door_Mid extends LinearOpMode {
                 .splineTo(new Vector2d(16.58, 57.98), Math.toRadians(0))
                 .splineTo(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
                 .build();
+
+
+
+
+
+
 
 
 
@@ -244,30 +256,35 @@ public class B_Far_Door_Mid extends LinearOpMode {
 
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            sleep(300);
+            sleep(270);
             slide.setPower(0);
 
 
-            slideLAngle.setPosition(0.25);
-            slideRAngle.setPosition(0.25);
-            sleep(2500);
+            slideLAngle.setPosition(0.2);
+            slideRAngle.setPosition(0.2);
+            sleep(1000);
             clawR.setPosition(0.5);
 
 
 
             sleep(500);
-            slideLAngle.setPosition(0.7);
-            slideRAngle.setPosition(0.7);
+            slideLAngle.setPosition(0.5);
+            slideRAngle.setPosition(0.5);
+            clawVAngle.setPosition(0.3);
             slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            drive.turn(Math.toRadians(73));
             sleep(200);
+            drive.followTrajectory(pixel2truss);
+            sleep(200);
+            drive.followTrajectory(forward60);
+
+
             drive.followTrajectory(start2board);
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
             sleep(300);
             slide.setPower(0);
-            clawVAngle.setPosition(0.3);
+
             sleep(300);
 
             clawL.setPosition(0.5);
