@@ -18,9 +18,9 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "B_Far_Door_Mid")
+@Autonomous(name = "R_Far_Truss_Mid")
 
-public class B_Far_Door_Mid extends LinearOpMode {
+public class R_Far_Truss_Mid extends LinearOpMode {
 
 
     OpenCvCamera webcam;
@@ -75,19 +75,27 @@ public class B_Far_Door_Mid extends LinearOpMode {
 
 
 
-        Pose2d startPose = new Pose2d(-36.00, 62.84, Math.toRadians(270.00));
+        Pose2d startPose = new Pose2d(-36.00, -62.84, Math.toRadians(90));
 
         drive.setPoseEstimate(startPose);
         Trajectory forward30 = drive.trajectoryBuilder(startPose)
                 .forward(30)
                 .build();
-        Trajectory start2board = drive.trajectoryBuilder(new Pose2d(11.96, 53.36, Math.toRadians(5)))
-                .splineTo(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
-
-                .build();
         Trajectory line4start = drive.trajectoryBuilder(startPose)
                 .lineToSplineHeading(new Pose2d(-36, 53.36, Math.toRadians(302.00)))
                 .build();
+        Trajectory pixel2start = drive.trajectoryBuilder(line4start.end())
+                .lineToSplineHeading(new Pose2d(-36, 58.36, Math.toRadians(0)))
+
+                .build();
+        Trajectory forward60 = drive.trajectoryBuilder(pixel2start.end())
+                .forward(60)
+                .build();
+        Trajectory start2board = drive.trajectoryBuilder(forward60.end())
+                .splineToConstantHeading(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
+
+                .build();
+
 
 
         Trajectory forward10 = drive.trajectoryBuilder(startPose)
@@ -119,11 +127,7 @@ public class B_Far_Door_Mid extends LinearOpMode {
 
                 .build();
 
-        Trajectory pixel2start = drive.trajectoryBuilder(new Pose2d(-49.57, 46.43), Math.toRadians(22.07))
-                .splineTo(new Vector2d(-14.10, 57.45), Math.toRadians(0.00))
-                .splineTo(new Vector2d(16.58, 57.98), Math.toRadians(0))
-                .splineTo(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
-                .build();
+
 
 
 
@@ -250,7 +254,7 @@ public class B_Far_Door_Mid extends LinearOpMode {
 
             slideLAngle.setPosition(0.25);
             slideRAngle.setPosition(0.25);
-            sleep(2500);
+            sleep(1500);
             clawR.setPosition(0.5);
 
 
@@ -262,6 +266,11 @@ public class B_Far_Door_Mid extends LinearOpMode {
             slide.setPower(slidePower);
             drive.turn(Math.toRadians(73));
             sleep(200);
+            drive.followTrajectory(pixel2start);
+            sleep(200);
+            drive.followTrajectory(forward60);
+            sleep(300);
+
             drive.followTrajectory(start2board);
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
@@ -273,25 +282,12 @@ public class B_Far_Door_Mid extends LinearOpMode {
             clawL.setPosition(0.5);
 
             sleep(3000);
-            drive.turn(Math.toRadians(90));
-            sleep(1000);
-            drive.followTrajectory(board2truss);
-
-
-            sleep(2000);
-
-            drive.turn(Math.toRadians(20));
-            slideLAngle.setPosition(0.25);
-            slideRAngle.setPosition(0.25);
-            clawR.setPosition(0);
-            clawL.setPosition(0);
-            drive.turn(Math.toRadians(150));
-            drive.followTrajectory(pixel2start);
 
 
 
-            drive.followTrajectory(start2board);
-            drive.followTrajectory(back11);
+
+
+
 
 
 
