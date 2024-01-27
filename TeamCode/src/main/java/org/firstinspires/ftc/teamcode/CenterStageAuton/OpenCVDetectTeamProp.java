@@ -22,8 +22,8 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
     public static final Scalar white = new Scalar(255, 255, 255);
     public static double webcamSplitDist = 160;
     public static boolean isDetected = false;
-    public static double minArea = 30;
-    public static double minWidth = 30;
+    public static double minArea = 40;
+    public static double minWidth = 40;
     public static double minHeight = 27;
     public int[] lowerColor = {0,0, 0};
     public int[] upperColor = {255, 255, 255};
