@@ -234,12 +234,11 @@ public class TeleOp extends OpMode {
         } else {
             if (gamepad2.left_stick_y >= 0.005 && pos <= 0.99) {
                 pos += gamepad2.left_stick_y * 0.01;
-                vPos = getClawVAngle2(pos);
             }
             if (gamepad2.left_stick_y <= -0.005 && pos >= 0.01) {
                 pos += gamepad2.left_stick_y * 0.01;
-                vPos = getClawVAngle2(pos);
             }
+            vPos = getClawVAngle2(pos);
         }
         if (gamepad2.right_stick_x >= 0.005 && hPos >= 0.01) {
             hPos += -gamepad2.right_stick_x * 0.01;
