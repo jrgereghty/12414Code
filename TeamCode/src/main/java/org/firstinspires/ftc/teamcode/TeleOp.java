@@ -252,10 +252,10 @@ public class TeleOp extends OpMode {
         clawHAngle.setPosition(hPos);
         clawVAngle.setPosition(vPos);
 
-        if (gamepad1.right_bumper) {
+        if (gamepad2.y) {
             hangLeft.setPower(-1);
             hangRight.setPower(-1);
-        } else if (gamepad1.left_bumper) {
+        } else if (gamepad2.a) {
             hangLeft.setPower(1);
             hangRight.setPower(1);
         } else {
