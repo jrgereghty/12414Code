@@ -81,13 +81,20 @@ public class B_Far_Door_Mid extends LinearOpMode {
         Trajectory forward30 = drive.trajectoryBuilder(startPose)
                 .forward(30)
                 .build();
-        Trajectory start2board = drive.trajectoryBuilder(new Pose2d(11.96, 53.36, Math.toRadians(5)))
-                .splineTo(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
-
-                .build();
         Trajectory line4start = drive.trajectoryBuilder(startPose)
                 .lineToSplineHeading(new Pose2d(-36, 53.36, Math.toRadians(302.00)))
                 .build();
+        Trajectory pixel2start = drive.trajectoryBuilder(line4start.end())
+                .lineToSplineHeading(new Pose2d(-36, 58.36, Math.toRadians(0)))
+                .build();
+        Trajectory forward60 = drive.trajectoryBuilder(pixel2start.end())
+                .forward(60)
+                .build();
+        Trajectory start2board = drive.trajectoryBuilder(forward60.end())
+                .splineToConstantHeading(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
+
+                .build();
+
 
 
         Trajectory forward10 = drive.trajectoryBuilder(startPose)
@@ -119,11 +126,12 @@ public class B_Far_Door_Mid extends LinearOpMode {
 
                 .build();
 
-        Trajectory pixel2start = drive.trajectoryBuilder(new Pose2d(-49.57, 46.43), Math.toRadians(22.07))
-                .splineTo(new Vector2d(-14.10, 57.45), Math.toRadians(0.00))
-                .splineTo(new Vector2d(16.58, 57.98), Math.toRadians(0))
-                .splineTo(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
-                .build();
+
+
+
+
+
+
 
 
 
@@ -262,6 +270,9 @@ public class B_Far_Door_Mid extends LinearOpMode {
             slide.setPower(slidePower);
             drive.turn(Math.toRadians(73));
             sleep(200);
+            drive.followTrajectory(pixel2start);
+            sleep(200);
+
             drive.followTrajectory(start2board);
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
