@@ -155,12 +155,15 @@ public class B_Far_Truss_Mid extends LinearOpMode {
         Trajectory back20 = drive.trajectoryBuilder(strafe2midR.end())
                 .back(20)
                 .build();
+        /*
         Trajectory return2sender = drive.trajectoryBuilder(back20.end())
                 .forward(95)
                 .build();
         Trajectory return2sender2 = drive.trajectoryBuilder(return2sender.end())
                 .lineToSplineHeading(startPose)
                 .build();
+
+         */
 
 
 
@@ -335,8 +338,8 @@ public class B_Far_Truss_Mid extends LinearOpMode {
             drive.followTrajectory(strafe2midR);
 
             drive.followTrajectory(back20);
-            drive.followTrajectory(return2sender);
-            drive.followTrajectory(return2sender2);
+            //drive.followTrajectory(return2sender);
+            //drive.followTrajectory(return2sender2);
             clawVAngle.setPosition(1);
 
             /*
@@ -423,8 +426,8 @@ public class B_Far_Truss_Mid extends LinearOpMode {
             drive.followTrajectory(strafe2midR);
 
             drive.followTrajectory(back20);
-            drive.followTrajectory(return2sender);
-            drive.followTrajectory(return2sender2);
+            //drive.followTrajectory(return2sender);
+            //drive.followTrajectory(return2sender2);
             clawVAngle.setPosition(1);
 
 
@@ -496,8 +499,8 @@ public class B_Far_Truss_Mid extends LinearOpMode {
             drive.followTrajectory(strafe2midR);
 
             drive.followTrajectory(back20);
-            drive.followTrajectory(return2sender);
-            drive.followTrajectory(return2sender2);
+            //drive.followTrajectory(return2sender);
+            //drive.followTrajectory(return2sender2);
             clawVAngle.setPosition(1);
             sleep(100);
 

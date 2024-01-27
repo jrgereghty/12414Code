@@ -153,6 +153,7 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
                 .splineTo(new Vector2d(16.58, 57.98), Math.toRadians(0))
                 .splineTo(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
                 .build();
+        /*
         Trajectory forward20 = drive.trajectoryBuilder(back20.end())
                 .forward(25)
                 .build();
@@ -162,6 +163,8 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
                 .lineToSplineHeading(startPose)
 
                 .build();
+
+         */
 
 
 
@@ -336,9 +339,11 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
                 drive.followTrajectory(pixel2start);                drive.followTrajectory(start2board);
                 drive.followTrajectory(back11);
 
-                 */
+
                 drive.followTrajectory(forward20);
                 drive.followTrajectory(return2sender);
+
+                 */
 
 
 
@@ -393,9 +398,11 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
                 drive.followTrajectory(back20);
                 clawVAngle.setPosition(1);
                 sleep(5000);
-
+                /*
                 drive.followTrajectory(forward20);
                 drive.followTrajectory(return2sender);
+
+                 */
 
 //________________________________________________________3333333333333333_3_3_3_3_3_3_3_3
             } else if (zoneDetected == 3) {
@@ -446,9 +453,12 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
                 drive.followTrajectory(back20);
                 clawVAngle.setPosition(1);
                 sleep(5000);
+                /*
 
                 drive.followTrajectory(forward20);
                 drive.followTrajectory(return2sender);
+
+                 */
 
             }
 
