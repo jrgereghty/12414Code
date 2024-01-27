@@ -18,9 +18,9 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "B_Far_Truss_Mid_Old")
+@Autonomous(name = "B_Far_Truss_Mid")
 
-public class B_Far_Truss_Mid_Old extends LinearOpMode {
+public class B_Far_Truss_Mid extends LinearOpMode {
 
 
     OpenCvCamera webcam;
@@ -82,21 +82,19 @@ public class B_Far_Truss_Mid_Old extends LinearOpMode {
                 .forward(30)
                 .build();
         Trajectory line4start = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Pose2d(-36, 53.36, Math.toRadians(315.00)))
+                .lineToSplineHeading(new Pose2d(-36, 53.36, Math.toRadians(302.00)))
                 .build();
-
         Trajectory pixel2start = drive.trajectoryBuilder(line4start.end())
                 .lineToSplineHeading(new Pose2d(-36, 58.36, Math.toRadians(0)))
-
                 .build();
         Trajectory forward60 = drive.trajectoryBuilder(pixel2start.end())
-                .forward(70)
-
+                .forward(60)
                 .build();
         Trajectory start2board = drive.trajectoryBuilder(forward60.end())
                 .splineToConstantHeading(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
 
                 .build();
+
 
 
         Trajectory forward10 = drive.trajectoryBuilder(startPose)
@@ -127,6 +125,11 @@ public class B_Far_Truss_Mid_Old extends LinearOpMode {
                 .splineTo(new Vector2d(-49.57, 46.43), Math.toRadians(212.07))
 
                 .build();
+
+
+
+
+
 
 
 
@@ -249,47 +252,57 @@ public class B_Far_Truss_Mid_Old extends LinearOpMode {
 
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            sleep(250);
+            sleep(300);
             slide.setPower(0);
 
 
             slideLAngle.setPosition(0.25);
             slideRAngle.setPosition(0.25);
-            sleep(1500);
+            sleep(2500);
             clawR.setPosition(0.5);
 
 
 
             sleep(500);
-            slideLAngle.setPosition(0.4);
-            slideRAngle.setPosition(0.4);
+            slideLAngle.setPosition(0.7);
+            slideRAngle.setPosition(0.7);
             slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-
-            sleep(400);
+            drive.turn(Math.toRadians(73));
+            sleep(200);
             drive.followTrajectory(pixel2start);
-            sleep(300);
-            drive.followTrajectory(forward60);
-            clawVAngle.setPosition(0.2);
+            sleep(200);
 
             drive.followTrajectory(start2board);
-
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
             sleep(300);
             slide.setPower(0);
-
+            clawVAngle.setPosition(0.3);
             sleep(300);
 
             clawL.setPosition(0.5);
 
             sleep(3000);
+            drive.turn(Math.toRadians(90));
+            sleep(1000);
+            drive.followTrajectory(board2truss);
+
+
+            sleep(2000);
+
+            drive.turn(Math.toRadians(20));
+            slideLAngle.setPosition(0.25);
+            slideRAngle.setPosition(0.25);
+            clawR.setPosition(0);
+            clawL.setPosition(0);
+            drive.turn(Math.toRadians(150));
+            drive.followTrajectory(pixel2start);
 
 
 
-
-
-
+            drive.followTrajectory(start2board);
+            drive.followTrajectory(back11);
 
 
 
