@@ -18,9 +18,9 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "B_Far_Truss_Mid")
+@Autonomous(name = "B_Far_Truss_Mid_Old")
 
-public class B_Far_Truss_Mid extends LinearOpMode {
+public class B_Far_Truss_Mid_Old extends LinearOpMode {
 
 
     OpenCvCamera webcam;
