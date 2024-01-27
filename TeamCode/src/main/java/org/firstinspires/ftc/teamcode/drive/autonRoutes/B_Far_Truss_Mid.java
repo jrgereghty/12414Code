@@ -87,7 +87,7 @@ public class B_Far_Truss_Mid extends LinearOpMode {
                 .lineToSplineHeading(new Pose2d(-36, 51.36, Math.toRadians(270)))
                 .build();
         Trajectory line4startright = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Pose2d(-36, 53.36, Math.toRadians(250)))
+                .lineToSplineHeading(new Pose2d(-36, 53.36, Math.toRadians(252)))
                 .build();
         Trajectory pixel2start = drive.trajectoryBuilder(line4start.end())
                 .lineToSplineHeading(new Pose2d(-36, 58.8, Math.toRadians(0)))
@@ -105,16 +105,16 @@ public class B_Far_Truss_Mid extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(48.01, 33), Math.toRadians(0.00))//46.01, 36
                 .build();
         Trajectory leftplace = drive.trajectoryBuilder(start2board.end())
-                .strafeLeft(3.5)
+                .strafeLeft(6)
                 .build();
         Trajectory left2boardmid = drive.trajectoryBuilder(start2board.end())
-                .strafeRight(3.5)
+                .strafeRight(6)
                 .build();
         Trajectory rightplace = drive.trajectoryBuilder(start2board.end())
-                .strafeRight(8.5)
+                .strafeRight(7)
                 .build();
         Trajectory right2boardmid = drive.trajectoryBuilder(start2board.end())
-                .strafeLeft(8.5)
+                .strafeLeft(7)
                 .build();
 
 
@@ -371,21 +371,21 @@ public class B_Far_Truss_Mid extends LinearOpMode {
 
             drive.followTrajectory(line4startmid);
             sleep(200);
-            slideLAngle.setPosition(0.25);
-            slideRAngle.setPosition(0.25);
-            clawVAngle.setPosition(0.45);
+            slideLAngle.setPosition(0.20);
+            slideRAngle.setPosition(0.20);
+            clawVAngle.setPosition(0.40);
 
 
 
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            sleep(410);
+            sleep(377);
             slide.setPower(0);
 
 
             slideLAngle.setPosition(0.25);
             slideRAngle.setPosition(0.25);
-            sleep(300);
+            sleep(500);
             clawR.setPosition(0.5);
 
 
@@ -438,7 +438,7 @@ public class B_Far_Truss_Mid extends LinearOpMode {
 
 
 
-
+//___333333333333333333333333333333333333333333333333333333333333333333333333
         } else if (zoneDetected == 3) {
             slideLAngle.setPosition(0.45);
             slideRAngle.setPosition(0.45);
@@ -476,7 +476,7 @@ public class B_Far_Truss_Mid extends LinearOpMode {
             clawVAngle.setPosition(0.2);
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            sleep(300);
+            sleep(290);
 
             slide.setPower(0);
             clawVAngle.setPosition(0.25);
