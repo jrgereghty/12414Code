@@ -124,18 +124,18 @@ public class TeleOp extends OpMode {
 
         slideLAngle = hardwareMap.servo.get("slideLAngle");
         slideLAngle.setDirection(Servo.Direction.REVERSE);
-        slideLAngle.setPosition(0.5);
+        slideLAngle.setPosition(0.8);
 
         slideRAngle = hardwareMap.servo.get("slideRAngle");
-        slideRAngle.setPosition(0.5);
+        slideRAngle.setPosition(0.8);
 
         clawHAngle = hardwareMap.servo.get("clawHAngle");
         clawHAngle.scaleRange(0.04, 1);
         clawHAngle.setPosition(hPos);
 
         clawVAngle = hardwareMap.servo.get("clawVAngle");
+        clawVAngle.setPosition(0.7);
         clawVAngle.scaleRange(0, 0.6);
-        clawVAngle.setPosition(vPos);
 
         clawL = hardwareMap.servo.get("clawL");
         clawL.scaleRange(0.21, 0.605);
@@ -245,6 +245,11 @@ public class TeleOp extends OpMode {
         }
         if (gamepad2.right_stick_x <= -0.005 && hPos <= 0.99) {
             hPos += -gamepad2.right_stick_x * 0.01;
+        }
+        if (hPos > 1) {
+            hPos = 1;
+        } else if (hPos < 0) {
+            hPos = 0;
         }
         ps2Last = gamepad2.ps;
         slideLAngle.setPosition(pos);
