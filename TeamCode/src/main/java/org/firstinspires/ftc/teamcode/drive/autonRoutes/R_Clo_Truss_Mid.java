@@ -32,7 +32,7 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
 
     //public static double pos = 0.5;
     public static double hPos = 0.5;
-    public static double vPos = 0.0;
+    public static double vPos = 0.7;
     public static double lPos = 0;
     public static double rPos = 0;
 
@@ -205,18 +205,19 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
 
         slideLAngle = hardwareMap.servo.get("slideLAngle");
         slideLAngle.setDirection(Servo.Direction.REVERSE);
-        slideLAngle.setPosition(0.7);
+        slideLAngle.setPosition(0.8);
 
         slideRAngle = hardwareMap.servo.get("slideRAngle");
-        slideRAngle.setPosition(0.7);
+        slideRAngle.setPosition(0.8);
 
         clawHAngle = hardwareMap.servo.get("clawHAngle");
         clawHAngle.scaleRange(0.04, 1);
         clawHAngle.setPosition(hPos);
 
         clawVAngle = hardwareMap.servo.get("clawVAngle");
-        clawVAngle.scaleRange(0, 0.6);
         clawVAngle.setPosition(vPos);
+        clawVAngle.scaleRange(0, 0.6);
+
 
         clawL = hardwareMap.servo.get("clawL");
         clawL.scaleRange(0.21, 0.605);
