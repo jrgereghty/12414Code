@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.drive.autonRoutes;
 
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
@@ -18,9 +17,9 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "B_Clo_Truss_Mid")
+@Autonomous(name = "R_Far_Truss_Edge")
 
-public class B_Clo_Truss_Mid extends LinearOpMode {
+public class R_Far_Truss_Edge extends LinearOpMode {
 
 
     OpenCvCamera webcam;
@@ -32,7 +31,7 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
 
     //public static double pos = 0.5;
     public static double hPos = 0.5;
-    public static double vPos = 1.0;
+    public static double vPos = 0.5;
     public static double lPos = 0;
     public static double rPos = 0;
 
@@ -75,34 +74,52 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
 
 
 
-        Pose2d startPose = new Pose2d(14.00, 62.84, Math.toRadians(270.00));
-
+        Pose2d startPose = new Pose2d(-36.00, -62.84, Math.toRadians(90.00));
 
         drive.setPoseEstimate(startPose);
         Trajectory forward30 = drive.trajectoryBuilder(startPose)
                 .forward(30)
                 .build();
-        Trajectory start2board = drive.trajectoryBuilder(new Pose2d(14, 53.36, Math.toRadians(0)))
-                .splineTo(new Vector2d(29,53.36), Math.toRadians(0))
-                //.lineToSplineHeading(new Pose2d(46.01, 36.18, Math.toRadians(0.00)))
-                .splineToConstantHeading(new Vector2d(46.01, 33), Math.toRadians(0.00))//46.01, 36
-
-                .build();
-
         Trajectory line4start = drive.trajectoryBuilder(startPose)
-
-                .lineToSplineHeading(new Pose2d(14, 53.36, Math.toRadians(290.00)))
+                .lineToSplineHeading(new Pose2d(-36, -53.36, Math.toRadians(115.00))) //312
                 .build();
-
         Trajectory line4startmid = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Pose2d(14, 51.36, Math.toRadians(273.00)))
-                .build();
-        Trajectory turn4mid = drive.trajectoryBuilder(line4startmid.end())
-                .lineToSplineHeading(new Pose2d(14, 53.36, Math.toRadians(0)))
+                .lineToSplineHeading(new Pose2d(-36, -51.36, Math.toRadians(90)))
                 .build();
         Trajectory line4startright = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Pose2d(14, 53.36, Math.toRadians(237.00)))
+                .lineToSplineHeading(new Pose2d(-36, -53.36, Math.toRadians(60)))
                 .build();
+        Trajectory pixel2start = drive.trajectoryBuilder(line4start.end())
+                .lineToSplineHeading(new Pose2d(-36, -59.3, Math.toRadians(0)))
+                .build();
+        Trajectory pixel2startmid = drive.trajectoryBuilder(line4startmid.end())
+                .lineToSplineHeading(new Pose2d(-36, -59.3, Math.toRadians(0)))
+                .build();
+        Trajectory pixel2startright = drive.trajectoryBuilder(line4startright.end())
+                .lineToSplineHeading(new Pose2d(-36, -59.3, Math.toRadians(0)))
+                .build();
+        Trajectory forward60 = drive.trajectoryBuilder(new Pose2d(-36, -59.3, Math.toRadians(0)))
+                .forward(60)
+                .build();
+        Trajectory start2board = drive.trajectoryBuilder(forward60.end()) // START TO BOARD HERE
+                .splineToConstantHeading(new Vector2d(48.01, -38), Math.toRadians(0.00))//46.01, 36
+                .build();
+        Trajectory leftplace = drive.trajectoryBuilder(start2board.end())
+                .strafeLeft(6)
+                .build();
+        Trajectory left2boardmid = drive.trajectoryBuilder(start2board.end())
+                .strafeRight(6)
+                .build();
+        Trajectory rightplace = drive.trajectoryBuilder(start2board.end())
+                .strafeRight(7)
+                .build();
+        Trajectory right2boardmid = drive.trajectoryBuilder(start2board.end())
+                .strafeLeft(7)
+                .build();
+
+
+
+
         Trajectory forward10 = drive.trajectoryBuilder(startPose)
                 .forward(10)
 
@@ -113,6 +130,12 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
         Trajectory forward5 = drive.trajectoryBuilder(startPose)
                 .forward(5)
                 .build();
+        Trajectory strafe2right = drive.trajectoryBuilder(start2board.end())
+                .strafeRight(19)
+                .build();
+        Trajectory strafe2left = drive.trajectoryBuilder(strafe2right.end())
+                .strafeLeft(19)
+                .build();
 
         Trajectory forward25 = drive.trajectoryBuilder(startPose)
                 .forward(25)
@@ -121,41 +144,45 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
                 .forward(40)
                 .build();
         Trajectory line90 = drive.trajectoryBuilder(start2board.end())
-                .lineToSplineHeading(new Pose2d(39.67, 42.47, Math.toRadians(90.00)))
+                .lineToSplineHeading(new Pose2d(39.67, -42.47, Math.toRadians(90.00)))
                 .build();
-        Trajectory strafe5halfleft = drive.trajectoryBuilder(start2board.end())
-                .strafeLeft(5.5)
-                .build();
-        Trajectory strafe5halfright = drive.trajectoryBuilder(start2board.end())
-                .strafeRight(5.5)
-                .build();
-
-        Trajectory back11 = drive.trajectoryBuilder(start2board.end())
-                .back(11)
-                .build();
-
-        Trajectory strafe2midR = drive.trajectoryBuilder(back11.end())
-                .lineToSplineHeading(new Pose2d(39, 11.3, Math.toRadians(180)))
-                .build();
-
-
-        Trajectory back20 = drive.trajectoryBuilder(strafe2midR.end())
-                .back(20)
-                .build();
-
         //Spline Trajectories
-        Trajectory board2truss = drive.trajectoryBuilder(new Pose2d(45.01, 36.18, Math.toRadians(90)))
-                .splineTo(new Vector2d(-17.73, 58.62), Math.toRadians(180.00))
-                .splineTo(new Vector2d(-49.57, 46.43), Math.toRadians(212.07))
+        Trajectory board2truss = drive.trajectoryBuilder(line90.end())
+                .splineTo(new Vector2d(-17.73, -58.62), Math.toRadians(180.00))
+                .splineTo(new Vector2d(-49.57, -46.43), Math.toRadians(212.07))
 
+                .build();
+        Trajectory back11 = drive.trajectoryBuilder(start2board.end())
+                .back(5)
+                .build();
+        /*
+        Trajectory strafe2midR = drive.trajectoryBuilder(back11.end())
+                .lineToSplineHeading(new Pose2d(39, -10, Math.toRadians(180)))
                 .build();
 
 
-        Trajectory pixel2start = drive.trajectoryBuilder(new Pose2d(-49.57, 46.43), Math.toRadians(22.07))
-                .splineTo(new Vector2d(-14.10, 57.95), Math.toRadians(0.00))
-                .splineTo(new Vector2d(16.58, 57.98), Math.toRadians(0))
-                .splineTo(new Vector2d(46.01, 36.18), Math.toRadians(0.00))
+
+        Trajectory return2sender = drive.trajectoryBuilder(back20.end())
+                .forward(95)
                 .build();
+        Trajectory return2sender2 = drive.trajectoryBuilder(return2sender.end())
+                .lineToSplineHeading(startPose)
+                .build();
+
+         */
+        Trajectory strafe2edgeR = drive.trajectoryBuilder(back11.end())
+                .lineToSplineHeading(new Pose2d(39, -59, Math.toRadians(180)))
+                .build();
+        Trajectory back20 = drive.trajectoryBuilder(strafe2edgeR.end())
+                .back(25)
+                .build();
+
+
+
+
+
+
+
 
 
 
@@ -165,7 +192,7 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
         //webcam2 = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), cameraMonitorViewId);
         pipeline = new OpenCVGreatestColorTest(telemetry);
         //webcam2.setPipeline(pipeline);
-        colorPipe = new OpenCVDetectTeamProp(telemetry, OpenCVGreatestColorTest.lowerBlue, OpenCVGreatestColorTest.upperBlue);
+        colorPipe = new OpenCVDetectTeamProp(telemetry, OpenCVGreatestColorTest.lowerRed, OpenCVGreatestColorTest.upperRed);
         webcam.setPipeline(colorPipe);
         FtcDashboard.getInstance().startCameraStream(webcam, 0);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
@@ -197,10 +224,10 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
 
         slideLAngle = hardwareMap.servo.get("slideLAngle");
         slideLAngle.setDirection(Servo.Direction.REVERSE);
-        slideLAngle.setPosition(0.9);
+        slideLAngle.setPosition(0.5);
 
         slideRAngle = hardwareMap.servo.get("slideRAngle");
-        slideRAngle.setPosition(0.9);
+        slideRAngle.setPosition(0.5);
 
         clawHAngle = hardwareMap.servo.get("clawHAngle");
         clawHAngle.scaleRange(0.04, 1);
@@ -265,20 +292,24 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
         if (zoneDetected == 1) {
 
 
-            slideLAngle.setPosition(0.45); //sets slides from init pos
+            slideLAngle.setPosition(0.45);
             slideRAngle.setPosition(0.45);
-            clawVAngle.setPosition(0.45);
-            drive.followTrajectory(line4start);//Moves from start position to place position
-            sleep(200);
 
-            slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));//Slide extension
+            slideLAngle.setPosition(0.10);
+            slideRAngle.setPosition(0.10);
+            clawVAngle.setPosition(0.35);
+            drive.followTrajectory(line4start);
+            sleep(230);
+
+
+
+
+            slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            sleep(140);//EXTENSION LENGTH
+            sleep(225);
             slide.setPower(0);
 
 
-            slideLAngle.setPosition(0.15);//Angle for spike mark placement
-            slideRAngle.setPosition(0.15);
 
             sleep(500);
             clawR.setPosition(0.5);
@@ -286,119 +317,151 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
 
 
             sleep(500);
+
+            slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
+            slide.setPower(slidePower);
+
+            sleep(800);
+            drive.followTrajectory(pixel2start);
+            drive.followTrajectory(forward60);
+            sleep(200);
+
+            drive.followTrajectory(start2board);
             slideLAngle.setPosition(0.4);
             slideRAngle.setPosition(0.4);
-            slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
-            drive.turn(Math.toRadians(70));//turn 90 degrees
-            clawVAngle.setPosition(0.3);
-            sleep(200);
-            drive.followTrajectory(start2board);
-            drive.followTrajectory(strafe5halfleft);
+            clawVAngle.setPosition(0.2);
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            sleep(210);//SECOND SLIDE EXTENSION
+            sleep(320);
+
             slide.setPower(0);
 
-            sleep(350);
+            drive.followTrajectory(leftplace);
+
+
+            sleep(300);
 
             clawL.setPosition(0.5);
-            sleep(500);
+
+
+            sleep(200);
             slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            drive.followTrajectory(strafe5halfright);
+            sleep(200);
+            drive.followTrajectory(left2boardmid);
             drive.followTrajectory(back11);
+            drive.followTrajectory(strafe2edgeR);
 
+            drive.followTrajectory(back20);
+            //drive.followTrajectory(return2sender);
+            //drive.followTrajectory(return2sender2);
+            clawVAngle.setPosition(1);
+            sleep(20000);
 
-
-
-
-
-
-            sleep(3000);
+            /*
             drive.turn(Math.toRadians(90));
             sleep(1000);
-            slideLAngle.setPosition(0.25);
-            slideRAngle.setPosition(0.25);
             drive.followTrajectory(board2truss);
+
+
             sleep(2000);
 
-
+            drive.turn(Math.toRadians(20));
+            slideLAngle.setPosition(0.25);
+            slideRAngle.setPosition(0.25);
             clawR.setPosition(0);
             clawL.setPosition(0);
-            drive.turn(Math.toRadians(183));
+            drive.turn(Math.toRadians(150));
             drive.followTrajectory(pixel2start);
+
+
+
             drive.followTrajectory(start2board);
             drive.followTrajectory(back11);
 
-            drive.followTrajectory(strafe2midR);
-
-            drive.followTrajectory(back20);
-            clawVAngle.setPosition(1);
-            sleep(5000);
+             */
 
 
 
-
-
-//________________________________________________________222222222222222222222
+//_______2222222222-2-2-2-22-2-2-2-2-2-2-2-2-22-2-2-2-22-2-2-2-22-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2
         } else if (zoneDetected == 2) {
-
-
-
-            slideLAngle.setPosition(0.45);
-            slideRAngle.setPosition(0.45);
+            slideLAngle.setPosition(0.10);
+            slideRAngle.setPosition(0.10);
 
             drive.followTrajectory(line4startmid);
-            sleep(300);
+            sleep(180);
+
+            clawVAngle.setPosition(0.40);
+
+
+
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            sleep(410);
+            sleep(377);
             slide.setPower(0);
 
 
-            slideLAngle.setPosition(0.2);
-            slideRAngle.setPosition(0.2);
-            clawVAngle.setPosition(0.45);
             sleep(500);
             clawR.setPosition(0.5);
 
 
 
-            sleep(500);
+            sleep(300);
+
+            slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
+            slide.setPower(slidePower);
+
+            sleep(1000);
+            drive.followTrajectory(pixel2startmid);
+
+            drive.followTrajectory(forward60);
+            sleep(200);
+
+            drive.followTrajectory(start2board);
             slideLAngle.setPosition(0.4);
             slideRAngle.setPosition(0.4);
-            slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
-            drive.turn(Math.toRadians(87));
-            clawVAngle.setPosition(0.3);
-            sleep(200);
-            drive.followTrajectory(start2board);
-
+            clawVAngle.setPosition(0.15);
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            sleep(210);
+            sleep(320);
+            clawVAngle.setPosition(0.25);
             slide.setPower(0);
 
-            sleep(350);
+            sleep(300);
 
             clawL.setPosition(0.5);
-            sleep(500);
+
+            sleep(200);
+            drive.followTrajectory(strafe2right);
             slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-
+            sleep(260);
+            drive.followTrajectory(strafe2left);
             drive.followTrajectory(back11);
-            drive.followTrajectory(strafe2midR);
+            drive.followTrajectory(strafe2edgeR);
 
             drive.followTrajectory(back20);
+            //drive.followTrajectory(return2sender);
+            //drive.followTrajectory(return2sender2);
             clawVAngle.setPosition(1);
-            sleep(5000);
+            sleep(20000);
 
-//________________________________________________________3333333333333333_3_3_3_3_3_3_3_3'
+
+
+
+
+
+
+
+
+
+
+
+//___333333333333333333333333333333333333333333333333333333333333333333333333
         } else if (zoneDetected == 3) {
-            clawVAngle.setPosition(0.45);
-            slideLAngle.setPosition(0.45);
-            slideRAngle.setPosition(0.45);
+            slideLAngle.setPosition(0.10);
+            slideRAngle.setPosition(0.10);
+
             drive.followTrajectory(line4startright);
             sleep(200);
 
@@ -406,12 +469,9 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
 
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            sleep(220);
+            sleep(210);
             slide.setPower(0);
 
-
-            slideLAngle.setPosition(0.15);
-            slideRAngle.setPosition(0.15);
 
             sleep(500);
             clawR.setPosition(0.5);
@@ -419,33 +479,47 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
 
 
             sleep(500);
+
+            slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
+            slide.setPower(slidePower);
+
+            sleep(1000);
+            drive.followTrajectory(pixel2startright);
+            drive.followTrajectory(forward60);
             slideLAngle.setPosition(0.4);
             slideRAngle.setPosition(0.4);
-            slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
-            drive.turn(Math.toRadians(120));
             clawVAngle.setPosition(0.2);
-            sleep(200);
+
             drive.followTrajectory(start2board);
-            drive.followTrajectory(strafe5halfright);
+
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            sleep(210);
-            slide.setPower(0);
+            sleep(270);
 
-            sleep(350);
+
+            slide.setPower(0);
+            clawVAngle.setPosition(0.25);
+            drive.followTrajectory(rightplace);
+
+            sleep(300);
 
             clawL.setPosition(0.5);
-            sleep(500);
+
+
+            sleep(200);
             slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            drive.followTrajectory(strafe5halfleft);
+            sleep(300);
+            drive.followTrajectory(right2boardmid);
             drive.followTrajectory(back11);
-            drive.followTrajectory(strafe2midR);
+            drive.followTrajectory(strafe2edgeR);
 
             drive.followTrajectory(back20);
+            clawVAngle.setPosition(0.4);
+            //drive.followTrajectory(return2sender);
+            //drive.followTrajectory(return2sender2);
             clawVAngle.setPosition(1);
-            sleep(5000);
+            sleep(20000);
 
         }
 
@@ -453,61 +527,8 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
 
 
 
-        //middle spike
-        /*drive.followTrajectory(forward30);
-        slurp.setPower(-0.6);
-        sleep(1000);
 
 
-        drive.turn(Math.toRadians(100));
-        drive.followTrajectory(forward30);
-        drive.followTrajectory(forward10);/*
-
-         */
-        //left spike
-
-        /*drive.followTrajectory(forward40);
-        drive.turn(Math.toRadians(100));
-        drive.followTrajectory(back11);
-
-        slurp.setPower(-0.6);
-        sleep(1000);
-        drive.followTrajectory(forward30);
-        drive.followTrajectory(forward25);
-
-        //right spike
-        /*
-        drive.followTrajectory(forward40);
-        drive.turn(Math.toRadians(-100));
-        slurp.setPower(-0.6);
-        sleep(600);
-        drive.turn(Math.toRadians(200));
-        drive.followTrajectory(forward40);
-        drive.followTrajectory(forward10);
-         */
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
