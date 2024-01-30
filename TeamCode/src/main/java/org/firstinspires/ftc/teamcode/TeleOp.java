@@ -63,9 +63,9 @@ public class TeleOp extends OpMode {
     double rotation;
     double drivePower;
     double slidePower;
-    public static double pos = 0.5;
+    public static double pos = 0.8;
     public static double hPos = 0.5;
-    public static double vPos = 0.5;
+    public static double vPos = 1;
 
     private static double getSlideVelocity(int trigger, double slidePos, double triggerDepth) {
         double velocity = 0.0;
@@ -78,19 +78,15 @@ public class TeleOp extends OpMode {
     }
 
     private static double getSlideAngle(double slideLength) {
-        if (Math.toDegrees(Math.acos(22.5 / slideLength)) / 47.8 - 1.4 >= 0) {
-            return(Math.toDegrees(Math.acos(22.5 / slideLength)) / 47.8 - 1.4);
-        } else {
-            return(0);
-        }
+        return(Math.toDegrees(Math.acos(22.5 / slideLength)) / 47.8 - 1.4);
     }
 
     private static double getClawVAngle1(double slideLength) {
-        return(-Math.toDegrees(Math.asin(22.5 / slideLength)) / 500 + 0.47);
+        return(-Math.toDegrees(Math.asin(22.5 / slideLength)) / 428.57 + 0.4);
     }
 
     private static double getClawVAngle2(double slideAngle) {
-        return(slideAngle / 4 + 0.1);
+        return(slideAngle / 3.43 + 0.117);
     }
 
     @Override
@@ -134,8 +130,8 @@ public class TeleOp extends OpMode {
         clawHAngle.setPosition(hPos);
 
         clawVAngle = hardwareMap.servo.get("clawVAngle");
-        clawVAngle.scaleRange(0, 0.6);
-        clawVAngle.setPosition(1);
+        clawVAngle.scaleRange(0, 0.7);
+        clawVAngle.setPosition(vPos);
 
         clawL = hardwareMap.servo.get("clawL");
         clawL.scaleRange(0.21, 0.605);
@@ -152,8 +148,6 @@ public class TeleOp extends OpMode {
 
     @Override
     public void loop() {
-
-        clawVAngle.scaleRange(0, 0.6);
 
         xMovement = gamepad1.left_stick_x;
         yMovement = gamepad1.left_stick_y;
@@ -225,7 +219,10 @@ public class TeleOp extends OpMode {
         if (!ps2Last && gamepad2.ps) {
             intake = !intake;
             hPos = 0.5;
-            if (!intake) {
+            if (intake) {
+                pos = 0;
+                vPos = getClawVAngle1(slideLength);
+            } else {
                 pos = 0.5;
                 vPos = getClawVAngle2(pos);
             }
@@ -242,17 +239,29 @@ public class TeleOp extends OpMode {
             }
             vPos = getClawVAngle2(pos);
         }
-        if (gamepad2.right_stick_x >= 0.005) {
+        if (gamepad2.right_stick_x >= 0.05) {
             hPos += -gamepad2.right_stick_x * 0.01;
         }
-        if (gamepad2.right_stick_x <= -0.005) {
+        if (gamepad2.right_stick_x <= -0.05) {
             hPos += -gamepad2.right_stick_x * 0.01;
         }
+
         if (hPos > 1) {
             hPos = 1;
         } else if (hPos < 0) {
             hPos = 0;
         }
+        if (pos > 1) {
+            pos = 1;
+        } else if (pos < 0) {
+            pos = 0;
+        }
+        if (vPos > 1) {
+            vPos = 1;
+        } else if (vPos < 0) {
+            vPos = 0;
+        }
+
         ps2Last = gamepad2.ps;
         slideLAngle.setPosition(pos);
         slideRAngle.setPosition(pos);
