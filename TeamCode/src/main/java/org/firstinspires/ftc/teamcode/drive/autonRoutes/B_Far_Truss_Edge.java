@@ -279,6 +279,9 @@ public class B_Far_Truss_Edge extends LinearOpMode {
 
 
         if (zoneDetected == 1) {
+            sleep(5000);
+            clawVAngle.setPosition(0.4);
+            sleep(300);
 
 
             slideLAngle.setPosition(0.45);
@@ -336,12 +339,14 @@ public class B_Far_Truss_Edge extends LinearOpMode {
             sleep(200);
             drive.followTrajectory(left2boardmid);
             drive.followTrajectory(back11);
+            clawVAngle.setPosition(1);
             drive.followTrajectory(strafe2edgeR);
 
             drive.followTrajectory(back20);
             //drive.followTrajectory(return2sender);
             //drive.followTrajectory(return2sender2);
             clawVAngle.setPosition(1);
+            sleep(20000);
 
             /*
             drive.turn(Math.toRadians(90));
@@ -370,14 +375,17 @@ public class B_Far_Truss_Edge extends LinearOpMode {
 
 //_______2222222222-2-2-2-22-2-2-2-2-2-2-2-2-22-2-2-2-22-2-2-2-22-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2
         } else if (zoneDetected == 2) {
+            sleep(5000);
+            slideLAngle.setPosition(0.20);
+            slideRAngle.setPosition(0.20);
+            clawVAngle.setPosition(0.40);
+            sleep(300);
             slideLAngle.setPosition(0.45);
             slideRAngle.setPosition(0.45);
 
             drive.followTrajectory(line4startmid);
             sleep(200);
-            slideLAngle.setPosition(0.20);
-            slideRAngle.setPosition(0.20);
-            clawVAngle.setPosition(0.40);
+
 
 
 
@@ -424,12 +432,14 @@ public class B_Far_Truss_Edge extends LinearOpMode {
             slide.setPower(slidePower);
             sleep(200);
             drive.followTrajectory(back11);
+            clawVAngle.setPosition(1);
             drive.followTrajectory(strafe2edgeR);
 
             drive.followTrajectory(back20);
             //drive.followTrajectory(return2sender);
             //drive.followTrajectory(return2sender2);
             clawVAngle.setPosition(1);
+            sleep(20000);
 
 
 
@@ -444,6 +454,9 @@ public class B_Far_Truss_Edge extends LinearOpMode {
 
 //___333333333333333333333333333333333333333333333333333333333333333333333333
         } else if (zoneDetected == 3) {
+            sleep(5000);
+            clawVAngle.setPosition(0.4);
+            sleep(300);
             slideLAngle.setPosition(0.45);
             slideRAngle.setPosition(0.45);
 
@@ -497,13 +510,14 @@ public class B_Far_Truss_Edge extends LinearOpMode {
             sleep(300);
             drive.followTrajectory(right2boardmid);
             drive.followTrajectory(back11);
+            clawVAngle.setPosition(1);
             drive.followTrajectory(strafe2edgeR);
 
             drive.followTrajectory(back20);
             //drive.followTrajectory(return2sender);
             //drive.followTrajectory(return2sender2);
             clawVAngle.setPosition(1);
-            sleep(100);
+            sleep(30000);
 
         }
 

@@ -74,7 +74,8 @@ public class OpenCVGreatestColorTest extends OpenCvPipeline {
         Mat hsv = new Mat();
         Imgproc.cvtColor(frame, hsv, Imgproc.COLOR_RGB2HSV_FULL);
 
-        Rect roi = new Rect(0, heightNoDetectPixels, frame.width(), frame.height()-heightNoDetectPixels);
+        Rect roi = new Rect(0, 20, frame.width(), 40);
+        //Rect roi = new Rect(0, heightNoDetectPixels, frame.width(), frame.height()-heightNoDetectPixels);
 //            Mat frameBottomHalf = new Mat(hsv, roi);
 
 

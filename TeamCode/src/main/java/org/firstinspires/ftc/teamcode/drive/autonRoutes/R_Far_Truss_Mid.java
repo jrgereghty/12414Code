@@ -285,16 +285,18 @@ public class R_Far_Truss_Mid extends LinearOpMode {
 
 
         if (zoneDetected == 1) {
+            sleep(5000);
 
 
             slideLAngle.setPosition(0.45);
             slideRAngle.setPosition(0.45);
+            clawVAngle.setPosition(0.30);
 
             slideLAngle.setPosition(0.10);
             slideRAngle.setPosition(0.10);
-            clawVAngle.setPosition(0.35);
+
             drive.followTrajectory(line4start);
-            sleep(230);
+            sleep(215);
 
 
 
@@ -345,12 +347,14 @@ public class R_Far_Truss_Mid extends LinearOpMode {
             sleep(200);
             drive.followTrajectory(left2boardmid);
             drive.followTrajectory(back11);
+            clawVAngle.setPosition(1);
             drive.followTrajectory(strafe2midR);
 
             drive.followTrajectory(back20);
             //drive.followTrajectory(return2sender);
             //drive.followTrajectory(return2sender2);
             clawVAngle.setPosition(1);
+            sleep(20000);
 
             /*
             drive.turn(Math.toRadians(90));
@@ -379,8 +383,10 @@ public class R_Far_Truss_Mid extends LinearOpMode {
 
 //_______2222222222-2-2-2-22-2-2-2-2-2-2-2-2-22-2-2-2-22-2-2-2-22-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2
         } else if (zoneDetected == 2) {
+            sleep(5000);
             slideLAngle.setPosition(0.10);
             slideRAngle.setPosition(0.10);
+            clawVAngle.setPosition(0.2);
 
             drive.followTrajectory(line4startmid);
             sleep(180);
@@ -431,13 +437,15 @@ public class R_Far_Truss_Mid extends LinearOpMode {
             slide.setPower(slidePower);
             sleep(260);
             drive.followTrajectory(strafe2left);
+            clawVAngle.setPosition(1);
             drive.followTrajectory(back11);
             drive.followTrajectory(strafe2midR);
 
             drive.followTrajectory(back20);
             //drive.followTrajectory(return2sender);
             //drive.followTrajectory(return2sender2);
-            clawVAngle.setPosition(1);
+
+            sleep(20000);
 
 
 
@@ -452,8 +460,11 @@ public class R_Far_Truss_Mid extends LinearOpMode {
 
 //___333333333333333333333333333333333333333333333333333333333333333333333333
         } else if (zoneDetected == 3) {
-            slideLAngle.setPosition(0.10);
-            slideRAngle.setPosition(0.10);
+            sleep(5000);
+            slideLAngle.setPosition(0.06);
+            slideRAngle.setPosition(0.06);
+            clawVAngle.setPosition(0.5);
+            sleep(100);
 
             drive.followTrajectory(line4startright);
             sleep(200);
@@ -462,7 +473,7 @@ public class R_Far_Truss_Mid extends LinearOpMode {
 
             slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
             slide.setPower(slidePower);
-            sleep(210);
+            sleep(200);
             slide.setPower(0);
 
 
@@ -505,14 +516,15 @@ public class R_Far_Truss_Mid extends LinearOpMode {
             sleep(300);
             drive.followTrajectory(right2boardmid);
             drive.followTrajectory(back11);
+            clawVAngle.setPosition(1);
             drive.followTrajectory(strafe2midR);
 
             drive.followTrajectory(back20);
-            clawVAngle.setPosition(0.4);
+            clawVAngle.setPosition(1);
             //drive.followTrajectory(return2sender);
             //drive.followTrajectory(return2sender2);
-            clawVAngle.setPosition(1);
-            sleep(100);
+
+            sleep(20000);
 
         }
 

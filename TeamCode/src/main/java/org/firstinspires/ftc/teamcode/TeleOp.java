@@ -134,8 +134,8 @@ public class TeleOp extends OpMode {
         clawHAngle.setPosition(hPos);
 
         clawVAngle = hardwareMap.servo.get("clawVAngle");
-        clawVAngle.setPosition(0.7);
         clawVAngle.scaleRange(0, 0.6);
+        clawVAngle.setPosition(1);
 
         clawL = hardwareMap.servo.get("clawL");
         clawL.scaleRange(0.21, 0.605);
@@ -152,6 +152,8 @@ public class TeleOp extends OpMode {
 
     @Override
     public void loop() {
+
+        clawVAngle.scaleRange(0, 0.6);
 
         xMovement = gamepad1.left_stick_x;
         yMovement = gamepad1.left_stick_y;
@@ -240,10 +242,10 @@ public class TeleOp extends OpMode {
             }
             vPos = getClawVAngle2(pos);
         }
-        if (gamepad2.right_stick_x >= 0.005 && hPos >= 0.01) {
+        if (gamepad2.right_stick_x >= 0.005) {
             hPos += -gamepad2.right_stick_x * 0.01;
         }
-        if (gamepad2.right_stick_x <= -0.005 && hPos <= 0.99) {
+        if (gamepad2.right_stick_x <= -0.005) {
             hPos += -gamepad2.right_stick_x * 0.01;
         }
         if (hPos > 1) {

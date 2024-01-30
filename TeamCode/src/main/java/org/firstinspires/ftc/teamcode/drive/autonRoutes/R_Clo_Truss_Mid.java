@@ -272,6 +272,8 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
 
 
             if (zoneDetected == 1) {
+                clawVAngle.setPosition(0.45);
+                sleep(200);
 
 
                 slideLAngle.setPosition(0.45); //sets slides from init pos
@@ -315,11 +317,12 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
                 slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
                 slide.setPower(slidePower);
                 drive.followTrajectory(back11);
+                clawVAngle.setPosition(1);
                 drive.followTrajectory(strafe2midR);
 
                 drive.followTrajectory(back20);
                 clawVAngle.setPosition(1);
-                sleep(5000);
+                sleep(20000);
 
 
 
@@ -355,6 +358,8 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
 
                 slideLAngle.setPosition(0.45);
                 slideRAngle.setPosition(0.45);
+                clawVAngle.setPosition(0.45);
+                sleep(200);
 
                 drive.followTrajectory(line4startmid);
                 sleep(300);
@@ -366,7 +371,7 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
 
                 slideLAngle.setPosition(0.15);
                 slideRAngle.setPosition(0.15);
-                clawVAngle.setPosition(0.45);
+
                 sleep(500);
                 clawR.setPosition(0.5);
 
@@ -394,11 +399,12 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
                 slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
                 slide.setPower(slidePower);
                 drive.followTrajectory(back11);
+                clawVAngle.setPosition(1);
                 drive.followTrajectory(strafe2midR);
 
                 drive.followTrajectory(back20);
                 clawVAngle.setPosition(1);
-                sleep(5000);
+                sleep(20000);
                 /*
                 drive.followTrajectory(forward20);
                 drive.followTrajectory(return2sender);
@@ -407,8 +413,10 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
 
 //________________________________________________________3333333333333333_3_3_3_3_3_3_3_3
             } else if (zoneDetected == 3) {
-                slideLAngle.setPosition(0.45);
-                slideRAngle.setPosition(0.45);
+                clawVAngle.setPosition(0.6);
+                sleep(200);
+                slideLAngle.setPosition(0.40);
+                slideRAngle.setPosition(0.40);
                 drive.followTrajectory(line4startright);
                 sleep(200);
 
@@ -448,12 +456,12 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
                 slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
                 slide.setPower(slidePower);
                 drive.followTrajectory(back11);
-
+                clawVAngle.setPosition(1);
                 drive.followTrajectory(strafe2midR);
                 //drive.turn(Math.PI);
                 drive.followTrajectory(back20);
                 clawVAngle.setPosition(1);
-                sleep(5000);
+                sleep(20000);
                 /*
 
                 drive.followTrajectory(forward20);
