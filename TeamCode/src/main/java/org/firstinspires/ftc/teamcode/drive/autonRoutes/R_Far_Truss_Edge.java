@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive.autonRoutes;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CenterStageAuton.OpenCVDetectTeamProp;
 import org.firstinspires.ftc.teamcode.CenterStageAuton.OpenCVGreatestColorTest;
@@ -29,33 +31,19 @@ public class R_Far_Truss_Edge extends LinearOpMode {
     //public static boolean isTest = false;
     public static boolean isParkFinal = true;
 
-    //public static double pos = 0.5;
-    public static double hPos = 0.5;
-    public static double vPos = 0.7;
-    public static double lPos = 0;
-    public static double rPos = 0;
 
-    double slideLength = 0.0;
+
     double slidePos = 0.0;
 
-    double slidePower;
-    double sudoTrigger;
-    double sudoTriggerDepth = 1;
 
-    private static double getSlideVelocity(int sudoTrigger, double slidePos, double sudoTriggerDepth) {
-        double velocity = 0.0;
-        if (sudoTrigger == 1) {
-            velocity = sudoTriggerDepth * (0.6 * Math.cos(0.5 * Math.PI * slidePos) + 0.4);
-        } else if (sudoTrigger == -1) {
-            velocity = sudoTriggerDepth * (-0.6 * Math.sin(0.5 * Math.PI * slidePos) - 0.4);
-        }
-        return(velocity);
-    }
+
+
 
 
 
     @Override
     public void runOpMode() {
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
 
@@ -152,8 +140,8 @@ public class R_Far_Truss_Edge extends LinearOpMode {
                 .splineTo(new Vector2d(-49.57, -46.43), Math.toRadians(212.07))
 
                 .build();
-        Trajectory back11 = drive.trajectoryBuilder(start2board.end())
-                .back(5)
+        Trajectory back10 = drive.trajectoryBuilder(start2board.end())
+                .back(10)
                 .build();
         /*
         Trajectory strafe2midR = drive.trajectoryBuilder(back11.end())
@@ -170,7 +158,7 @@ public class R_Far_Truss_Edge extends LinearOpMode {
                 .build();
 
          */
-        Trajectory strafe2edgeR = drive.trajectoryBuilder(back11.end())
+        Trajectory strafe2edgeR = drive.trajectoryBuilder(back10.end())
                 .lineToSplineHeading(new Pose2d(39, -59, Math.toRadians(180)))
                 .build();
         Trajectory back20 = drive.trajectoryBuilder(strafe2edgeR.end())
@@ -188,12 +176,17 @@ public class R_Far_Truss_Edge extends LinearOpMode {
 
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         //webcam2 = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 2"), cameraMonitorViewId);
+
         pipeline = new OpenCVGreatestColorTest(telemetry);
+
         //webcam2.setPipeline(pipeline);
+
         colorPipe = new OpenCVDetectTeamProp(telemetry, OpenCVGreatestColorTest.lowerRed, OpenCVGreatestColorTest.upperRed);
         webcam.setPipeline(colorPipe);
+
         FtcDashboard.getInstance().startCameraStream(webcam, 0);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
@@ -220,7 +213,8 @@ public class R_Far_Truss_Edge extends LinearOpMode {
         slide = hardwareMap.dcMotor.get("slide");
         slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slide.setTargetPosition(1);
+        slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         slideLAngle = hardwareMap.servo.get("slideLAngle");
         slideLAngle.setDirection(Servo.Direction.REVERSE);
@@ -231,65 +225,56 @@ public class R_Far_Truss_Edge extends LinearOpMode {
 
         clawHAngle = hardwareMap.servo.get("clawHAngle");
         clawHAngle.scaleRange(0.04, 1);
-        clawHAngle.setPosition(hPos);
+        clawHAngle.setPosition(0.5);
 
         clawVAngle = hardwareMap.servo.get("clawVAngle");
-        clawVAngle.setPosition(vPos);
-        clawVAngle.scaleRange(0, 0.6);
-
+        clawVAngle.scaleRange(0, 0.7);
+        clawVAngle.setPosition(1);
 
         clawL = hardwareMap.servo.get("clawL");
         clawL.scaleRange(0.21, 0.605);
-        clawL.setPosition(lPos);
+        clawL.setPosition(0);
 
         clawR = hardwareMap.servo.get("clawR");
         clawR.setDirection(Servo.Direction.REVERSE);
-        clawR.scaleRange(0.17, 0.595);
-        clawR.setPosition(rPos);
-
-
+        clawR.scaleRange(0.20, 0.595);
+        clawR.setPosition(0);
 
         int StopSearch = 0;
         int zoneDetectionPing1 = 0;
         int zoneDetectionPing2 = 0;
         int zoneDetectionPing3 = 0;
         int zoneDetected = 0;
+
         while (opModeInInit() && StopSearch == 0) {
-
             if (!OpenCVDetectTeamProp.isDetected) {
-                zoneDetected = 3;
                 zoneDetectionPing3++;
-
             } else if (OpenCVDetectTeamProp.centerX < 200) {
-                zoneDetected = 1;
                 zoneDetectionPing1++;
-
-
             } else if (OpenCVDetectTeamProp.centerX >= 200) {
-                zoneDetected = 2;
                 zoneDetectionPing2++;
-
-            } else if (zoneDetectionPing1 > 10 || zoneDetectionPing2 > 10 || zoneDetectionPing3 > 10) {
+            }
+            if (zoneDetectionPing1 >= 100 || zoneDetectionPing2 >= 100 || zoneDetectionPing3 >= 100) {
+                if (zoneDetectionPing1 >= 100) {
+                    zoneDetected = 1;
+                } else if (zoneDetectionPing2 >= 100) {
+                    zoneDetected = 2;
+                } else if (zoneDetectionPing3 >= 100) {
+                    zoneDetected = 3;
+                }
                 StopSearch = 1;
             }
         }
+        telemetry.addData("zoneDetected", zoneDetected);
+        telemetry.update();
         waitForStart();
 
         slidePos = slide.getCurrentPosition() / 537.7 * 4 * Math.PI / 54.864;
-        slideLength = slidePos * 54.864 + 38.5;
+
+        drive.followTrajectory(forward10);
+
 
         /*
-        } else if (gamepad1.left_trigger > 0.01) {
-            slidePower = getSlideVelocity(-1, slidePos, Math.pow(gamepad1.left_trigger, 3));
-            slide.setPower(slidePower);
-        } else {
-            slide.setPower(0);
-        }
-
-         */
-
-
-
         if (zoneDetected == 1) {
 
 
@@ -306,8 +291,6 @@ public class R_Far_Truss_Edge extends LinearOpMode {
 
 
 
-            slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
             sleep(225);
             slide.setPower(0);
 
@@ -320,8 +303,7 @@ public class R_Far_Truss_Edge extends LinearOpMode {
 
             sleep(500);
 
-            slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
+
 
             sleep(800);
             drive.followTrajectory(pixel2start);
@@ -332,8 +314,7 @@ public class R_Far_Truss_Edge extends LinearOpMode {
             slideLAngle.setPosition(0.4);
             slideRAngle.setPosition(0.4);
             clawVAngle.setPosition(0.2);
-            slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
+
             sleep(320);
 
             slide.setPower(0);
@@ -347,8 +328,7 @@ public class R_Far_Truss_Edge extends LinearOpMode {
 
 
             sleep(200);
-            slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
+
             sleep(200);
             drive.followTrajectory(left2boardmid);
             drive.followTrajectory(back11);
@@ -382,7 +362,7 @@ public class R_Far_Truss_Edge extends LinearOpMode {
             drive.followTrajectory(start2board);
             drive.followTrajectory(back11);
 
-             */
+
 
 
 
@@ -400,8 +380,7 @@ public class R_Far_Truss_Edge extends LinearOpMode {
 
 
 
-            slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
+
             sleep(377);
             slide.setPower(0);
 
@@ -413,8 +392,7 @@ public class R_Far_Truss_Edge extends LinearOpMode {
 
             sleep(300);
 
-            slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
+
 
             sleep(1000);
             drive.followTrajectory(pixel2startmid);
@@ -426,8 +404,7 @@ public class R_Far_Truss_Edge extends LinearOpMode {
             slideLAngle.setPosition(0.4);
             slideRAngle.setPosition(0.4);
             clawVAngle.setPosition(0.15);
-            slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
+
             sleep(320);
             clawVAngle.setPosition(0.25);
             slide.setPower(0);
@@ -438,8 +415,7 @@ public class R_Far_Truss_Edge extends LinearOpMode {
 
             sleep(200);
             drive.followTrajectory(strafe2left);
-            slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
+
             sleep(260);
             drive.followTrajectory(strafe2right);
             drive.followTrajectory(back11);
@@ -479,8 +455,6 @@ public class R_Far_Truss_Edge extends LinearOpMode {
 
 
 
-            slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
             sleep(230);
             slide.setPower(0);
 
@@ -492,8 +466,7 @@ public class R_Far_Truss_Edge extends LinearOpMode {
 
             sleep(500);
 
-            slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
+
 
             sleep(1000);
             drive.followTrajectory(pixel2startright);
@@ -504,8 +477,7 @@ public class R_Far_Truss_Edge extends LinearOpMode {
 
             drive.followTrajectory(start2board);
 
-            slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
+
             sleep(270);
 
 
@@ -519,8 +491,7 @@ public class R_Far_Truss_Edge extends LinearOpMode {
 
 
             sleep(200);
-            slidePower = getSlideVelocity(-1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
+
             sleep(300);
             drive.followTrajectory(right2boardmid);
             drive.followTrajectory(back11);
@@ -534,7 +505,7 @@ public class R_Far_Truss_Edge extends LinearOpMode {
             clawVAngle.setPosition(1);
             sleep(20000);
 
-        }
+        }*/
 
 
 

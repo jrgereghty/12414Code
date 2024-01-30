@@ -25,7 +25,7 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
     public static double minArea = 40;
     public static double minWidth = 40;
     public static double minHeight = 27;
-    public int[] lowerColor = {0,0, 0};
+    public int[] lowerColor = {0, 0, 0};
     public int[] upperColor = {255, 255, 255};
 
     public static int centerX;

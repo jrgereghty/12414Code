@@ -213,12 +213,12 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
 
         clawL = hardwareMap.servo.get("clawL");
         clawL.scaleRange(0.21, 0.605);
-        clawL.setPosition(lPos);
+        clawL.setPosition(0.5);
 
         clawR = hardwareMap.servo.get("clawR");
         clawR.setDirection(Servo.Direction.REVERSE);
-        clawR.scaleRange(0.17, 0.595);
-        clawR.setPosition(rPos);
+        clawR.scaleRange(0.20, 0.595);
+        clawR.setPosition(0.5);
 
 
 

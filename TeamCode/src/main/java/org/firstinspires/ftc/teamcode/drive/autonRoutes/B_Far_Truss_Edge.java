@@ -29,11 +29,9 @@ public class B_Far_Truss_Edge extends LinearOpMode {
     //public static boolean isTest = false;
     public static boolean isParkFinal = true;
 
-    //public static double pos = 0.5;
     public static double hPos = 0.5;
-    public static double vPos = 0.7;
-    public static double lPos = 0;
-    public static double rPos = 0;
+    public static double vPos = 1;
+    public static double pos = 0.8;
 
     double slideLength = 0.0;
     double slidePos = 0.0;
@@ -212,28 +210,28 @@ public class B_Far_Truss_Edge extends LinearOpMode {
 
         slideLAngle = hardwareMap.servo.get("slideLAngle");
         slideLAngle.setDirection(Servo.Direction.REVERSE);
-        slideLAngle.setPosition(0.8);
+        slideLAngle.setPosition(pos);
 
         slideRAngle = hardwareMap.servo.get("slideRAngle");
-        slideRAngle.setPosition(0.8);
+        slideRAngle.setPosition(pos);
 
         clawHAngle = hardwareMap.servo.get("clawHAngle");
         clawHAngle.scaleRange(0.04, 1);
         clawHAngle.setPosition(hPos);
 
         clawVAngle = hardwareMap.servo.get("clawVAngle");
-        clawVAngle.setPosition(vPos);
         clawVAngle.scaleRange(0, 0.6);
+        clawVAngle.setPosition(vPos);
 
 
         clawL = hardwareMap.servo.get("clawL");
         clawL.scaleRange(0.21, 0.605);
-        clawL.setPosition(lPos);
+        clawL.setPosition(0.5);
 
         clawR = hardwareMap.servo.get("clawR");
         clawR.setDirection(Servo.Direction.REVERSE);
-        clawR.scaleRange(0.17, 0.595);
-        clawR.setPosition(rPos);
+        clawR.scaleRange(0.20, 0.595);
+        clawR.setPosition(0.5);
 
 
 
