@@ -12,296 +12,157 @@ pos = 0.1 (75 deg), vpos = 0.214, slidePos = 0.573
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import org.firstinspires.ftc.teamcode.drive.JayMap;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "purple")
 @Config
 
 public class TeleOp extends OpMode {
 
-    DcMotor frontLeft;
-    DcMotor frontRight;
-    DcMotor backLeft;
-    DcMotor backRight;
-
-    DcMotor slide;
-
-    DcMotor hangLeft;
-    DcMotor hangRight;
-
-    Servo clawHAngle;
-    Servo clawVAngle;
-    Servo slideLAngle;
-    Servo slideRAngle;
-    Servo clawL;
-    Servo clawR;
-
+    JayMap jayBot = new JayMap(this);
     MecanumDrive drive;
-
-    boolean halfSpeedToggle = true;
-    boolean aLast = false;
-
-    boolean drivingReverse = false;
-    boolean yLast = false;
-
-    boolean clawLOpen = false;
-    boolean leftBumper2Last = false;
-
-    boolean clawROpen = false;
-    boolean rightBumper2Last = false;
-
-    boolean intake = true;
-    boolean ps2Last = false;
-
-    // slidePos is a fraction of the total possible slide extension.
-    double slideLength = 0.0;
-    double slidePos = 0.0;
-
-    double yMovement;
-    double xMovement;
-    double rotation;
-    double drivePower;
-    double slidePower;
-    public static double pos = 0.8;
-    public static double hPos = 0.5;
-    public static double vPos = 1;
-
-    private static double getSlideVelocity(int trigger, double slidePos, double triggerDepth) {
-        double velocity = 0.0;
-        if (trigger == 1) {
-            velocity = triggerDepth * (0.6 * Math.cos(0.5 * Math.PI * slidePos) + 0.4);
-        } else if (trigger == -1) {
-            velocity = triggerDepth * (-0.6 * Math.sin(0.5 * Math.PI * slidePos) - 0.4);
-        }
-        return(velocity);
-    }
-
-    private static double getSlideAngle(double slideLength) {
-        return(Math.toDegrees(Math.acos(22.5 / slideLength)) / 47.8 - 1.4);
-    }
-
-    private static double getClawVAngle1(double slideLength) {
-        return(-Math.toDegrees(Math.asin(22.5 / slideLength)) / 428.57 + 0.4);
-    }
-
-    private static double getClawVAngle2(double slideAngle) {
-        return(slideAngle / 3.43 + 0.117);
-    }
 
     @Override
     public void init() {
-
-        frontLeft = hardwareMap.dcMotor.get("frontLeft");
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
-
-        frontRight = hardwareMap.dcMotor.get("frontRight");
-        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        backLeft = hardwareMap.dcMotor.get("backLeft");
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
-
-        backRight = hardwareMap.dcMotor.get("backRight");
-        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        hangLeft = hardwareMap.dcMotor.get("hangLeft");
-        hangLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        hangLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        hangRight = hardwareMap.dcMotor.get("hangRight");
-        hangRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        slide = hardwareMap.dcMotor.get("slide");
-        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        slideLAngle = hardwareMap.servo.get("slideLAngle");
-        slideLAngle.setDirection(Servo.Direction.REVERSE);
-        slideLAngle.setPosition(0.8);
-
-        slideRAngle = hardwareMap.servo.get("slideRAngle");
-        slideRAngle.setPosition(0.8);
-
-        clawHAngle = hardwareMap.servo.get("clawHAngle");
-        clawHAngle.scaleRange(0.04, 1);
-        clawHAngle.setPosition(hPos);
-
-        clawVAngle = hardwareMap.servo.get("clawVAngle");
-        clawVAngle.scaleRange(0, 0.7);
-        clawVAngle.setPosition(vPos);
-
-        clawL = hardwareMap.servo.get("clawL");
-        clawL.scaleRange(0.21, 0.605);
-        clawL.setPosition(0.5);
-
-        clawR = hardwareMap.servo.get("clawR");
-        clawR.setDirection(Servo.Direction.REVERSE);
-        clawR.scaleRange(0.20, 0.595);
-        clawR.setPosition(0.5);
-
-        drive = new MecanumDrive(frontLeft, frontRight, backLeft, backRight);
-
+        jayBot.init();
+        drive = new MecanumDrive(jayBot.frontLeft, jayBot.frontRight, jayBot.backLeft, jayBot.backRight);
     }
 
     @Override
     public void loop() {
 
-        xMovement = gamepad1.left_stick_x;
-        yMovement = gamepad1.left_stick_y;
-        rotation = gamepad1.right_stick_x;
-        drivePower = Math.max(Math.max(Math.abs(yMovement), Math.abs(xMovement)), Math.abs(rotation));
+        jayBot.xMovement = gamepad1.left_stick_x;
+        jayBot.yMovement = gamepad1.left_stick_y;
+        jayBot.rotation = gamepad1.right_stick_x;
+        jayBot.drivePower = Math.max(Math.max(Math.abs(jayBot.yMovement), Math.abs(jayBot.xMovement)), Math.abs(jayBot.rotation));
 
-        if (!aLast && gamepad1.a) {
-            halfSpeedToggle = !halfSpeedToggle;
+        if (!jayBot.aLast && gamepad1.a) {
+            jayBot.halfSpeedToggle = !jayBot.halfSpeedToggle;
         }
-        if (halfSpeedToggle) {
-            drivePower *= 0.5;
+        if (jayBot.halfSpeedToggle) {
+            jayBot.drivePower *= 0.5;
         }
-        aLast = gamepad1.a;
+        jayBot.aLast = gamepad1.a;
 
-        if (!yLast && gamepad1.y) {
-            drivingReverse = !drivingReverse;
+        if (!jayBot.yLast && gamepad1.y) {
+            jayBot.drivingReverse = !jayBot.drivingReverse;
         }
-        if (drivingReverse) {
-            xMovement *= -1;
-            yMovement *= -1;
+        if (jayBot.drivingReverse) {
+            jayBot.xMovement *= -1;
+            jayBot.yMovement *= -1;
         }
-        yLast = gamepad1.y;
+        jayBot.yLast = gamepad1.y;
 
-        /*
-        if (Math.abs(gamepad1.right_stick_y) > 0.01) {
-            pos += Math.pow(gamepad1.right_stick_y, 3) * 0.05;
+        if (!jayBot.rightBumper2Last && gamepad2.right_bumper) {
+            jayBot.clawROpen = !jayBot.clawROpen;
         }
-        slideLAngle.setPosition(pos);
-        slideRAngle.setPosition(pos);
-        */
-
-        if (!rightBumper2Last && gamepad2.right_bumper) {
-            clawROpen = !clawROpen;
-        }
-        if (clawROpen) {
-            clawR.setPosition(0.5);
+        if (jayBot.clawROpen) {
+            jayBot.clawR.setPosition(0.5);
         } else {
-            clawR.setPosition(0);
+            jayBot.clawR.setPosition(0);
         }
-        rightBumper2Last = gamepad2.right_bumper;
+        jayBot.rightBumper2Last = gamepad2.right_bumper;
 
-        if (!leftBumper2Last && gamepad2.left_bumper) {
-            clawLOpen = !clawLOpen;
+        if (!jayBot.leftBumper2Last && gamepad2.left_bumper) {
+            jayBot.clawLOpen = !jayBot.clawLOpen;
         }
-        if (clawLOpen) {
-            clawL.setPosition(0.5);
+        if (jayBot.clawLOpen) {
+            jayBot.clawL.setPosition(0.5);
         } else {
-            clawL.setPosition(0);
+            jayBot.clawL.setPosition(0);
         }
-        leftBumper2Last = gamepad2.left_bumper;
+        jayBot.leftBumper2Last = gamepad2.left_bumper;
 
-        slidePos = slide.getCurrentPosition() / 537.7 * 4 * Math.PI / 41.1;
-        slideLength = slidePos * 41.1 + 38.5;
+        jayBot.slidePos = jayBot.slide.getCurrentPosition() / 537.7 * 4 * Math.PI / 41.1;
+        jayBot.slideLength = jayBot.slidePos * 41.1 + 38.5;
         if (gamepad2.right_trigger > 0.01) {
-            slidePower = getSlideVelocity(1, slidePos, Math.pow(gamepad2.right_trigger, 3));
-            slide.setPower(slidePower);
+            jayBot.slidePower = jayBot.getSlideVelocity(1, jayBot.slidePos, Math.pow(gamepad2.right_trigger, 3));
+            jayBot.slide.setPower(jayBot.slidePower);
         } else if (gamepad2.left_trigger > 0.01) {
-            slidePower = getSlideVelocity(-1, slidePos, Math.pow(gamepad2.left_trigger, 3));
-            slide.setPower(slidePower);
+            jayBot.slidePower = jayBot.getSlideVelocity(-1, jayBot.slidePos, Math.pow(gamepad2.left_trigger, 3));
+            jayBot.slide.setPower(jayBot.slidePower);
         } else {
-            if (slidePos <= 0.08) {
-                slide.setPower(-0.5);
-            } else if (slidePos >= 0.92) {
-                slide.setPower(0.5);
+            if (jayBot.slidePos <= 0.08) {
+                jayBot.slide.setPower(-0.5);
+            } else if (jayBot.slidePos >= 0.92) {
+                jayBot.slide.setPower(0.5);
             }
-            slide.setPower(0);
+            jayBot.slide.setPower(0);
         }
 
-        if (!ps2Last && gamepad2.ps) {
-            intake = !intake;
-            hPos = 0.5;
-            if (intake) {
-                pos = 0;
-                vPos = getClawVAngle1(slideLength);
+        if (!jayBot.ps2Last && gamepad2.ps) {
+            jayBot.intake = !jayBot.intake;
+            jayBot.hPos = 0.5;
+            if (jayBot.intake) {
+                jayBot.pos = 0;
+                jayBot.vPos = JayMap.getClawVAngle1(jayBot.slideLength);
             } else {
-                pos = 0.5;
-                vPos = getClawVAngle2(pos);
+                jayBot.pos = 0.5;
+                jayBot.vPos = JayMap.getClawVAngle2(jayBot.pos);
             }
         }
-        if (intake) {
-            pos = getSlideAngle(slideLength);
-            vPos = getClawVAngle1(slideLength);
+        if (jayBot.intake) {
+            jayBot.pos = JayMap.getSlideAngle(jayBot.slideLength);
+            jayBot.vPos = JayMap.getClawVAngle1(jayBot.slideLength);
         } else {
-            if (gamepad2.left_stick_y >= 0.005 && pos <= 0.99) {
-                pos += gamepad2.left_stick_y * 0.01;
+            if (gamepad2.left_stick_y >= 0.005 && jayBot.pos <= 0.99) {
+                jayBot.pos += gamepad2.left_stick_y * 0.01;
             }
-            if (gamepad2.left_stick_y <= -0.005 && pos >= 0.01) {
-                pos += gamepad2.left_stick_y * 0.01;
+            if (gamepad2.left_stick_y <= -0.005 && jayBot.pos >= 0.01) {
+                jayBot.pos += gamepad2.left_stick_y * 0.01;
             }
-            vPos = getClawVAngle2(pos);
+            jayBot.vPos = JayMap.getClawVAngle2(jayBot.pos);
         }
         if (gamepad2.right_stick_x >= 0.05) {
-            hPos += -gamepad2.right_stick_x * 0.01;
+            jayBot.hPos += -gamepad2.right_stick_x * 0.01;
         }
         if (gamepad2.right_stick_x <= -0.05) {
-            hPos += -gamepad2.right_stick_x * 0.01;
+            jayBot.hPos += -gamepad2.right_stick_x * 0.01;
         }
 
-        if (hPos > 1) {
-            hPos = 1;
-        } else if (hPos < 0) {
-            hPos = 0;
+        if (jayBot.hPos > 1) {
+            jayBot.hPos = 1;
+        } else if (jayBot.hPos < 0) {
+            jayBot.hPos = 0;
         }
-        if (pos > 1) {
-            pos = 1;
-        } else if (pos < 0) {
-            pos = 0;
+        if (jayBot.pos > 1) {
+            jayBot.pos = 1;
+        } else if (jayBot.pos < 0) {
+            jayBot.pos = 0;
         }
-        if (vPos > 1) {
-            vPos = 1;
-        } else if (vPos < 0) {
-            vPos = 0;
+        if (jayBot.vPos > 1) {
+            jayBot.vPos = 1;
+        } else if (jayBot.vPos < 0) {
+            jayBot.vPos = 0;
         }
 
-        ps2Last = gamepad2.ps;
-        slideLAngle.setPosition(pos);
-        slideRAngle.setPosition(pos);
-        clawHAngle.setPosition(hPos);
-        clawVAngle.setPosition(vPos);
+        jayBot.ps2Last = gamepad2.ps;
+        jayBot.slideLAngle.setPosition(jayBot.pos);
+        jayBot.slideRAngle.setPosition(jayBot.pos);
+        jayBot.clawHAngle.setPosition(jayBot.hPos);
+        jayBot.clawVAngle.setPosition(jayBot.vPos);
 
         if (gamepad2.y) {
-            hangLeft.setPower(-1);
-            hangRight.setPower(-1);
+            jayBot.hangLeft.setPower(-1);
+            jayBot.hangRight.setPower(-1);
         } else if (gamepad2.a) {
-            hangLeft.setPower(1);
-            hangRight.setPower(1);
+            jayBot.hangLeft.setPower(1);
+            jayBot.hangRight.setPower(1);
         } else {
-            hangLeft.setPower(0);
-            hangRight.setPower(0);
+            jayBot.hangLeft.setPower(0);
+            jayBot.hangRight.setPower(0);
         }
-        /*
-        if (gamepad1.dpad_up) {
-            clawVAngle.setPosition(clawVAngle.getPosition() + 0.005);
-        }
-        if (gamepad1.dpad_down) {
-            clawVAngle.setPosition(clawVAngle.getPosition() - 0.005);
-        }
-        if (gamepad1.dpad_right) {
-            clawHAngle.setPosition(clawHAngle.getPosition() - 0.005);
-        }
-        if (gamepad1.dpad_left) {
-            clawHAngle.setPosition(clawHAngle.getPosition() + 0.005);
-        )
-        */
 
-        telemetry.addData("slidePos", slidePos);
-        telemetry.addData("halfSpeed", halfSpeedToggle);
-        telemetry.addData("drivingReverse", drivingReverse);
-        telemetry.addData("clawHAngle", clawHAngle.getPosition());
-        telemetry.addData("clawVAngle", clawVAngle.getPosition());
-        telemetry.addData("slideAngle", slideLAngle.getPosition());
-        updateTelemetry(telemetry);
+        telemetry.addData("slidePos", jayBot.slidePos);
+        telemetry.addData("halfSpeed", jayBot.halfSpeedToggle);
+        telemetry.addData("drivingReverse", jayBot.drivingReverse);
+        telemetry.addData("clawHAngle", jayBot.clawHAngle.getPosition());
+        telemetry.addData("clawVAngle", jayBot.clawVAngle.getPosition());
+        telemetry.addData("slideAngle", jayBot.slideLAngle.getPosition());
+        telemetry.update();
 
-        drive.moveInTeleop(xMovement, yMovement, rotation, drivePower);
+        drive.moveInTeleop(jayBot.xMovement, jayBot.yMovement, jayBot.rotation, jayBot.drivePower);
 
     }
 

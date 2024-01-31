@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CenterStageAuton.OpenCVDetectTeamProp;
 import org.firstinspires.ftc.teamcode.CenterStageAuton.OpenCVGreatestColorTest;
+import org.firstinspires.ftc.teamcode.drive.JayMap;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -29,38 +30,15 @@ public class R_Far_Truss_Edge extends LinearOpMode {
     static OpenCVGreatestColorTest pipeline;
     //PointFollower follower = new PointFollower(this);
     //public static boolean isTest = false;
-    public static boolean isParkFinal = true;
 
-
-
-    double slidePos = 0.0;
-
-
-
-
-
-
+    JayMap jayBot = new JayMap(this);
 
     @Override
     public void runOpMode() {
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
-
-
-        DcMotor slide;
-        Servo clawHAngle;
-        Servo clawVAngle;
-        Servo slideLAngle;
-        Servo slideRAngle;
-        Servo clawL;
-        Servo clawR;
-
-
-
-
-
-
+        jayBot.init();
 
         Pose2d startPose = new Pose2d(-36.00, -62.84, Math.toRadians(90.00));
 
@@ -207,38 +185,6 @@ public class R_Far_Truss_Edge extends LinearOpMode {
 
         //___________________________________________________________________
 
-
-
-
-        slide = hardwareMap.dcMotor.get("slide");
-        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide.setTargetPosition(1);
-        slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        slideLAngle = hardwareMap.servo.get("slideLAngle");
-        slideLAngle.setDirection(Servo.Direction.REVERSE);
-        slideLAngle.setPosition(0.8);
-
-        slideRAngle = hardwareMap.servo.get("slideRAngle");
-        slideRAngle.setPosition(0.8);
-
-        clawHAngle = hardwareMap.servo.get("clawHAngle");
-        clawHAngle.scaleRange(0.04, 1);
-        clawHAngle.setPosition(0.5);
-
-        clawVAngle = hardwareMap.servo.get("clawVAngle");
-        clawVAngle.scaleRange(0, 0.7);
-        clawVAngle.setPosition(1);
-
-        clawL = hardwareMap.servo.get("clawL");
-        clawL.scaleRange(0.21, 0.605);
-        clawL.setPosition(0);
-
-        clawR = hardwareMap.servo.get("clawR");
-        clawR.setDirection(Servo.Direction.REVERSE);
-        clawR.scaleRange(0.20, 0.595);
-        clawR.setPosition(0);
 
         int StopSearch = 0;
         int zoneDetectionPing1 = 0;
