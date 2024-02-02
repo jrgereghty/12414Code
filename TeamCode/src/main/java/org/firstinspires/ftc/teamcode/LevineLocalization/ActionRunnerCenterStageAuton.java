@@ -11,4 +11,41 @@ import org.firstinspires.ftc.teamcode.drive.JayMap;
 import java.util.ArrayList;
 
 public class ActionRunnerCenterStageAuton {
+    public LinearOpMode opMode;
+    JayMap jayBot;
+    Telemetry telemetry;
+
+    public ActionRunnerCenterStageAuton(LinearOpMode opMode, JayMap jayBot) {
+        this.opMode = opMode;
+        this.jayBot = jayBot;
+        telemetry = new MultipleTelemetry(this.opMode.telemetry, FtcDashboard.getInstance().getTelemetry());
+
+    }
+
+    public void runActions(String action) {
+        telemetry.addLine("Run action");
+        telemetry.addLine("action is " + action);
+        switch (action) {
+            case("Close Left Claw"):
+                jayBot.closeLeftClaw();
+                break;
+            case("Close Right Claw"):
+                jayBot.closeRightClaw();
+                break;
+            case("Open Left Claw"):
+                jayBot.openLeftClaw();
+                break;
+            case("Open Right Claw"):
+                jayBot.openRightClaw();
+                break;
+            case("Intake Mode"):
+                jayBot.setIntakeMode();
+                break;
+            case("Placing Mode"):
+                jayBot.setPlacingMode();
+                break;
+
+        }
+        telemetry.update();
+    }
 }

@@ -14,7 +14,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CenterStageAuton.OpenCVDetectTeamProp;
 import org.firstinspires.ftc.teamcode.CenterStageAuton.OpenCVGreatestColorTest;
+import org.firstinspires.ftc.teamcode.LevineLocalization.PointFollower;
 import org.firstinspires.ftc.teamcode.drive.JayMap;
+import org.firstinspires.ftc.teamcode.LevineLocalization.ActionRunnerCenterStageAuton;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -32,126 +34,13 @@ public class R_Far_Truss_Edge extends LinearOpMode {
     //public static boolean isTest = false;
 
     JayMap jayBot = new JayMap(this);
+    ActionRunnerCenterStageAuton actionRunner = new ActionRunnerCenterStageAuton(this, jayBot);
+    PointFollower follower = new PointFollower(this, actionRunner);
 
     @Override
     public void runOpMode() {
-        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
         jayBot.init();
-
-        Pose2d startPose = new Pose2d(-36.00, -62.84, Math.toRadians(90.00));
-
-        drive.setPoseEstimate(startPose);
-        Trajectory forward30 = drive.trajectoryBuilder(startPose)
-                .forward(30)
-                .build();
-        Trajectory line4start = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Pose2d(-36, -53.36, Math.toRadians(115.00))) //312
-                .build();
-        Trajectory line4startmid = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Pose2d(-36, -51.36, Math.toRadians(90)))
-                .build();
-        Trajectory line4startright = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Pose2d(-36, -53.36, Math.toRadians(60)))
-                .build();
-        Trajectory pixel2start = drive.trajectoryBuilder(line4start.end())
-                .lineToSplineHeading(new Pose2d(-36, -59.3, Math.toRadians(0)))
-                .build();
-        Trajectory pixel2startmid = drive.trajectoryBuilder(line4startmid.end())
-                .lineToSplineHeading(new Pose2d(-36, -59.3, Math.toRadians(0)))
-                .build();
-        Trajectory pixel2startright = drive.trajectoryBuilder(line4startright.end())
-                .lineToSplineHeading(new Pose2d(-36, -59.3, Math.toRadians(0)))
-                .build();
-        Trajectory forward60 = drive.trajectoryBuilder(new Pose2d(-36, -59.3, Math.toRadians(0)))
-                .forward(60)
-                .build();
-        Trajectory start2board = drive.trajectoryBuilder(forward60.end()) // START TO BOARD HERE
-                .splineToConstantHeading(new Vector2d(48.01, -38), Math.toRadians(0.00))//46.01, 36
-                .build();
-        Trajectory leftplace = drive.trajectoryBuilder(start2board.end())
-                .strafeLeft(6)
-                .build();
-        Trajectory left2boardmid = drive.trajectoryBuilder(start2board.end())
-                .strafeRight(6)
-                .build();
-        Trajectory rightplace = drive.trajectoryBuilder(start2board.end())
-                .strafeRight(7)
-                .build();
-        Trajectory right2boardmid = drive.trajectoryBuilder(start2board.end())
-                .strafeLeft(7)
-                .build();
-
-
-
-
-        Trajectory forward10 = drive.trajectoryBuilder(startPose)
-                .forward(10)
-
-                .build();
-        Trajectory strafe18 = drive.trajectoryBuilder(startPose)
-                .strafeRight(18)
-                .build();
-        Trajectory forward5 = drive.trajectoryBuilder(startPose)
-                .forward(5)
-                .build();
-        Trajectory strafe2right = drive.trajectoryBuilder(start2board.end())
-                .strafeRight(2)
-                .build();
-        Trajectory strafe2left = drive.trajectoryBuilder(strafe2right.end())
-                .strafeLeft(2)
-                .build();
-
-        Trajectory forward25 = drive.trajectoryBuilder(startPose)
-                .forward(25)
-                .build();
-        Trajectory forward40 = drive.trajectoryBuilder(startPose)
-                .forward(40)
-                .build();
-        Trajectory line90 = drive.trajectoryBuilder(start2board.end())
-                .lineToSplineHeading(new Pose2d(39.67, -42.47, Math.toRadians(90.00)))
-                .build();
-        //Spline Trajectories
-        Trajectory board2truss = drive.trajectoryBuilder(line90.end())
-                .splineTo(new Vector2d(-17.73, -58.62), Math.toRadians(180.00))
-                .splineTo(new Vector2d(-49.57, -46.43), Math.toRadians(212.07))
-
-                .build();
-        Trajectory back10 = drive.trajectoryBuilder(start2board.end())
-                .back(10)
-                .build();
-        /*
-        Trajectory strafe2midR = drive.trajectoryBuilder(back11.end())
-                .lineToSplineHeading(new Pose2d(39, -10, Math.toRadians(180)))
-                .build();
-
-
-
-        Trajectory return2sender = drive.trajectoryBuilder(back20.end())
-                .forward(95)
-                .build();
-        Trajectory return2sender2 = drive.trajectoryBuilder(return2sender.end())
-                .lineToSplineHeading(startPose)
-                .build();
-
-         */
-        Trajectory strafe2edgeR = drive.trajectoryBuilder(back10.end())
-                .lineToSplineHeading(new Pose2d(39, -59, Math.toRadians(180)))
-                .build();
-        Trajectory back20 = drive.trajectoryBuilder(strafe2edgeR.end())
-                .back(25)
-                .build();
-
-
-
-
-
-
-
-
-
-
+        Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
@@ -215,9 +104,6 @@ public class R_Far_Truss_Edge extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
-        slidePos = slide.getCurrentPosition() / 537.7 * 4 * Math.PI / 54.864;
-
-        drive.followTrajectory(forward10);
 
 
         /*

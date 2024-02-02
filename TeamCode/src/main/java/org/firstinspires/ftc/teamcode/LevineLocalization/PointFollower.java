@@ -343,15 +343,14 @@ import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.LevineLocalization.ActionRunnerCenterStageAuton;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.ArrayList;
 
 @Config
 public class PointFollower {
-    /*LinearOpMode myOpMode;
-    LevineLocalizationMap wMap;
+    LinearOpMode myOpMode;
+    LevineLocalizationMap levineMap;
     Telemetry telemetry;
     SampleMecanumDrive drive;
     ActionRunnerCenterStageAuton actionRunner;
@@ -376,7 +375,7 @@ public class PointFollower {
     public double distToTarg;
     public static double maxVel = 40, almostDoneVel = 20, slowVel = almostDoneVel, evenSlowerVel = 2, testVel = 20, slowestVel = 4;
     public static double roomForErrorStartDecel = 0;
-    public static double decceleration = 40;
+    public static double deceleration = 40;
     public double targetVelocity = maxVel;
     public static double accelerationConst = 200;
     public static PIDCoefficients PIDVals = new PIDCoefficients(0.25, 0, 0.5);
@@ -384,7 +383,7 @@ public class PointFollower {
 
     public PointFollower(LinearOpMode opmode, ActionRunnerCenterStageAuton actionRunner) {
         myOpMode = opmode;
-        wMap = new LevineLocalizationMap(this.myOpMode);
+        levineMap = new LevineLocalizationMap(this.myOpMode);
         telemetry = new MultipleTelemetry(this.myOpMode.telemetry, FtcDashboard.getInstance().getTelemetry());
         this.actionRunner = actionRunner;
     }
@@ -396,7 +395,7 @@ public class PointFollower {
             almostDoneVel = testVel;
         }
 
-        wMap.init(posesToGoTo.get(0).pose);
+        levineMap.init(posesToGoTo.get(0).pose);
         startOfNewGo = posesToGoTo.get(0).pose;
         drive = new SampleMecanumDrive(this.myOpMode.hardwareMap);
         drive.setPoseEstimate(posesToGoTo.get(0).pose);
@@ -509,7 +508,7 @@ public class PointFollower {
         velTime.reset();
         Pose2d currPose = drive.getPoseEstimate();
         targetVelocity = newMaxVel;
-        double distNeededToStartDecel = ((Math.pow(slowestVel, 2) - Math.pow(newMaxVel, 2))/(-2*decceleration));
+        double distNeededToStartDecel = ((Math.pow(slowestVel, 2) - Math.pow(newMaxVel, 2))/(-2* deceleration));
 //        double totXDist = posesToGoTo.get(posesToGoTo.size()-1).pose.getX() - currPose.getX();
 //        double totYDist = posesToGoTo.get(posesToGoTo.size()-1).pose.getY() - currPose.getY();
         double totXDist = 0;
@@ -522,7 +521,7 @@ public class PointFollower {
 
         if(distNeededToStartDecel > totDistToTarget){
 //            totDistToTarget = ((Math.pow(slowestVel, 2) - Math.pow(newNEWMaxVel, 2))/(-2*decceleration))
-            targetVelocity = Math.sqrt(Math.abs(Math.pow(slowestVel, 2) + (2*decceleration*totDistToTarget)));
+            targetVelocity = Math.sqrt(Math.abs(Math.pow(slowestVel, 2) + (2* deceleration *totDistToTarget)));
         }
         posesToGoTo.remove(0);
 
@@ -556,7 +555,7 @@ public class PointFollower {
                 double angDist = targetPose.getHeading() - currPose.getHeading();
 
                 double distToTarget = Math.hypot(xDist, yDist);
-                double theta = MathsAndStuff.AngleWrap(Math.atan2(xDist, yDist) + wMap.startingPose.getHeading());
+                double theta = MathsAndStuff.AngleWrap(Math.atan2(xDist, yDist) + levineMap.startingPose.getHeading());
 
 //                for (int i = 1; i < posesToGoTo.size(); i++) {
 //                    totXDist += Math.abs(posesToGoTo.get(i).pose.getX() - posesToGoTo.get(i-1).pose.getX());
@@ -585,7 +584,7 @@ public class PointFollower {
 
                 if (stopAfter){
                     if(Math.abs(totDistToTarget) < Math.abs(distNeededToStartDecel)){
-                        targetVelocity = targetVelocity - (decceleration*timeForVel);
+                        targetVelocity = targetVelocity - (deceleration *timeForVel);
                     }
                     else{
                         targetVelocity = newMaxVel;
@@ -607,7 +606,7 @@ public class PointFollower {
                     currPower = 1;
                 }
 
-                wMap.setMotorPowers(currPose, targetPose, currPower);
+                levineMap.setMotorPowers(currPose, targetPose, currPower);
 
                 if (isBuggingChecker > isBuggingRuntimeToStop) {
                     xDone = true;
@@ -668,7 +667,7 @@ public class PointFollower {
             }
         }
         if(stopAfter) {
-            wMap.stopMotors();
+            levineMap.stopMotors();
         }
-    }*/
+    }
 }

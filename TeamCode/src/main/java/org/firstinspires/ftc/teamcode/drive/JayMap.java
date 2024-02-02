@@ -93,6 +93,21 @@ public class JayMap {
         return(slideAngle / 3.43 + 0.117);
     }
 
+    public void closeLeftClaw() {
+        clawL.setPosition(0);
+    }
+    public void closeRightClaw() {
+        clawR.setPosition(0);
+    }
+    public void openLeftClaw() {
+        clawL.setPosition(0.5);
+    }
+    public void openRightClaw() {
+        clawR.setPosition(0.5);
+    }
+    public void setIntakeMode() {intake = true;}
+    public void setPlacingMode() {intake = false;}
+
     public void init() {
         frontLeft = this.opMode.hardwareMap.dcMotor.get("frontLeft");
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
