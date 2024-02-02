@@ -90,7 +90,7 @@ public class JayMap {
     }
 
     public static double getClawVAngle2(double slideAngle) {
-        return(slideAngle / 3.43 + 0.117);
+        return(slideAngle / 3.43 - 0.05);
     }
 
     public void closeLeftClaw() {
