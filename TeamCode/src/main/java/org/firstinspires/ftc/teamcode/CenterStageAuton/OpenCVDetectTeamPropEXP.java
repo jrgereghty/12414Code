@@ -14,20 +14,19 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 @Config
-public class OpenCVDetectTeamProp extends OpenCvPipeline {
+public class OpenCVDetectTeamPropEXP extends OpenCvPipeline {
     public static final Scalar green = new Scalar(0, 255, 0);
     public static final Scalar blue = new Scalar(0, 0, 255);
     public static final Scalar red = new Scalar(255, 0, 0);
     public static final Scalar pink = new Scalar(255, 0, 142);
     public static final Scalar white = new Scalar(255, 255, 255);
-    public static final Scalar black = new Scalar(0, 0, 0);
     public static double webcamSplitDist = 160;
     public static boolean isDetected = false;
     public static double minArea = 40;
     public static double maxAreaCon = 2000;
     public static double maxWidth = 70;
     public static double maxHeight = 70;
-    public static double minWidth = 20;
+    public static double minWidth = 40;
     public static double minHeight = 27;
     public int[] lowerColor = {0, 0, 0};
     public int[] upperColor = {255, 255, 255};
@@ -39,17 +38,19 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
     public static double thetaX;
 
     public static int rectArea;
-    Rect zone1 = new Rect(0,6, 60, 100);
 
     Telemetry telemetry;
     // Make a Constructor
-    public OpenCVDetectTeamProp(Telemetry telemetry, int[] lowerColor, int[] upperColor) {
+    public OpenCVDetectTeamPropEXP(Telemetry telemetry, int[] lowerColor, int[] upperColor) {
         this.telemetry = telemetry;
         System.arraycopy(lowerColor, 0, this.lowerColor, 0, this.lowerColor.length);
         System.arraycopy(upperColor, 0, this.upperColor, 0, this.upperColor.length);
 
-
     }
+    private static final Rect box1Rect = new Rect(new Point(0, 60), new Point(60, 180));
+    private static final Rect box2Rect = new Rect(new Point(130, 60), new Point(190, 180));
+    private static final Rect box3Rect = new Rect(new Point(180, 60), new Point(240, 180));
+
 
     @Override
     public void init(Mat input) {
@@ -61,28 +62,9 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
 
         Mat hsv = new Mat();
         Imgproc.cvtColor(frame, hsv, Imgproc.COLOR_RGB2HSV_FULL);
-        Rect box2Rect = new Rect(new Point(70, 20), new Point(90, 50));
-        Rect box1Rect = new Rect(new Point(230, 140), new Point(270, 80));
-
-        Mat fakehsv = hsv;
-
-        //EXPERIMENTAL ZONE
-       // Mat area1 = new Mat(hsv, new Rect(0, 60, 60, 180));
-        Mat area1 = new Mat(hsv, new Rect(new Point(0,60), new Point(60,160)));
-        //Mat area1 = new Mat(hsv, new Rect(0,6, 60, 100));
-        Mat area2 = new Mat(hsv, new Rect(new Point(135,60), new Point(180,160)));
-        Mat area3 = new Mat(hsv, new Rect(new Point(190,60), new Point(240,160)));
-        //Mat area4 = new Mat(fakehsv, new Rect(new Point(190,60), new Point(240,160)));
-        //Mat area3 = new Mat(hsv, new Rect(x, y, width, height));
-        Mat area4 = new Mat(fakehsv, zone1);
-        Imgproc.rectangle(hsv, new Point(0,180), new Point(320,240), black, Core.FILLED);
-        Imgproc.rectangle(hsv, new Point(0,0), new Point(320,60), black, Core.FILLED);
-        Imgproc.rectangle(hsv, new Point(60,0), new Point(130,240), black, Core.FILLED);
-        Imgproc.rectangle(hsv, new Point(190,0), new Point(240,240), black, Core.FILLED);
-
-
-
-        //END ZONE
+        Mat box1 = new Mat(hsv, box1Rect);
+        Mat box2 = new Mat(hsv, box2Rect);
+        Mat box3 = new Mat(hsv, box3Rect);
 
 
 
@@ -98,21 +80,6 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
         Mat mask = new Mat();
         Mat mask1 = new Mat();
         Mat mask2 = new Mat();
-
-        //EXPRIMENTAL ZONE
-        Mat maskzone1 = new Mat();
-        Mat mask1zone1 = new Mat();
-        Mat mask2zone1 = new Mat();
-
-        Mat maskzone2 = new Mat();
-        Mat mask1zone2 = new Mat();
-        Mat mask2zone2 = new Mat();
-
-        Mat maskzone3 = new Mat();
-        Mat mask1zone3 = new Mat();
-        Mat mask2zone3 = new Mat();
-        //END ZONE
-
         Scalar secondLower;
         Scalar secondUpper;
         if(upperColor[0] > 180){
@@ -122,26 +89,10 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
             telemetry.addData("secondLower", secondLower);
             telemetry.addData("secondUpper", secondUpper);
 
-/*
-            Core.inRange(hsv, new Scalar(lowerColor[0], lowerColor[1], lowerColor[2]), new Scalar(upperColor[0], upperColor[1], upperColor[2]), mask1);//Uses originals for the filter
-            Core.inRange(hsv, secondLower, secondUpper, mask2);//Uses the adjusted hue
-            Core.bitwise_or(mask2, mask1, mask);//Combines the masks including all values of 255
 
- */
-
-            //EXPERIMENTAL ZONE
-            Core.inRange(area1, new Scalar(lowerColor[0], lowerColor[1], lowerColor[2]), new Scalar(upperColor[0], upperColor[1], upperColor[2]), mask1zone1);//Uses originals for the filter
-            Core.inRange(area1, secondLower, secondUpper, mask2zone1);//Uses the adjusted hue
-            Core.bitwise_or(mask2zone1, mask1zone1, maskzone1);//Combines the masks including all values of 255
-
-            Core.inRange(area2, new Scalar(lowerColor[0], lowerColor[1], lowerColor[2]), new Scalar(upperColor[0], upperColor[1], upperColor[2]), mask1zone2);//Uses originals for the filter
-            Core.inRange(area2, secondLower, secondUpper, mask2zone2);//Uses the adjusted hue
-            Core.bitwise_or(mask2zone2, mask1zone2, maskzone2);
-
-            Core.inRange(area3, new Scalar(lowerColor[0], lowerColor[1], lowerColor[2]), new Scalar(upperColor[0], upperColor[1], upperColor[2]), mask1zone3);//Uses originals for the filter
-            Core.inRange(area3, secondLower, secondUpper, mask2zone3);//Uses the adjusted hue
-            Core.bitwise_or(mask2zone3, mask1zone3, maskzone3);
-
+            Core.inRange(hsv, new Scalar(lowerColor[0], lowerColor[1], lowerColor[2]), new Scalar(upperColor[0], upperColor[1], upperColor[2]), mask1);
+            Core.inRange(hsv, secondLower, secondUpper, mask2);
+            Core.bitwise_or(mask2, mask1, mask);
         }
         else{
             Core.inRange(hsv, new Scalar(lowerColor[0], lowerColor[1], lowerColor[2]), new Scalar(upperColor[0], upperColor[1], upperColor[2]), mask);
@@ -153,15 +104,10 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
         ArrayList<MatOfPoint> contours = new ArrayList<>();
         Mat hierarchy = new Mat();
         Imgproc.findContours(mask, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-        Imgproc.findContours(maskzone1, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-        Imgproc.findContours(maskzone2, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-        Imgproc.findContours(maskzone3, contours, hierarchy, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
-        //Imgproc.findContours();
 
         // Draw the contours on the original frame
 //      Imgproc.drawContours(hsv, contours, -1, white, 10);
         telemetry.addData("Contours found: ", contours.size());
-        telemetry.addData("Con found: ", contours.size());
 
         // Find the contour with the largest area
         double maxArea = 0;
@@ -171,7 +117,7 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
             Rect boundingBox = Imgproc.boundingRect(contour);
             int w = boundingBox.width;
             int h = boundingBox.height;
-            if (area > maxArea && area >= minArea && w >= minWidth && h >= minHeight) {
+            if (area < maxAreaCon && area >= minArea && w >= minWidth && h >= minHeight) {
                 maxArea = area;
                 maxContour = contour;
             }
@@ -190,8 +136,6 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
             rectArea = w*h;
 
             Imgproc.rectangle(hsv, new Point(x, y), new Point(x + w, y + h), green, 2);
-
-
 
             // Display the coordinates of the center of the bounding box
             int center_x = x + w/2;
@@ -217,7 +161,6 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
 //                Imgproc.circle(hsv, new Point(center_x, center_y), circRad, red, 2);
 //                Imgproc.circle(hsv, new Point(center_x, center_y), 3, red, -1);
 
-
             Imgproc.line(hsv, new Point(x, y), new Point(Math.abs(x + w), Math.abs(y + h)), red, 1);
             Imgproc.line(hsv, new Point(x, Math.abs(y + h)), new Point(Math.abs(x + w), y), red, 1);
 
@@ -229,12 +172,8 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
             telemetry.addLine("None found :(");
         }
         telemetry.update();
-        Imgproc.rectangle(hsv, new Point(0,80), new Point(60,160), pink, 2);
-        Imgproc.rectangle(hsv, new Point(130,60), new Point(190,160), pink, 2);
-        Imgproc.rectangle(hsv, new Point(260,80), new Point(320,160), pink, 2);
 
-        //return area4;
-
+//        return frame;
         return hsv;
     }
 }

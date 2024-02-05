@@ -41,6 +41,7 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
 
     double slidePower;
     double sudoTrigger;
+    public static int[] detections = new int[20];
     double sudoTriggerDepth = 1;
 
     private static double getSlideVelocity(int sudoTrigger, double slidePos, double sudoTriggerDepth) {
@@ -68,6 +69,40 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
         Servo slideRAngle;
         Servo clawL;
         Servo clawR;
+
+
+        slide = hardwareMap.dcMotor.get("slide");
+        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slide.setTargetPosition(0);
+        slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        slideLAngle = hardwareMap.servo.get("slideLAngle");
+        slideLAngle.setDirection(Servo.Direction.REVERSE);
+        slideLAngle.setPosition(0.8);
+
+        slideRAngle = hardwareMap.servo.get("slideRAngle");
+        slideRAngle.setPosition(0.8);
+
+        clawHAngle = hardwareMap.servo.get("clawHAngle");
+        clawHAngle.scaleRange(0.04, 1);
+        clawHAngle.setPosition(hPos);
+
+        clawVAngle = hardwareMap.servo.get("clawVAngle");
+        clawVAngle.setPosition(vPos);
+        clawVAngle.scaleRange(0, 0.6);
+
+
+        clawL = hardwareMap.servo.get("clawL");
+        clawL.scaleRange(0.21, 0.605);
+        clawL.setPosition(0.0);
+
+        clawR = hardwareMap.servo.get("clawR");
+        clawR.setDirection(Servo.Direction.REVERSE);
+        clawR.scaleRange(0.20, 0.595);
+        clawR.setPosition(0.0);
 
 
 
@@ -190,61 +225,70 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
 
 
 
-        slide = hardwareMap.dcMotor.get("slide");
-        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        slideLAngle = hardwareMap.servo.get("slideLAngle");
-        slideLAngle.setDirection(Servo.Direction.REVERSE);
-        slideLAngle.setPosition(0.8);
-
-        slideRAngle = hardwareMap.servo.get("slideRAngle");
-        slideRAngle.setPosition(0.8);
-
-        clawHAngle = hardwareMap.servo.get("clawHAngle");
-        clawHAngle.scaleRange(0.04, 1);
-        clawHAngle.setPosition(hPos);
-
-        clawVAngle = hardwareMap.servo.get("clawVAngle");
-        clawVAngle.setPosition(vPos);
-        clawVAngle.scaleRange(0, 0.6);
-
-
-        clawL = hardwareMap.servo.get("clawL");
-        clawL.scaleRange(0.21, 0.605);
-        clawL.setPosition(0.5);
-
-        clawR = hardwareMap.servo.get("clawR");
-        clawR.setDirection(Servo.Direction.REVERSE);
-        clawR.scaleRange(0.20, 0.595);
-        clawR.setPosition(0.5);
 
 
 
+        int k = 0;
         int StopSearch = 0;
-        int zoneDetectionPing1 = 0;
-        int zoneDetectionPing2 = 0;
-        int zoneDetectionPing3 = 0;
+        int AVGsum = 0;
+        int Zone1detections = 0;
+        int Zone2detections = 0;
+        int Zone3detections = 0;
+
         int zoneDetected = 0;
         while (opModeInInit() && StopSearch == 0) {
 
-            if (!OpenCVDetectTeamProp.isDetected) {
+
+            if ((OpenCVDetectTeamProp.centerX >240) && (OpenCVDetectTeamProp.centerY > 80) && (OpenCVDetectTeamProp.centerY < 160)) {
                 zoneDetected = 3;
-                zoneDetectionPing3++;
 
-            } else if (OpenCVDetectTeamProp.centerX < 200) {
+
+
+            } else if ((OpenCVDetectTeamProp.centerX >60) && (OpenCVDetectTeamProp.centerY > 80) && (OpenCVDetectTeamProp.centerY < 160)) {
                 zoneDetected = 1;
-                zoneDetectionPing1++;
 
 
-            } else if (OpenCVDetectTeamProp.centerX >= 200) {
+
+            } else if ((OpenCVDetectTeamProp.centerX > 130) && (OpenCVDetectTeamProp.centerY > 100) && (OpenCVDetectTeamProp.centerY < 140) && (OpenCVDetectTeamProp.centerX < 190)) {
                 zoneDetected = 2;
-                zoneDetectionPing2++;
 
-            } else if (zoneDetectionPing1 > 10 || zoneDetectionPing2 > 10 || zoneDetectionPing3 > 10) {
-                StopSearch = 1;
+
+            } //else if (zoneDetectionPing1 > 10 || zoneDetectionPing2 > 10 || zoneDetectionPing3 > 10) {
+
+
+            for(int x =19; x>0; x--) {
+                detections[x] = detections[x-1];
             }
+            detections[0] = zoneDetected;
+
+
+            if(opModeIsActive()){
+                StopSearch = 1;
+
+
+
+                for(int j = 19; j>0; j--){
+                    if(detections[j] == 1){Zone1detections++;}
+                    if(detections[j] == 2){Zone2detections++;}
+                    if(detections[j] == 3){Zone3detections++;}
+
+
+
+
+
+                }
+
+
+                telemetry.addLine("Search Stopped" );
+                updateTelemetry(telemetry);
+
+
+            }
+            if(Zone1detections > Zone2detections && Zone1detections > Zone3detections){zoneDetected=1;}
+            else if(Zone2detections > Zone1detections && Zone2detections > Zone3detections){zoneDetected=2;}
+            else if(Zone3detections > Zone1detections && Zone3detections > Zone2detections){zoneDetected=3;}
+
+
         }
         waitForStart();
 
@@ -269,6 +313,10 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
             slideLAngle.setPosition(0.45); //sets slides from init pos
             slideRAngle.setPosition(0.45);
             clawVAngle.setPosition(0.45);
+            slide.setPower(0.05);
+            slide.setTargetPosition(41);
+            slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            sleep(50000);
             sleep(200);
             drive.followTrajectory(line4start);//Moves from start position to place position
             sleep(200);
