@@ -6,8 +6,11 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CenterStageAuton.OpenCVDetectTeamProp;
@@ -35,6 +38,7 @@ public class B_Far_Truss_Edge extends LinearOpMode {
 
     double slideLength = 0.0;
     double slidePos = 0.0;
+    public static int[] detections = new int[100];
 
     double slidePower;
     double sudoTrigger;
@@ -66,13 +70,47 @@ public class B_Far_Truss_Edge extends LinearOpMode {
         Servo clawL;
         Servo clawR;
 
+        slide = hardwareMap.dcMotor.get("slide");
+        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slide.setTargetPosition(0);
+        slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        slideLAngle = hardwareMap.servo.get("slideLAngle");
+        slideLAngle.setDirection(Servo.Direction.REVERSE);
+        slideLAngle.setPosition(pos);
+
+        slideRAngle = hardwareMap.servo.get("slideRAngle");
+        slideRAngle.setPosition(pos);
+
+        clawHAngle = hardwareMap.servo.get("clawHAngle");
+        clawHAngle.scaleRange(0.04, 1);
+        clawHAngle.setPosition(hPos);
+
+        clawVAngle = hardwareMap.servo.get("clawVAngle");
+        clawVAngle.scaleRange(0, 0.7);
+        clawVAngle.setPosition(vPos);
+
+
+
+        clawL = hardwareMap.servo.get("clawL");
+        clawL.scaleRange(0.21, 0.605);
+        clawL.setPosition(0.0);
+
+        clawR = hardwareMap.servo.get("clawR");
+        clawR.setDirection(Servo.Direction.REVERSE);
+        clawR.scaleRange(0.20, 0.595);
+        clawR.setPosition(0.0);
 
 
 
 
 
 
-        Pose2d startPose = new Pose2d(-36.00, 62.84, Math.toRadians(270.00));
+
+        Pose2d startPose = new Pose2d(-34.50, 62.84, Math.toRadians(270.00));
 
         drive.setPoseEstimate(startPose);
         Trajectory forward30 = drive.trajectoryBuilder(startPose)
@@ -120,6 +158,9 @@ public class B_Far_Truss_Edge extends LinearOpMode {
 
         Trajectory forward10 = drive.trajectoryBuilder(startPose)
                 .forward(10)
+                .addTemporalMarker(2, ()->{
+                    slide.setTargetPosition(2);
+                })
 
                 .build();
         Trajectory strafe18 = drive.trajectoryBuilder(startPose)
@@ -153,7 +194,7 @@ public class B_Far_Truss_Edge extends LinearOpMode {
         Trajectory back20 = drive.trajectoryBuilder(strafe2edgeR.end())
                 .back(20)
                 .build();
-        /*
+
         Trajectory return2sender = drive.trajectoryBuilder(back20.end())
                 .forward(95)
                 .build();
@@ -161,7 +202,7 @@ public class B_Far_Truss_Edge extends LinearOpMode {
                 .lineToSplineHeading(startPose)
                 .build();
 
-         */
+
 
 
 
@@ -203,61 +244,73 @@ public class B_Far_Truss_Edge extends LinearOpMode {
 
 
 
-        slide = hardwareMap.dcMotor.get("slide");
-        slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        slideLAngle = hardwareMap.servo.get("slideLAngle");
-        slideLAngle.setDirection(Servo.Direction.REVERSE);
-        slideLAngle.setPosition(pos);
-
-        slideRAngle = hardwareMap.servo.get("slideRAngle");
-        slideRAngle.setPosition(pos);
-
-        clawHAngle = hardwareMap.servo.get("clawHAngle");
-        clawHAngle.scaleRange(0.04, 1);
-        clawHAngle.setPosition(hPos);
-
-        clawVAngle = hardwareMap.servo.get("clawVAngle");
-        clawVAngle.scaleRange(0, 0.6);
-        clawVAngle.setPosition(vPos);
+       //OLD SPOT FOR HARDWARE MAPPING
 
 
-        clawL = hardwareMap.servo.get("clawL");
-        clawL.scaleRange(0.21, 0.605);
-        clawL.setPosition(0.5);
-
-        clawR = hardwareMap.servo.get("clawR");
-        clawR.setDirection(Servo.Direction.REVERSE);
-        clawR.scaleRange(0.20, 0.595);
-        clawR.setPosition(0.5);
-
-
-
+        int k = 0;
         int StopSearch = 0;
-        int zoneDetectionPing1 = 0;
-        int zoneDetectionPing2 = 0;
-        int zoneDetectionPing3 = 0;
+        int AVGsum = 0;
+        int Zone1detections = 0;
+        int Zone2detections = 0;
+        int Zone3detections = 0;
+
         int zoneDetected = 0;
         while (opModeInInit() && StopSearch == 0) {
 
-            if (!OpenCVDetectTeamProp.isDetected) {
+
+            if ((OpenCVDetectTeamProp.centerX >180) && (OpenCVDetectTeamProp.centerY > 80) && (OpenCVDetectTeamProp.centerY < 160)) {
                 zoneDetected = 3;
-                zoneDetectionPing3++;
 
-            } else if (OpenCVDetectTeamProp.centerX < 100) {
+
+
+            } else if ((OpenCVDetectTeamProp.centerX >60) && (OpenCVDetectTeamProp.centerY > 80) && (OpenCVDetectTeamProp.centerY < 160)) {
                 zoneDetected = 1;
-                zoneDetectionPing1++;
 
 
-            } else if (OpenCVDetectTeamProp.centerX >= 101) {
+
+            } else if ((OpenCVDetectTeamProp.centerX > 130) && (OpenCVDetectTeamProp.centerY > 100) && (OpenCVDetectTeamProp.centerY < 140) && (OpenCVDetectTeamProp.centerX < 190)) {
                 zoneDetected = 2;
-                zoneDetectionPing2++;
 
-            } else if (zoneDetectionPing1 > 10 || zoneDetectionPing2 > 10 || zoneDetectionPing3 > 10) {
-                StopSearch = 1;
+
+            } //else if (zoneDetectionPing1 > 10 || zoneDetectionPing2 > 10 || zoneDetectionPing3 > 10) {
+
+            for(int x =19; x>0; x--) {
+                detections[x] = detections[x-1];
             }
+            detections[0] = zoneDetected;
+
+
+
+                if(opModeIsActive()){
+                    StopSearch = 1;
+
+
+
+                for(int j = 19; j>0; j--){
+                    if(detections[j] == 1){Zone1detections++;}
+                    if(detections[j] == 2){Zone2detections++;}
+                    if(detections[j] == 3){Zone3detections++;}
+
+
+
+
+
+                }
+
+
+                telemetry.addLine("Search Stopped" );
+                updateTelemetry(telemetry);
+
+
+            }
+            if(Zone1detections >= Zone2detections && Zone1detections >= Zone3detections){zoneDetected=1;}
+            else if(Zone2detections >= Zone1detections && Zone2detections >= Zone3detections){zoneDetected=2;}
+            else if(Zone3detections >= Zone1detections && Zone3detections >= Zone2detections){zoneDetected=3;}
+
+
+
+
+
         }
         waitForStart();
 
@@ -277,9 +330,12 @@ public class B_Far_Truss_Edge extends LinearOpMode {
 
 
         if (zoneDetected == 1) {
-            sleep(5000);
+
             clawVAngle.setPosition(0.4);
             sleep(300);
+            slide.setPower(1);
+            slide.setTargetPosition(5);
+
 
 
             slideLAngle.setPosition(0.45);
@@ -287,6 +343,8 @@ public class B_Far_Truss_Edge extends LinearOpMode {
 
             drive.followTrajectory(line4start);
             sleep(230);
+
+            sleep(10000);
 
 
 
@@ -341,8 +399,8 @@ public class B_Far_Truss_Edge extends LinearOpMode {
             drive.followTrajectory(strafe2edgeR);
 
             drive.followTrajectory(back20);
-            //drive.followTrajectory(return2sender);
-            //drive.followTrajectory(return2sender2);
+            drive.followTrajectory(return2sender);
+            drive.followTrajectory(return2sender2);
             clawVAngle.setPosition(1);
             sleep(20000);
 
@@ -434,8 +492,8 @@ public class B_Far_Truss_Edge extends LinearOpMode {
             drive.followTrajectory(strafe2edgeR);
 
             drive.followTrajectory(back20);
-            //drive.followTrajectory(return2sender);
-            //drive.followTrajectory(return2sender2);
+            drive.followTrajectory(return2sender);
+            drive.followTrajectory(return2sender2);
             clawVAngle.setPosition(1);
             sleep(20000);
 
@@ -512,8 +570,8 @@ public class B_Far_Truss_Edge extends LinearOpMode {
             drive.followTrajectory(strafe2edgeR);
 
             drive.followTrajectory(back20);
-            //drive.followTrajectory(return2sender);
-            //drive.followTrajectory(return2sender2);
+            drive.followTrajectory(return2sender);
+            drive.followTrajectory(return2sender2);
             clawVAngle.setPosition(1);
             sleep(30000);
 

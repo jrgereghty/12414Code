@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.CenterStageAuton;
 
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -12,7 +14,12 @@ import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
+@Config
 public class OpenCVGreatestColorTest extends OpenCvPipeline {
+    public static int Lowblue = 70;//115 or 50
+    public static int Lowbluesat = 50;//115 o
+    public static int Highblue = 160;//160 or 70
+    public static int Highbluesat = 200;//160
     public static final Scalar green = new Scalar(0, 255, 0);
     public static final Scalar blue = new Scalar(0, 0, 255);
     public static final Scalar red = new Scalar(255, 0, 0);
@@ -20,8 +27,8 @@ public class OpenCVGreatestColorTest extends OpenCvPipeline {
     public static final Scalar white = new Scalar(255, 255, 255);
     public static int heightNoDetectPixels = 60;
 
-    public static int[] lowerBlue = {115, 50, 20};
-    public static int[] upperBlue = {160, 255, 255};
+    public static int[] lowerBlue = {Lowblue, Lowbluesat, 20};//66,125,214 ORIGINAL 115, 50, 20
+    public static int[] upperBlue = {Highblue, Highbluesat, 255};//58.8, 176, 199 ORIGINAL 160, 255, 255
 
     public static int[] lowerRed = {160, 100, 100};
     public static int[] upperRed  = {200, 255, 255};
@@ -48,6 +55,7 @@ public class OpenCVGreatestColorTest extends OpenCvPipeline {
 
     public static int centerX;
     public static int centerY;
+
     public static int xDist;
     public static int yDist;
     public static double thetaX;
@@ -105,7 +113,7 @@ public class OpenCVGreatestColorTest extends OpenCvPipeline {
             int h = boundingBox.height;
             if(y > heightNoDetectPixels){
                 double area = Imgproc.contourArea(contour);
-                if (area > maxArea) {
+                if (area > maxArea && area < 2000) {
                     maxArea = area;
                     maxContour = contour;
                 }
@@ -122,7 +130,7 @@ public class OpenCVGreatestColorTest extends OpenCvPipeline {
             int h = boundingBox.height;
 
             rectArea = w*h;
-
+//draws the bounding box around the desired contour
             Imgproc.rectangle(hsv, new Point(x, y), new Point(x + w, y + h), green, 2);
 
             // Display the coordinates of the center of the bounding box
@@ -149,8 +157,13 @@ public class OpenCVGreatestColorTest extends OpenCvPipeline {
 //                Imgproc.circle(hsv, new Point(center_x, center_y), circRad, red, 2);
 //                Imgproc.circle(hsv, new Point(center_x, center_y), 3, red, -1);
 
+
             Imgproc.line(hsv, new Point(x, y), new Point(Math.abs(x + w), Math.abs(y + h)), blue, 1);
             Imgproc.line(hsv, new Point(x, Math.abs(y + h)), new Point(Math.abs(x + w), y), blue, 1);
+
+            Imgproc.rectangle(hsv, new Point(0,60), new Point(60,160), pink, 2);
+            Imgproc.rectangle(hsv, new Point(130,60), new Point(180,160), pink, 2);
+            Imgproc.rectangle(hsv, new Point(190,60), new Point(240,160), pink, 2);
 
 //                Imgproc.putText(hsv, "(" + center_x + ", " + center_y + ")", new Point(frame.width(), frame.height() - 10), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(0, 255, 0), 2);
 //                telemetry.addData("Center X: ", center_x + " Center Y: " + center_y);
@@ -161,7 +174,7 @@ public class OpenCVGreatestColorTest extends OpenCvPipeline {
         }
 //            telemetry.update();
 
-//            return mask;
+            //return mask;
         return hsv;
     }
 }
