@@ -53,6 +53,12 @@ public class B_Far_Truss_Edge extends LinearOpMode {
         }
         return(velocity);
     }
+    /*
+    private static double setTargetHeight(int stackheight)
+
+
+
+     */
 
 
 
@@ -256,7 +262,7 @@ public class B_Far_Truss_Edge extends LinearOpMode {
 
         int zoneDetected = 0;
         while (opModeInInit() && StopSearch == 0) {
-
+            zoneDetected = 0;
 
             if ((OpenCVDetectTeamProp.centerX >180) && (OpenCVDetectTeamProp.centerY > 80) && (OpenCVDetectTeamProp.centerY < 160)) {
                 zoneDetected = 3;
@@ -274,10 +280,12 @@ public class B_Far_Truss_Edge extends LinearOpMode {
 
             } //else if (zoneDetectionPing1 > 10 || zoneDetectionPing2 > 10 || zoneDetectionPing3 > 10) {
 
-            for(int x =19; x>0; x--) {
-                detections[x] = detections[x-1];
+            if (!(zoneDetected == 0)) {
+                for(int x =19; x>0; x--) {
+                    detections[x] = detections[x-1];
+                }
+                detections[0] = zoneDetected;
             }
-            detections[0] = zoneDetected;
 
 
 
@@ -334,7 +342,7 @@ public class B_Far_Truss_Edge extends LinearOpMode {
             clawVAngle.setPosition(0.4);
             sleep(300);
             slide.setPower(1);
-            slide.setTargetPosition(5);
+            slide.setTargetPosition(20);
 
 
 
