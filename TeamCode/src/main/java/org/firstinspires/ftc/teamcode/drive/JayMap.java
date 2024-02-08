@@ -63,48 +63,27 @@ public class JayMap {
     public static double hPos = 0.5;
     public static double vPos = 1;
 
-    public JayMap(OpMode opMode){
-        this.opMode = opMode;
-    }
+    public JayMap(OpMode opMode){this.opMode = opMode;}
 
-    public JayMap(LinearOpMode opMode) {
-        this.opMode = opMode;
-    }
+    public JayMap(LinearOpMode opMode) {this.opMode = opMode;}
 
     public static double getSlideVelocity(int trigger, double slidePos, double triggerDepth) {
         double velocity = 0.0;
-        if (trigger == 1) {
-            velocity = triggerDepth * (0.6 * Math.cos(0.5 * Math.PI * slidePos) + 0.4);
-        } else if (trigger == -1) {
-            velocity = triggerDepth * (-0.6 * Math.sin(0.5 * Math.PI * slidePos) - 0.4);
-        }
+        if (trigger == 1) {velocity = triggerDepth * (0.6 * Math.cos(0.5 * Math.PI * slidePos) + 0.4);}
+        else if (trigger == -1) {velocity = triggerDepth * (-0.6 * Math.sin(0.5 * Math.PI * slidePos) - 0.4);}
         return(velocity);
     }
 
-    public static double getSlideAngle(double slideLength) {
-        return(Math.toDegrees(Math.acos(22.5 / slideLength)) / 47.8 - 1.4);
-    }
+    public static double getSlideAngle(double slideLength) {return(Math.toDegrees(Math.acos(22.5 / slideLength)) / 47.8 - 1.4);}
 
-    public static double getClawVAngle1(double slideLength) {
-        return(-Math.toDegrees(Math.asin(22.5 / slideLength)) / 428.57 + 0.4);
-    }
+    public static double getClawVAngle1(double slideLength) {return(-Math.toDegrees(Math.asin(22.5 / slideLength)) / 428.57 + 0.4);}
 
-    public static double getClawVAngle2(double slideAngle) {
-        return(slideAngle / 3.43 - 0.05);
-    }
+    public static double getClawVAngle2(double slideAngle) {return(slideAngle / 4 + 0.05);}
 
-    public void closeLeftClaw() {
-        clawL.setPosition(0);
-    }
-    public void closeRightClaw() {
-        clawR.setPosition(0);
-    }
-    public void openLeftClaw() {
-        clawL.setPosition(0.5);
-    }
-    public void openRightClaw() {
-        clawR.setPosition(0.5);
-    }
+    public void closeLeftClaw() {clawL.setPosition(0);}
+    public void closeRightClaw() {clawR.setPosition(0);}
+    public void openLeftClaw() {clawL.setPosition(0.5);}
+    public void openRightClaw() {clawR.setPosition(0.5);}
     public void setIntakeMode() {intake = true;}
     public void setPlacingMode() {intake = false;}
 

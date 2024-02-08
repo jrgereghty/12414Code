@@ -58,9 +58,9 @@ public class TeleOp extends OpMode {
             jayBot.clawROpen = !jayBot.clawROpen;
         }
         if (jayBot.clawROpen) {
-            jayBot.clawR.setPosition(0.5);
+            jayBot.openRightClaw();
         } else {
-            jayBot.clawR.setPosition(0);
+            jayBot.closeRightClaw();
         }
         jayBot.rightBumper2Last = gamepad2.right_bumper;
 
@@ -68,9 +68,9 @@ public class TeleOp extends OpMode {
             jayBot.clawLOpen = !jayBot.clawLOpen;
         }
         if (jayBot.clawLOpen) {
-            jayBot.clawL.setPosition(0.5);
+            jayBot.openLeftClaw();
         } else {
-            jayBot.clawL.setPosition(0);
+            jayBot.closeLeftClaw();
         }
         jayBot.leftBumper2Last = gamepad2.left_bumper;
 
