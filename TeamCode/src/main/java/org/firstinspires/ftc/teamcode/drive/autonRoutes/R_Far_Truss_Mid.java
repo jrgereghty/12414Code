@@ -41,6 +41,7 @@ public class R_Far_Truss_Mid extends LinearOpMode {
     double slidePower;
     double sudoTrigger;
     double sudoTriggerDepth = 1;
+    public static int[] detections = new int[20];
 
     private static double getSlideVelocity(int sudoTrigger, double slidePos, double sudoTriggerDepth) {
         double velocity = 0.0;
@@ -244,28 +245,68 @@ public class R_Far_Truss_Mid extends LinearOpMode {
 
 
         int StopSearch = 0;
-        int zoneDetectionPing1 = 0;
-        int zoneDetectionPing2 = 0;
-        int zoneDetectionPing3 = 0;
+        int Zone1detections = 0;
+        int Zone2detections = 0;
+        int Zone3detections = 0;
+
         int zoneDetected = 0;
         while (opModeInInit() && StopSearch == 0) {
 
-            if (!OpenCVDetectTeamProp.isDetected) {
+
+            if ((OpenCVDetectTeamProp.centerX >240) && (OpenCVDetectTeamProp.centerY > 80) && (OpenCVDetectTeamProp.centerY < 160)) {
                 zoneDetected = 3;
-                zoneDetectionPing3++;
 
-            } else if (OpenCVDetectTeamProp.centerX < 200) {
+
+
+            } else if ((OpenCVDetectTeamProp.centerX < 60) && (OpenCVDetectTeamProp.centerY > 80) && (OpenCVDetectTeamProp.centerY < 160)) {
                 zoneDetected = 1;
-                zoneDetectionPing1++;
 
 
-            } else if (OpenCVDetectTeamProp.centerX >= 200) {
+
+            } else if ((OpenCVDetectTeamProp.centerX > 130) && (OpenCVDetectTeamProp.centerY > 100) && (OpenCVDetectTeamProp.centerY < 140) && (OpenCVDetectTeamProp.centerX < 190)) {
                 zoneDetected = 2;
-                zoneDetectionPing2++;
 
-            } else if (zoneDetectionPing1 > 10 || zoneDetectionPing2 > 10 || zoneDetectionPing3 > 10) {
-                StopSearch = 1;
+
             }
+
+
+            if (!(zoneDetected==0)) {
+                detections[0] = zoneDetected;
+            }
+            for(int x =19; x>0; x--) {
+                detections[x] = detections[x-1];
+            }
+
+
+
+            if(opModeIsActive()){
+                StopSearch = 1;
+
+
+
+                for(int j = 19; j>0; j--){
+                    if(detections[j] == 1){Zone1detections++;}
+                    if(detections[j] == 2){Zone2detections++;}
+                    if(detections[j] == 3){Zone3detections++;}
+
+
+
+
+
+                }
+
+
+                telemetry.addLine("Search Stopped" );
+                updateTelemetry(telemetry);
+
+
+            }
+            if(Zone1detections > Zone2detections && Zone1detections > Zone3detections){zoneDetected=1;}
+            else if(Zone2detections > Zone1detections && Zone2detections > Zone3detections){zoneDetected=2;}
+            else if(Zone3detections > Zone1detections && Zone3detections > Zone2detections){zoneDetected=3;}
+
+
+
         }
         waitForStart();
 

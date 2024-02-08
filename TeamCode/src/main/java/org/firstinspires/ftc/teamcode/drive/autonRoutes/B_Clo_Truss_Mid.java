@@ -244,7 +244,7 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
 
 
 
-            } else if ((OpenCVDetectTeamProp.centerX >60) && (OpenCVDetectTeamProp.centerY > 80) && (OpenCVDetectTeamProp.centerY < 160)) {
+            } else if ((OpenCVDetectTeamProp.centerX < 60) && (OpenCVDetectTeamProp.centerY > 80) && (OpenCVDetectTeamProp.centerY < 160)) {
                 zoneDetected = 1;
 
 

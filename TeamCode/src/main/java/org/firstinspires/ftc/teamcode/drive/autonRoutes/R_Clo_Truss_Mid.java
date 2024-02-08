@@ -245,7 +245,7 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
 
 
 
-            } else if ((OpenCVDetectTeamProp.centerX >60) && (OpenCVDetectTeamProp.centerY > 80) && (OpenCVDetectTeamProp.centerY < 160)) {
+            } else if ((OpenCVDetectTeamProp.centerX < 60) && (OpenCVDetectTeamProp.centerY > 80) && (OpenCVDetectTeamProp.centerY < 160)) {
                 zoneDetected = 1;
 
 
@@ -291,6 +291,7 @@ public class R_Clo_Truss_Mid extends LinearOpMode {
             if(Zone1detections > Zone2detections && Zone1detections > Zone3detections){zoneDetected=1;}
             else if(Zone2detections > Zone1detections && Zone2detections > Zone3detections){zoneDetected=2;}
             else if(Zone3detections > Zone1detections && Zone3detections > Zone2detections){zoneDetected=3;}
+
 
 
         }

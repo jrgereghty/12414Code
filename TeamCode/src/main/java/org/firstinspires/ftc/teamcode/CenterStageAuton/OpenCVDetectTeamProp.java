@@ -122,25 +122,14 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
             telemetry.addData("secondLower", secondLower);
             telemetry.addData("secondUpper", secondUpper);
 
-/*
+
             Core.inRange(hsv, new Scalar(lowerColor[0], lowerColor[1], lowerColor[2]), new Scalar(upperColor[0], upperColor[1], upperColor[2]), mask1);//Uses originals for the filter
             Core.inRange(hsv, secondLower, secondUpper, mask2);//Uses the adjusted hue
             Core.bitwise_or(mask2, mask1, mask);//Combines the masks including all values of 255
 
- */
 
-            //EXPERIMENTAL ZONE
-            Core.inRange(area1, new Scalar(lowerColor[0], lowerColor[1], lowerColor[2]), new Scalar(upperColor[0], upperColor[1], upperColor[2]), mask1zone1);//Uses originals for the filter
-            Core.inRange(area1, secondLower, secondUpper, mask2zone1);//Uses the adjusted hue
-            Core.bitwise_or(mask2zone1, mask1zone1, maskzone1);//Combines the masks including all values of 255
 
-            Core.inRange(area2, new Scalar(lowerColor[0], lowerColor[1], lowerColor[2]), new Scalar(upperColor[0], upperColor[1], upperColor[2]), mask1zone2);//Uses originals for the filter
-            Core.inRange(area2, secondLower, secondUpper, mask2zone2);//Uses the adjusted hue
-            Core.bitwise_or(mask2zone2, mask1zone2, maskzone2);
 
-            Core.inRange(area3, new Scalar(lowerColor[0], lowerColor[1], lowerColor[2]), new Scalar(upperColor[0], upperColor[1], upperColor[2]), mask1zone3);//Uses originals for the filter
-            Core.inRange(area3, secondLower, secondUpper, mask2zone3);//Uses the adjusted hue
-            Core.bitwise_or(mask2zone3, mask1zone3, maskzone3);
 
         }
         else{
