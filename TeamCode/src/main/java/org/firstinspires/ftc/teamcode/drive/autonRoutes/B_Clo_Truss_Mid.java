@@ -256,10 +256,8 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
             } //else if (zoneDetectionPing1 > 10 || zoneDetectionPing2 > 10 || zoneDetectionPing3 > 10) {
 
 
-            if (!(zoneDetected == 0)) {
-                for(int x =19; x>0; x--) {
-                    detections[x] = detections[x-1];
-                }
+            for(int x =19; x>0; x--) {
+                detections[x] = detections[x-1];
             }
             detections[0] = zoneDetected;
 
@@ -315,11 +313,9 @@ public class B_Clo_Truss_Mid extends LinearOpMode {
             slideLAngle.setPosition(0.45); //sets slides from init pos
             slideRAngle.setPosition(0.45);
             clawVAngle.setPosition(0.45);
-            slide.setPower(1);
-            slide.setTargetPosition(100);
+            slide.setPower(0.05);
+            slide.setTargetPosition(41);
             slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            clawVAngle.setPosition(1);
-
             sleep(50000);
             sleep(200);
             drive.followTrajectory(line4start);//Moves from start position to place position

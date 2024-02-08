@@ -250,12 +250,13 @@ public class B_Far_Truss_Mid extends LinearOpMode {
                 zoneDetected = 3;
                 zoneDetectionPing3++;
 
-            } else if (OpenCVDetectTeamProp.centerX < 100) {
+            } else if (OpenCVDetectTeamProp.centerX < 200) {
                 zoneDetected = 1;
                 zoneDetectionPing1++;
 
 
-            } else if (OpenCVDetectTeamProp.centerX >= 101) {
+            } else if (OpenCVDetectTeamProp.centerX >= 200
+            ) {
                 zoneDetected = 2;
                 zoneDetectionPing2++;
 
