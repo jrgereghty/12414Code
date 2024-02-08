@@ -76,6 +76,7 @@ public class EpicSuperCoolAprilTags extends LinearOpMode {
      */
     public static VisionPortal visionPortal;
 
+
     public static WebcamName cam1;
 
     @Override

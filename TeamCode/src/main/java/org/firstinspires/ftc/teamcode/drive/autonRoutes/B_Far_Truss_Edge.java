@@ -38,7 +38,7 @@ public class B_Far_Truss_Edge extends LinearOpMode {
 
     double slideLength = 0.0;
     double slidePos = 0.0;
-    public static int[] detections = new int[100];
+    public static int[] detections = new int[20];
 
     double slidePower;
     double sudoTrigger;
@@ -247,9 +247,7 @@ public class B_Far_Truss_Edge extends LinearOpMode {
        //OLD SPOT FOR HARDWARE MAPPING
 
 
-        int k = 0;
         int StopSearch = 0;
-        int AVGsum = 0;
         int Zone1detections = 0;
         int Zone2detections = 0;
         int Zone3detections = 0;
@@ -258,7 +256,7 @@ public class B_Far_Truss_Edge extends LinearOpMode {
         while (opModeInInit() && StopSearch == 0) {
 
 
-            if ((OpenCVDetectTeamProp.centerX >180) && (OpenCVDetectTeamProp.centerY > 80) && (OpenCVDetectTeamProp.centerY < 160)) {
+            if ((OpenCVDetectTeamProp.centerX >240) && (OpenCVDetectTeamProp.centerY > 80) && (OpenCVDetectTeamProp.centerY < 160)) {
                 zoneDetected = 3;
 
 
@@ -272,17 +270,20 @@ public class B_Far_Truss_Edge extends LinearOpMode {
                 zoneDetected = 2;
 
 
-            } //else if (zoneDetectionPing1 > 10 || zoneDetectionPing2 > 10 || zoneDetectionPing3 > 10) {
+            }
 
+
+            if (!(zoneDetected==0)) {
+                detections[0] = zoneDetected;
+            }
             for(int x =19; x>0; x--) {
                 detections[x] = detections[x-1];
             }
-            detections[0] = zoneDetected;
 
 
 
-                if(opModeIsActive()){
-                    StopSearch = 1;
+            if(opModeIsActive()){
+                StopSearch = 1;
 
 
 
@@ -303,12 +304,9 @@ public class B_Far_Truss_Edge extends LinearOpMode {
 
 
             }
-            if(Zone1detections >= Zone2detections && Zone1detections >= Zone3detections){zoneDetected=1;}
-            else if(Zone2detections >= Zone1detections && Zone2detections >= Zone3detections){zoneDetected=2;}
-            else if(Zone3detections >= Zone1detections && Zone3detections >= Zone2detections){zoneDetected=3;}
-
-
-
+            if(Zone1detections > Zone2detections && Zone1detections > Zone3detections){zoneDetected=1;}
+            else if(Zone2detections > Zone1detections && Zone2detections > Zone3detections){zoneDetected=2;}
+            else if(Zone3detections > Zone1detections && Zone3detections > Zone2detections){zoneDetected=3;}
 
 
         }
