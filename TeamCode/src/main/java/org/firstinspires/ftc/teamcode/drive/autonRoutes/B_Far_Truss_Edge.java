@@ -110,7 +110,7 @@ public class B_Far_Truss_Edge extends LinearOpMode {
 
 
 
-        Pose2d startPose = new Pose2d(-35.2, 64, Math.toRadians(270.00));
+        Pose2d startPose = new Pose2d(-35.2, 63.5, Math.toRadians(270.00));
 
         drive.setPoseEstimate(startPose);
         Trajectory forward30 = drive.trajectoryBuilder(startPose)
@@ -132,16 +132,16 @@ public class B_Far_Truss_Edge extends LinearOpMode {
                 .lineToSplineHeading(new Pose2d(-36, 53.36, Math.toRadians(252)))
                 .build();
         Trajectory pixel2start = drive.trajectoryBuilder(line4start.end())
-                .lineToSplineHeading(new Pose2d(-43, 58.8, Math.toRadians(0)))
+                .lineToSplineHeading(new Pose2d(-43, 59.8, Math.toRadians(0)))
                 .build();
         Trajectory pixel2startmid = drive.trajectoryBuilder(line4startmid.end())
-                .lineToSplineHeading(new Pose2d(-43, 58.8, Math.toRadians(0)))
+                .lineToSplineHeading(new Pose2d(-43, 59.8, Math.toRadians(0)))
                 .build();
         Trajectory pixel2startright = drive.trajectoryBuilder(line4startright.end())
-                .lineToSplineHeading(new Pose2d(-43, 58.8, Math.toRadians(0)))
+                .lineToSplineHeading(new Pose2d(-43, 59.8, Math.toRadians(0)))
                 .build();
-        Trajectory forward60 = drive.trajectoryBuilder(new Pose2d(-43, 58.36, Math.toRadians(0)))
-                .lineTo(new Vector2d(24, 58.8))
+        Trajectory forward60 = drive.trajectoryBuilder(new Pose2d(-43, 59.8, Math.toRadians(0)))
+                .lineTo(new Vector2d(24, 59.8))
                 .build();
         Trajectory start2board = drive.trajectoryBuilder(forward60.end())
                 .splineToConstantHeading(new Vector2d(46.01, 36), Math.toRadians(0.00))//46.01, 36
@@ -195,7 +195,7 @@ public class B_Far_Truss_Edge extends LinearOpMode {
                 .back(11)
                 .build();
         Trajectory strafe2edgeR = drive.trajectoryBuilder(back11.end())
-                .lineToSplineHeading(new Pose2d(39, 59, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(39, 60, Math.toRadians(180)))
                 .build();
         Trajectory back20 = drive.trajectoryBuilder(strafe2edgeR.end())
                 .back(20)
