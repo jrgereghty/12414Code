@@ -29,6 +29,9 @@
 
 package org.firstinspires.ftc.teamcode.drive.opmode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import android.util.Size;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -53,9 +56,9 @@ import java.util.List;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@TeleOp(name = "Concept: AprilTag", group = "Concept")
 
-public class EpicSuperCoolAprilTags extends LinearOpMode {
+
+public class EpicSuperCoolAprilTags{
 
 
 
@@ -77,23 +80,21 @@ public class EpicSuperCoolAprilTags extends LinearOpMode {
     public static VisionPortal visionPortal;
 
 
-    public static WebcamName cam1;
+    //public static WebcamName cam1;
 
-    @Override
-    public void runOpMode() {
+    //@Override
+    public void AprilTagPro(WebcamName cam1) {
 
-        initAprilTag();
+        initAprilTag(cam1);
 
 
-        cam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
+        //cam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
         // Wait for the DS start button to be touched.
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
-        waitForStart();
 
-        if (opModeIsActive()) {
-            while (opModeIsActive()) {
+
 
                 telemetryAprilTag();
 
@@ -101,16 +102,18 @@ public class EpicSuperCoolAprilTags extends LinearOpMode {
                 telemetry.update();
 
                 // Save CPU resources; can resume streaming when needed.
+                /*
                 if (gamepad1.dpad_down) {
                     visionPortal.stopStreaming();
                 } else if (gamepad1.dpad_up) {
                     visionPortal.resumeStreaming();
                 }
+                */
 
+                visionPortal.resumeStreaming();
                 // Share the CPU.
-                sleep(20);
-            }
-        }
+
+
 
         // Save more CPU resources when camera is no longer needed.
         visionPortal.close();
@@ -120,7 +123,7 @@ public class EpicSuperCoolAprilTags extends LinearOpMode {
     /**
      * Initialize the AprilTag processor.
      */
-    public void initAprilTag() {
+    public void initAprilTag(WebcamName cam1) {
 
         // Create the AprilTag processor.
 
@@ -155,7 +158,7 @@ public class EpicSuperCoolAprilTags extends LinearOpMode {
        // }
 
         // Choose a camera resolution. Not all cameras support all resolutions.
-        builder.setCameraResolution(new Size(640, 480));
+        builder.setCameraResolution(new Size(320, 240));
 
 
 

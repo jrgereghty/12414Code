@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drive.autonRoutes;
+package org.firstinspires.ftc.teamcode.drive.autonRoutesOld;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -107,7 +107,7 @@ public class B_Far_Door_Edge extends LinearOpMode {
 
 
 
-        Pose2d startPose = new Pose2d(-34.50, 62.84, Math.toRadians(270.00));
+        Pose2d startPose = new Pose2d(-34.50, 63.5, Math.toRadians(270.00));
 
         drive.setPoseEstimate(startPose);
 
@@ -119,10 +119,10 @@ public class B_Far_Door_Edge extends LinearOpMode {
         })
                 .build();
         Trajectory spike2whiteleft = drive.trajectoryBuilder(start2leftspike.end())
-                .lineToSplineHeading(new Pose2d(-46, 7.5, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(-47, 8, Math.toRadians(180)))
                 .build();
         Trajectory back79 = drive.trajectoryBuilder(new Pose2d(-46,11.5, Math.toRadians(180)))
-                .lineTo(new Vector2d(36,11.5))
+                .lineTo(new Vector2d(36,8.5))
                 .build();
         Trajectory white2boardpart2 = drive.trajectoryBuilder(back79.end())
                 .lineToSplineHeading(new Pose2d(50, 16, Math.toRadians(48.7)))
@@ -136,7 +136,7 @@ public class B_Far_Door_Edge extends LinearOpMode {
                 })
                 .build();
         Trajectory spike2whitemid = drive.trajectoryBuilder(start2midspike.end())
-                .lineToSplineHeading(new Pose2d(-46, 11.5, Math.toRadians(180.00)))
+                .lineToSplineHeading(new Pose2d(-47, 8, Math.toRadians(180.00)))
                 .build();
 
         Trajectory start2rightspike = drive.trajectoryBuilder(startPose)
@@ -154,7 +154,7 @@ public class B_Far_Door_Edge extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(48,16), Math.toRadians(45))//
                 .build();
         Trajectory spike2whiteright = drive.trajectoryBuilder(start2rightspike.end())
-                .lineToSplineHeading(new Pose2d(-46, 11.5, Math.toRadians(180.00)))
+                .lineToSplineHeading(new Pose2d(-47, 8, Math.toRadians(180.00)))
                 .build();
 
 
@@ -180,7 +180,7 @@ public class B_Far_Door_Edge extends LinearOpMode {
         //Spline Trajectories
 
         Trajectory strafe2midR = drive.trajectoryBuilder(white2boardpart2.end())
-                .lineToSplineHeading(new Pose2d(48, 10, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(48, 8, Math.toRadians(180)))
                 .build();
         Trajectory back11 = drive.trajectoryBuilder(strafe2midR.end())
                 .back(11)
@@ -341,37 +341,40 @@ public class B_Far_Door_Edge extends LinearOpMode {
             sleep(1000);
 
 
-
-
-
             clawR.setPosition(0.5); //place
              // to white pixels, turned towards spike
             sleep(500);
-
-
 
 
             slideRAngle.setPosition(0.5);
             slideLAngle.setPosition(0.5);
 
             drive.followTrajectory(spike2whiteleft);
-
-            slideLAngle.setPosition(0.1);
-            slideRAngle.setPosition(0.1);
-            clawVAngle.setPosition(0.38);
-            sleep(500);
+            slideLAngle.setPosition(0.17);
+            slideRAngle.setPosition(0.17);
+            sleep(200);
+            slideLAngle.setPosition(0.07);
+            slideRAngle.setPosition(0.07);
+            //clawVAngle.setPosition(0.28);
+            clawVAngle.setPosition(0.35);
+            sleep(2000);
             clawR.setPosition(0); // +1, hopefully
             sleep(500);
 
 
             drive.followTrajectory(back79);
-            slideLAngle.setPosition(0.35);
-            slideRAngle.setPosition(0.35);
+
+            slideLAngle.setPosition(0.55);
+            slideRAngle.setPosition(0.55);
             clawHAngle.setPosition(0.3815);
             clawVAngle.setPosition(0.2);
-            slide.setTargetPosition(1000);
+            slide.setTargetPosition(1200);
             slide.setPower(1);
             drive.followTrajectory(white2boardpart2);
+            slideLAngle.setPosition(0.35);
+            slideRAngle.setPosition(0.35);
+
+
 
 
 
@@ -384,12 +387,13 @@ public class B_Far_Door_Edge extends LinearOpMode {
             clawR.setPosition(0.5);
 
 
-            sleep(200);
+            sleep(600);
+            clawHAngle.setPosition(0.24);
             slide.setTargetPosition(0);
             slide.setPower(-1);
             sleep(200);
             //drive.followTrajectory(strafe18R);
-
+/*
             //returning
             drive.followTrajectory(return2mid);
             slideLAngle.setPosition(0.05);
@@ -402,6 +406,8 @@ public class B_Far_Door_Edge extends LinearOpMode {
             clawR.setPosition(0);
             sleep(2000);
             drive.followTrajectory(return2boardfinal);
+
+
 
 
 
@@ -420,6 +426,8 @@ public class B_Far_Door_Edge extends LinearOpMode {
 
             clawL.setPosition(0.5);
             clawR.setPosition(0.5);
+
+ */
 
 
             sleep(200);
@@ -448,8 +456,7 @@ public class B_Far_Door_Edge extends LinearOpMode {
 
 //_______2222222222-2-2-2-22-2-2-2-2-2-2-2-2-22-2-2-2-22-2-2-2-22-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2
         } else if (zoneDetected == 2) {
-            slideLAngle.setPosition(0.45);
-            slideRAngle.setPosition(0.45);
+
 
 
             slideLAngle.setPosition(0.10);
@@ -473,9 +480,14 @@ public class B_Far_Door_Edge extends LinearOpMode {
             slideLAngle.setPosition(0.3);
 
             drive.followTrajectory(spike2whitemid);
-            slideLAngle.setPosition(0.20);
-            slideRAngle.setPosition(0.20);
-            clawVAngle.setPosition(0.5);
+            slideLAngle.setPosition(0.17);
+            slideRAngle.setPosition(0.17);
+            sleep(200);
+            slideLAngle.setPosition(0.07);
+            slideRAngle.setPosition(0.07);
+            //clawVAngle.setPosition(0.28);
+            clawVAngle.setPosition(0.35);
+            sleep(2000);
             clawR.setPosition(0); // +1, hopefully
 
 
@@ -483,15 +495,15 @@ public class B_Far_Door_Edge extends LinearOpMode {
             drive.followTrajectory(white2boardpart2);
             slideLAngle.setPosition(0.4);
             slideRAngle.setPosition(0.4);
-            clawHAngle.setPosition(0.5);
+            clawHAngle.setPosition(0.38);
             clawVAngle.setPosition(0.2);
-            slidePower = getSlideVelocity(1, slidePos, Math.pow(sudoTriggerDepth, 3));
-            slide.setPower(slidePower);
-            sleep(320);
+            slide.setTargetPosition(700);
+            slide.setPower(1);
 
-            slide.setPower(0);
 
-            drive.followTrajectory(rightplace);
+            drive.turn(Math.toRadians(10));
+
+            //drive.followTrajectory(rightplace);
 
 
             sleep(300);

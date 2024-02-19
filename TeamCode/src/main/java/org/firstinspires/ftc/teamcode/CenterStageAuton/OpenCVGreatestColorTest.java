@@ -30,8 +30,8 @@ public class OpenCVGreatestColorTest extends OpenCvPipeline {
     public static int[] lowerBlue = {Lowblue, Lowbluesat, 20};//66,125,214 ORIGINAL 115, 50, 20
     public static int[] upperBlue = {Highblue, Highbluesat, 255};//58.8, 176, 199 ORIGINAL 160, 255, 255
 
-    public static int[] lowerRed = {160, 100, 100};
-    public static int[] upperRed  = {200, 255, 255};
+    public static int[] lowerRed = {170, 100, 100};//{160, 100, 100}
+    public static int[] upperRed  = {210, 255, 255};//{200, 255, 255}
 
     public static int[] lowerYellow = {20, 100, 20};
     public static int[] upperYellow = {50, 255, 255};

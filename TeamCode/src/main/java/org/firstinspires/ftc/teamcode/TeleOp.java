@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.drive.JayMap;
+import org.firstinspires.ftc.teamcode.util.AprilTagAutoAlignmentManager;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "purple")
 @Config
@@ -22,6 +23,11 @@ public class TeleOp extends OpMode {
 
     JayMap jayBot = new JayMap(this);
     MecanumDrive drive;
+
+
+    AprilTagAutoAlignmentManager hPosCheck = new AprilTagAutoAlignmentManager();
+
+    double stackHeight = 22.5;
 
     @Override
     public void init() {
@@ -36,7 +42,14 @@ public class TeleOp extends OpMode {
         jayBot.yMovement = gamepad1.left_stick_y;
         jayBot.rotation = gamepad1.right_stick_x;
         jayBot.drivePower = Math.max(Math.max(Math.abs(jayBot.yMovement), Math.abs(jayBot.xMovement)), Math.abs(jayBot.rotation));
-
+        if (gamepad2.dpad_up) {
+            jayBot.stackNum ++;
+            stackHeight = 22.5-(1.27*jayBot.stackNum);
+        }
+        if (gamepad2.dpad_down) {
+            jayBot.stackNum --;
+            stackHeight = 22.5-(1.27*jayBot.stackNum);
+        }
         if (!jayBot.aLast && gamepad1.a) {
             jayBot.halfSpeedToggle = !jayBot.halfSpeedToggle;
         }
@@ -96,15 +109,15 @@ public class TeleOp extends OpMode {
             jayBot.hPos = 0.5;
             if (jayBot.intake) {
                 jayBot.pos = 0;
-                jayBot.vPos = JayMap.getClawVAngle1(jayBot.slideLength);
+                jayBot.vPos = JayMap.getClawVAngle1(jayBot.slideLength, stackHeight);
             } else {
                 jayBot.pos = 0.5;
                 jayBot.vPos = JayMap.getClawVAngle2(jayBot.pos);
             }
         }
         if (jayBot.intake) {
-            jayBot.pos = JayMap.getSlideAngle(jayBot.slideLength);
-            jayBot.vPos = JayMap.getClawVAngle1(jayBot.slideLength);
+            jayBot.pos = JayMap.getSlideAngle(jayBot.slideLength, stackHeight);
+            jayBot.vPos = JayMap.getClawVAngle1(jayBot.slideLength, stackHeight);
         } else {
             if (gamepad2.left_stick_y >= 0.005 && jayBot.pos <= 0.99) {
                 jayBot.pos += gamepad2.left_stick_y * 0.01;
@@ -120,6 +133,11 @@ public class TeleOp extends OpMode {
         if (gamepad2.right_stick_x <= -0.05) {
             jayBot.hPos += -gamepad2.right_stick_x * 0.01;
         }
+        if (gamepad2.start) {
+           double newHPos = AprilTagAutoAlignmentManager.calculateAngleToTag(jayBot.bonoboCam);
+           jayBot.setToAngle(newHPos);
+        }
+
 
         if (jayBot.hPos > 1) {
             jayBot.hPos = 1;
