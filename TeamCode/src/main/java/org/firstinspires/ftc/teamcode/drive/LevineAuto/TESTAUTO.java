@@ -172,7 +172,7 @@ public class TESTAUTO extends LinearOpMode {
             posesToGoTo.add(new PosesAndActions(wBot.startingPosition, ""));
 
             posesToGoTo.add(new PosesAndActions(wBot.testPosition, ""));
-            follower.init(posesToGoTo, isTest);
+            follower.init(posesToGoTo, isTest, true);
             follower.goToPoints(true);
 
             if(zoneDetected == 3) {

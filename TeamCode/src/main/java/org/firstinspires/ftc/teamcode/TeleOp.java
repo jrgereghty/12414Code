@@ -88,7 +88,7 @@ public class TeleOp extends OpMode {
         jayBot.leftBumper2Last = gamepad2.left_bumper;
 
         jayBot.slidePos = jayBot.slide.getCurrentPosition() / 537.7 * 4 * Math.PI / 41.1;
-        jayBot.slideLength = jayBot.slidePos * 41.1 + 38.5;
+        jayBot.slideLength = jayBot.slidePos * 41.1 + 38.5;//outputs slide position in cm
         if (gamepad2.right_trigger > 0.01) {
             jayBot.slidePower = jayBot.getSlideVelocity(1, jayBot.slidePos, Math.pow(gamepad2.right_trigger, 3));
             jayBot.slide.setPower(jayBot.slidePower);

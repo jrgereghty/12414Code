@@ -38,6 +38,7 @@ public class JayMap {
     public Pose2d startingPosition, startingPosition2, boardBack;
     public Pose2d testPosition;
     public Pose2d firstPlacementLeft, firstPlacementMid, firstPlacementRight;
+    public Pose2d Turn2BoardLeft, Turn2BoardMid, Turn2BoardRight;
     public Pose2d PerpendicularBoardLeft, PerpendicularBoardMid, PerpendicularBoardRight;
     public Pose2d DoorAlignmentBoard, TrussAlignmentBoard;
     public Pose2d doorStack, trussStack, emergencyStack;
@@ -103,7 +104,7 @@ public class JayMap {
     }
 
     public static double getSlideAngle(double slideLength, double stackHeight) {
-        return (Math.toDegrees(Math.acos(stackHeight / slideLength)) / 47.8 - 1.4);
+        return (Math.toDegrees(Math.acos((22.5-0.5*stackHeight) / slideLength)) / 47.8 - 1.4);
     }
 
     public static double getClawVAngle1(double slideLength) {
@@ -111,7 +112,7 @@ public class JayMap {
     }
 
     public static double getClawVAngle1(double slideLength, double stackHeight) {
-        return (-Math.toDegrees(Math.asin(stackHeight / slideLength)) / 428.57 + 0.4);
+        return (-Math.toDegrees(Math.asin((22.5-0.5*stackHeight) / slideLength)) / 428.57 + 0.4);
     }
 
     public static double getClawVAngle2(double slideAngle) {
@@ -146,11 +147,13 @@ public class JayMap {
         clawHAngle.setPosition(angle2);
     }
     public void initSlideToPos(){slide.setTargetPosition(0);slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
-    public void clawExtensionManager(int slideLength, double stackHeight){double slideAngle = getSlideAngle(slideLength, stackHeight);slideLAngle.setPosition(slideAngle);slideRAngle.setPosition(slideAngle);
+    public void clawExtensionManager(int slideLength, int stackHeight){double slidePos = (slide.getCurrentPosition() / 537.7 * 4 * Math.PI / 41.1) * 41.1 + 38.5;double slideAngle = getSlideAngle(slidePos, stackHeight);
+        clawVAngle.setPosition(getClawVAngle1(slidePos, stackHeight));slideLAngle.setPosition(slideAngle);slideRAngle.setPosition(slideAngle);//Save 384.5
     slide.setTargetPosition(slideLength);slide.setPower(1);}
-    public void perpendicularBoardPlacement(double slideAngle){clawVAngle.setPosition(getClawVAngle2(slideAngle));
-        slideRAngle.setPosition(slideAngle);slideLAngle.setPosition(slideAngle);}
-
+    public void perpendicularBoardPlacement(double slideAngle, int intendedSlideLength){clawVAngle.setPosition(getClawVAngle2(slideAngle));
+        slideRAngle.setPosition(slideAngle);slideLAngle.setPosition(slideAngle);slide.setTargetPosition(intendedSlideLength);slide.setPower(1);}
+    public void slideToTarget(int intendedSlideLength, double power){slide.setTargetPosition(intendedSlideLength);slide.setPower(power);}
+    public void resetCLaw4Park(){closeLeftClaw();closeRightClaw();clawVAngle.setPosition(0.9);}
 
     public void init() {
         frontLeft = this.opMode.hardwareMap.dcMotor.get("frontLeft");
@@ -237,16 +240,43 @@ public class JayMap {
         switch (autonType) {
             case "B_Clo_Door_Mid":
                 startingPosition = new Pose2d(BlueClosePoses.xPosStartingPos, BlueClosePoses.yPosStartingPos, BlueClosePoses.headingStartingPos);
+                startingPosition2 = new Pose2d(BlueClosePoses.xPosStartingPos2, BlueClosePoses.yPosStartingPos2, BlueClosePoses.headingStartingPos);
                 firstPlacementLeft = new Pose2d(BlueClosePoses.xPosLeftSpikeMark, BlueClosePoses.yPosLeftSpikeMark, BlueClosePoses.headingLeftSpikeMark);
                 firstPlacementMid = new Pose2d(BlueClosePoses.xPosMiddleSpikeMark, BlueClosePoses.yPosMiddleSpikeMark, BlueClosePoses.headingMiddleSpikeMark);
                 firstPlacementRight = new Pose2d(BlueClosePoses.xPosRightSpikeMark, BlueClosePoses.yPosRightSpikeMark, BlueClosePoses.headingRightSpikeMark);
 
-                testPosition = new Pose2d(BlueClosePoses.xPosTestPos, BlueClosePoses.yPosTestPos, BlueClosePoses.headingTestPos);
+                Turn2BoardMid = new Pose2d(BlueClosePoses.xPosTurn2BoardMid, BlueClosePoses.yPosTurn2BoardMid, BlueClosePoses.headingTurn2BoardMid);
+
+                boardBack = new Pose2d(BlueClosePoses.xPosBoardBack, BlueClosePoses.yPosBoardBack, BlueClosePoses.faceBoard);
 
                 PerpendicularBoardLeft = new Pose2d(BlueClosePoses.xPosLeftBoardPlace, BlueClosePoses.yPosLeftBoardPlace, BlueClosePoses.PerpendicularBoardPlacementHeading);
                 PerpendicularBoardMid = new Pose2d(BlueClosePoses.xPosMidBoardPlace, BlueClosePoses.yPosMidBoardPlace, BlueClosePoses.PerpendicularBoardPlacementHeading);
                 PerpendicularBoardRight = new Pose2d(BlueClosePoses.xPosRightBoardPlace, BlueClosePoses.yPosRightBoardPlace, BlueClosePoses.PerpendicularBoardPlacementHeading);
-                //ParkP
+
+                DoorAlignmentBoard = new Pose2d(BlueClosePoses.xPosDoorLaneAlignmentBoard, BlueClosePoses.yPosDoorLaneAlignmentBoard, BlueClosePoses.headingDoorLaneAlignmentBoard);
+                doorStack = new Pose2d(BlueClosePoses.xPosWhitePickupMid, BlueClosePoses.yPosWhitePickupMid, BlueClosePoses.headingWhitePickupMid);
+                parkPrepare = new Pose2d(BlueClosePoses.xPosStartParkMid, BlueClosePoses.yPosStartParkMid, BlueClosePoses.faceBoard);
+                parkFinish = new Pose2d(BlueClosePoses.xPosEndParkMid, BlueClosePoses.yPosEndParkMid, BlueClosePoses.faceBoard);
+                break;
+            case "B_Clo_Door_Edge":
+                startingPosition = new Pose2d(BlueClosePoses.xPosStartingPos, BlueClosePoses.yPosStartingPos, BlueClosePoses.headingStartingPos);
+                startingPosition2 = new Pose2d(BlueClosePoses.xPosStartingPos2, BlueClosePoses.yPosStartingPos2, BlueClosePoses.headingStartingPos);
+                firstPlacementLeft = new Pose2d(BlueClosePoses.xPosLeftSpikeMark, BlueClosePoses.yPosLeftSpikeMark, BlueClosePoses.headingLeftSpikeMark);
+                firstPlacementMid = new Pose2d(BlueClosePoses.xPosMiddleSpikeMark, BlueClosePoses.yPosMiddleSpikeMark, BlueClosePoses.headingMiddleSpikeMark);
+                firstPlacementRight = new Pose2d(BlueClosePoses.xPosRightSpikeMark, BlueClosePoses.yPosRightSpikeMark, BlueClosePoses.headingRightSpikeMark);
+
+                Turn2BoardMid = new Pose2d(BlueClosePoses.xPosTurn2BoardMid, BlueClosePoses.yPosTurn2BoardMid, BlueClosePoses.headingTurn2BoardMid);
+
+                boardBack = new Pose2d(BlueClosePoses.xPosBoardBack, BlueClosePoses.yPosBoardBack, BlueClosePoses.faceBoard);
+
+                PerpendicularBoardLeft = new Pose2d(BlueClosePoses.xPosLeftBoardPlace, BlueClosePoses.yPosLeftBoardPlace, BlueClosePoses.PerpendicularBoardPlacementHeading);
+                PerpendicularBoardMid = new Pose2d(BlueClosePoses.xPosMidBoardPlace, BlueClosePoses.yPosMidBoardPlace, BlueClosePoses.PerpendicularBoardPlacementHeading);
+                PerpendicularBoardRight = new Pose2d(BlueClosePoses.xPosRightBoardPlace, BlueClosePoses.yPosRightBoardPlace, BlueClosePoses.PerpendicularBoardPlacementHeading);
+
+                DoorAlignmentBoard = new Pose2d(BlueClosePoses.xPosDoorLaneAlignmentBoard, BlueClosePoses.yPosDoorLaneAlignmentBoard, BlueClosePoses.headingDoorLaneAlignmentBoard);
+                doorStack = new Pose2d(BlueClosePoses.xPosWhitePickupMid, BlueClosePoses.yPosWhitePickupMid, BlueClosePoses.headingWhitePickupMid);
+                parkPrepare = new Pose2d(BlueClosePoses.xPosStartParkEdge, BlueClosePoses.yPosStartParkEdge, BlueClosePoses.faceBoard);
+                parkFinish = new Pose2d(BlueClosePoses.xPosEndParkEdge, BlueClosePoses.yPosEndParkEdge, BlueClosePoses.faceBoard);
                 break;
             case "B_Clo_Door_Mid_L":
                 startingPosition = new Pose2d(BlueClosePoses.xPosStartingPos, BlueClosePoses.yPosStartingPos, BlueClosePoses.headingStartingPos);
@@ -266,6 +296,8 @@ public class JayMap {
                 firstPlacementMid = new Pose2d(RedClosePoses.xPosMiddleSpikeMark, RedClosePoses.yPosMiddleSpikeMark, RedClosePoses.headingMiddleSpikeMark);
                 firstPlacementRight = new Pose2d(RedClosePoses.xPosRightSpikeMark, RedClosePoses.yPosRightSpikeMark, RedClosePoses.headingRightSpikeMark);
 
+                Turn2BoardMid = new Pose2d(RedClosePoses.xPosTurn2BoardMid, RedClosePoses.yPosTurn2BoardMid, RedClosePoses.headingTurn2BoardMid);
+
                 boardBack = new Pose2d(RedClosePoses.xPosBoardBack, RedClosePoses.yPosBoardBack, RedClosePoses.faceBoard);
 
                 PerpendicularBoardLeft = new Pose2d(RedClosePoses.xPosLeftBoardPlace, RedClosePoses.yPosLeftBoardPlace, RedClosePoses.PerpendicularBoardPlacementHeading);
@@ -274,6 +306,33 @@ public class JayMap {
 
                 DoorAlignmentBoard = new Pose2d(RedClosePoses.xPosDoorLaneAlignmentBoard, RedClosePoses.yPosDoorLaneAlignmentBoard, RedClosePoses.headingDoorLaneAlignmentBoard);
                 doorStack = new Pose2d(RedClosePoses.xPosWhitePickupMid, RedClosePoses.yPosWhitePickupMid, RedClosePoses.headingWhitePickupMid);
+                parkPrepare = new Pose2d(RedClosePoses.xPosStartParkMid, RedClosePoses.yPosStartParkMid, RedClosePoses.faceBoard);
+                parkFinish = new Pose2d(RedClosePoses.xPosEndParkMid, RedClosePoses.yPosEndParkMid, RedClosePoses.faceBoard);
+
+
+
+                //ParkP
+                break;
+            case "R_Clo_Door_Edge":
+                startingPosition = new Pose2d(RedClosePoses.xPosStartingPos, RedClosePoses.yPosStartingPos, RedClosePoses.headingStartingPos);
+                startingPosition2 = new Pose2d(RedClosePoses.xPosStartingPos2, RedClosePoses.yPosStartingPos2, RedClosePoses.headingStartingPos);
+                firstPlacementLeft = new Pose2d(RedClosePoses.xPosLeftSpikeMark, RedClosePoses.yPosLeftSpikeMark, RedClosePoses.headingLeftSpikeMark);
+                firstPlacementMid = new Pose2d(RedClosePoses.xPosMiddleSpikeMark, RedClosePoses.yPosMiddleSpikeMark, RedClosePoses.headingMiddleSpikeMark);
+                firstPlacementRight = new Pose2d(RedClosePoses.xPosRightSpikeMark, RedClosePoses.yPosRightSpikeMark, RedClosePoses.headingRightSpikeMark);
+
+                Turn2BoardMid = new Pose2d(RedClosePoses.xPosTurn2BoardMid, RedClosePoses.yPosTurn2BoardMid, RedClosePoses.headingTurn2BoardMid);
+
+                boardBack = new Pose2d(RedClosePoses.xPosBoardBack, RedClosePoses.yPosBoardBack, RedClosePoses.faceBoard);
+
+                PerpendicularBoardLeft = new Pose2d(RedClosePoses.xPosLeftBoardPlace, RedClosePoses.yPosLeftBoardPlace, RedClosePoses.PerpendicularBoardPlacementHeading);
+                PerpendicularBoardMid = new Pose2d(RedClosePoses.xPosMidBoardPlace, RedClosePoses.yPosMidBoardPlace, RedClosePoses.PerpendicularBoardPlacementHeading);
+                PerpendicularBoardRight = new Pose2d(RedClosePoses.xPosRightBoardPlace, RedClosePoses.yPosRightBoardPlace, RedClosePoses.PerpendicularBoardPlacementHeading);
+
+                DoorAlignmentBoard = new Pose2d(RedClosePoses.xPosDoorLaneAlignmentBoard, RedClosePoses.yPosDoorLaneAlignmentBoard, RedClosePoses.headingDoorLaneAlignmentBoard);
+                doorStack = new Pose2d(RedClosePoses.xPosWhitePickupMid, RedClosePoses.yPosWhitePickupMid, RedClosePoses.headingWhitePickupMid);
+                parkPrepare = new Pose2d(RedClosePoses.xPosStartParkEdge, RedClosePoses.yPosStartParkEdge, RedClosePoses.faceBoard);
+                parkFinish = new Pose2d(RedClosePoses.xPosEndParkEdge, RedClosePoses.yPosEndParkEdge, RedClosePoses.faceBoard);
+
 
 
                 //ParkP

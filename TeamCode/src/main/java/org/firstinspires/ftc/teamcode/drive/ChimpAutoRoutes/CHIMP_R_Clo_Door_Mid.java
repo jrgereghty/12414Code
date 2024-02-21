@@ -70,6 +70,7 @@ public class CHIMP_R_Clo_Door_Mid extends LinearOpMode {
         int Zone3detections = 0;
 
         int zoneDetected = 0;
+        int slideLength = 850;
         Pose2d firstPlacement = new Pose2d();
         Pose2d yellowPixelPlacement = new Pose2d();
         Pose2d firstWhitePixel = new Pose2d();
@@ -78,6 +79,10 @@ public class CHIMP_R_Clo_Door_Mid extends LinearOpMode {
         Pose2d startPos2 = wBot.startingPosition2;
         Pose2d laneAlignment = wBot.DoorAlignmentBoard;
         Pose2d doorStack = wBot.doorStack;
+        Pose2d turn2Board = wBot.Turn2BoardMid;
+        Pose2d parkPrepare = wBot.parkPrepare;
+        Pose2d parkFinish = wBot.parkFinish;
+
         while (opModeInInit() && StopSearch == 0) {
 
 
@@ -182,25 +187,49 @@ public class CHIMP_R_Clo_Door_Mid extends LinearOpMode {
             //}
         while(opModeIsActive()){
             timeForAuton.reset();
-
-
+            wBot.clawVAngle.setPosition(0.3);
+            wBot.slideRAngle.setPosition(0.3);
+            wBot.slideLAngle.setPosition(0.3);
             posesToGoTo.add(new PosesAndActions(startPos, ""));
+            posesToGoTo.add(new PosesAndActions(startPos2, ""));
             posesToGoTo.add(new PosesAndActions(firstPlacement, ""));
-            follower.init(posesToGoTo, isTest);
+            follower.init(posesToGoTo, isTest, true);
             follower.goToPoints(true);
-            wBot.clawExtensionManager(500, 22.5);
-
+            if(zoneDetected == 3) {
+                slideLength = 450;
+            }
+            wBot.clawExtensionManager(slideLength, 0);
+            sleep(1000);
             wBot.openRightClaw();
-            sleep(3000);//TEMP GAP FOR TESTING ONLY
-            wBot.perpendicularBoardPlacement(firstBoardSlideAngle);
-            wBot.openLeftClaw();
+            sleep(1000);//TEMP GAP FOR TESTING ONLY
+            wBot.perpendicularBoardPlacement(firstBoardSlideAngle, 700);
+
             posesToGoTo.clear();
+            //posesToGoTo.add(new PosesAndActions(turn2Board, ""));
             posesToGoTo.add(new PosesAndActions(yellowPixelPlacement, ""));
             follower.reinit(posesToGoTo);
             follower.goToPoints(true);
 
-            sleep(3000);//AnotherTESTGAP
+            sleep(500);//AnotherTESTGAP
 
+            wBot.openLeftClaw();
+            sleep(1000);
+            wBot.slideToTarget(0,-1);
+            sleep(300);
+            posesToGoTo.clear();
+            posesToGoTo.add(new PosesAndActions(parkPrepare, ""));
+            posesToGoTo.add(new PosesAndActions(parkFinish, ""));
+            follower.reinit(posesToGoTo);
+            follower.goToPoints(true);
+            wBot.resetCLaw4Park();
+            sleep(20000);
+/*
+            posesToGoTo.clear();
+            posesToGoTo.add(new PosesAndActions(wBot.boardBack, ""));
+            posesToGoTo.add(new PosesAndActions(laneAlignment, ""));
+            follower.reinit(posesToGoTo);
+            follower.goToPoints(true);
+            sleep(1000);
             posesToGoTo.clear();
             posesToGoTo.add(new PosesAndActions(wBot.boardBack, ""));
             posesToGoTo.add(new PosesAndActions(laneAlignment, ""));
@@ -208,18 +237,23 @@ public class CHIMP_R_Clo_Door_Mid extends LinearOpMode {
             follower.goToPoints(true);
             sleep(2000);
             posesToGoTo.clear();
-            posesToGoTo.add(new PosesAndActions(doorStack, ""));
+            posesToGoTo.add(new PosesAndActions(doorStack, ""));//Monkey Operated Bot
             follower.reinit(posesToGoTo);
             follower.goToPoints(true);
             sleep(1000);
+
             posesToGoTo.clear();
             posesToGoTo.add(new PosesAndActions(laneAlignment, ""));
             follower.reinit(posesToGoTo);
             follower.goToPoints(true);
+
             posesToGoTo.clear();
+            posesToGoTo.add(new PosesAndActions(wBot.boardBack, ""));
             posesToGoTo.add(new PosesAndActions(firstWhitePixel, ""));
             follower.reinit(posesToGoTo);
             follower.goToPoints(true);
+
+ */
 
             /*
             sleep(MonkeyMap.sleepTimeExtendSlides);

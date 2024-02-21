@@ -12,24 +12,26 @@ public class RedClosePoses {
     public static double xPosStartingPos2 = 12 * sideMultiplierX, yPosStartingPos2 = 53 * sideMultipliery;
 
     //Purple Pixel Placement
-    public static double xPosLeftSpikeMark = 40, yPosLeftSpikeMark = 35 * sideMultipliery, headingLeftSpikeMark = Math.toRadians(180);//x,40,y35,y = 180 Left
+    public static double xPosLeftSpikeMark = 27, yPosLeftSpikeMark = 35 * sideMultipliery, headingLeftSpikeMark = Math.toRadians(180);//x,40,y35,y = 180 Left
     //x=44.5,
     public static double xPosMiddleSpikeMark = 12, yPosMiddleSpikeMark = 49 * sideMultipliery, headingMiddleSpikeMark = Math.toRadians(90);
-    public static double xPosRightSpikeMark = 20, yPosRightSpikeMark = 35 * sideMultipliery, headingRightSpikeMark = Math.toRadians(180);
+    public static double xPosRightSpikeMark = 40, yPosRightSpikeMark = 35 * sideMultipliery, headingRightSpikeMark = Math.toRadians(180);
+    public static double xPosTurn2BoardMid = 12, yPosTurn2BoardMid = 49 * sideMultipliery, headingTurn2BoardMid = Math.toRadians(0);
     //x=20,y35, H = 180 Right
     //x=13 ,y=49, heading = 270 Mid
 
+
     //Poses For board Placing
-    public static double xPosLeftBoardPlace = 44.5, yPosLeftBoardPlace = 45 * sideMultipliery;
-    public static double xPosMidBoardPlace = 44.5, yPosMidBoardPlace = 38.5 * sideMultipliery;
-    public static double xPosRightBoardPlace = 44.5, yPosRightBoardPlace = 31.5 * sideMultipliery;
+    public static double xPosLeftBoardPlace = 44.5, yPosLeftBoardPlace = 33.5 * sideMultipliery;//revert after tuning, x value
+    public static double xPosMidBoardPlace = 44.5, yPosMidBoardPlace = 36 * sideMultipliery;
+    public static double xPosRightBoardPlace = 45.5, yPosRightBoardPlace = 46 * sideMultipliery;
     public static double PerpendicularBoardPlacementHeading = Math.toRadians(0);
     //x=44.5, 38.5, H=0 Mid 2
-    public static double xPosBoardBack = 36.5, yPosBoardBack = 38.5 * sideMultipliery;
+    public static double xPosBoardBack = 40, yPosBoardBack = 11 * sideMultipliery;
 
     //Middle 2+ Poses
-    public static double xPosDoorLaneAlignmentBoard = 39, yPosDoorLaneAlignmentBoard = 12 * sideMultipliery, headingDoorLaneAlignmentBoard = Math.toRadians(180);//Return here after grabbing whites
-    public static double xPosWhitePickupMid = -45, yPosWhitePickupMid = 7 * sideMultipliery, headingWhitePickupMid = Math.toRadians(180);
+    public static double xPosDoorLaneAlignmentBoard = 40, yPosDoorLaneAlignmentBoard = 14 * sideMultipliery, headingDoorLaneAlignmentBoard = Math.toRadians(180);//Return here after grabbing whites
+    public static double xPosWhitePickupMid = -45, yPosWhitePickupMid = 14 * sideMultipliery, headingWhitePickupMid = Math.toRadians(180);
 
     //Placement from door poses and headings
     public static double xPosDoorSidePlace = 51, yPosDoorSidePlace = 20 * sideMultipliery;
@@ -39,10 +41,10 @@ public class RedClosePoses {
     public static double xPosTrussAlignmentFar = -39, yPosTrussAlignmentFar = 61 * sideMultipliery, headingTrussAlignmentFar = Math.toRadians(180);
     public static double xPosTrussWhite = -51, yPosTrussWhite = 50 * sideMultipliery, headingTrussWhite = -Math.toRadians(213);
     //Parking
-    public static double xPosStartParkMid = 9, yPosStartParkMid = 40* sideMultipliery;
-    public static double xPosEndParkMid = 9, yPosEndParkMid = 15* sideMultipliery;
-    public static double xPosStartParkEdge = 61, yPosStartParkEdge = 40* sideMultipliery;
-    public static double xPosEndParkEdge = 61, yPosEndParkEdge = 15 * sideMultipliery;
+    public static double xPosStartParkMid = 40, yPosStartParkMid = 12* sideMultipliery;
+    public static double xPosEndParkMid = 53, yPosEndParkMid = 12* sideMultipliery;
+    public static double xPosStartParkEdge = 40, yPosStartParkEdge = 60* sideMultipliery;
+    public static double xPosEndParkEdge = 53, yPosEndParkEdge = 60 * sideMultipliery;
     public static double faceBoard = Math.toRadians(0), faceWhites = Math.toRadians(180);
     //Old Style purple placement:
     public static double xPosLine4StartLeft = 12, yPosLine4StartLeft = 53 * sideMultipliery, headingLine4StartLeft = Math.toRadians(307);
