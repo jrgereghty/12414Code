@@ -75,11 +75,17 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                     wBot.setAllSlidePoses(0,0.5,-1);
                 })
                 .addDisplacementMarker(10, ()->{
-                    wBot.setSlideAngle(0.08);
+                    wBot.setSlideAngle(0.11);
                 })
                 .build();
         Trajectory back79 = drive.trajectoryBuilder(stackReady)
                 .lineTo(new Vector2d(36,9))
+                .addDisplacementMarker(1, ()->{
+                    wBot.slideToTarget(1000,0.3);
+                })
+                .addDisplacementMarker(1, ()->{
+                    wBot.slideToTarget(0,-1);
+                })
                 .build();
         Trajectory white2boardpart2left = drive.trajectoryBuilder(back79.end())
                 .lineToSplineHeading(new Pose2d(50, 16, Math.toRadians(54.7)))
@@ -127,6 +133,12 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                 .build();
         Trajectory white2boardpart2Right = drive.trajectoryBuilder(back79.end())
                 .lineToSplineHeading(new Pose2d(50, 16, Math.toRadians(38)))
+                .addDisplacementMarker(1, ()->{
+                    wBot.setAllSlidePoses(0,0.7,-1);
+                })
+                .addDisplacementMarker(20, ()->{
+                    wBot.setAllSlidePoses(600,0.25,1);
+                })
                 .build();
 
 
@@ -315,7 +327,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
             wBot.clawVAngle.setPosition(0.35);
             sleep(1000);
             wBot.slideToTarget(750,1);
-            sleep(300);
+            sleep(600);
             wBot.closeRightClaw(); // +1, hopefully
             sleep(300);
 
@@ -323,23 +335,26 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
             drive.followTrajectory(back79);
 
             wBot.clawVAngle.setPosition(0.2);
-            wBot.clawHAngle.setPosition(0.35);
+            wBot.clawHAngle.setPosition(0.45);
             drive.followTrajectory(white2boardpart2left);
             wBot.openLeftClaw();
             wBot.openRightClaw();
-            sleep(200);
+            sleep(500);
             //drive.followTrajectory(strafe18R);
-
+            wBot.slideToTarget(0,-1);
             //returning
             drive.followTrajectory(return2midLeft);
-            wBot.setSlideAngle(0.03);
+
+
+
+            wBot.setSlideAngle(0.05);
 
             wBot.clawVAngle.setPosition(0.35);
             wBot.clawHAngle.setPosition(hPos);
 
             drive.followTrajectory(return2whites);
             wBot.slideToTarget(750,1);
-            sleep(500);
+            sleep(700);
             wBot.closeRightClaw();
             sleep(500);
             drive.followTrajectory(back79);
