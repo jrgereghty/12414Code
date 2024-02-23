@@ -21,8 +21,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 
 import java.util.ArrayList;
 
-@Autonomous(group = "Chimps",name = "CHIMP_B_Clo_Door_Edge")
-public class CHIMP_B_Clo_Door_Edge extends LinearOpMode {
+@Autonomous(group = "Chimps",name = "CHIMP_B_Far_Door_Mid")
+public class CHIMP_B_Far_Door_Mid extends LinearOpMode {
     OpenCvCamera webcam;
     static OpenCVDetectTeamProp colorPipe;
     static OpenCVGreatestColorTest pipeline;
@@ -39,7 +39,7 @@ public class CHIMP_B_Clo_Door_Edge extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         wBot.init();
-        wBot.initForAuton("B_Clo_Door_Edge");
+        wBot.initForAuton("B_Far_Door_Mid");
         //wBot.resetSlides();
         ArrayList<PosesAndActions> posesToGoTo = new ArrayList<>();
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
@@ -70,7 +70,7 @@ public class CHIMP_B_Clo_Door_Edge extends LinearOpMode {
         int Zone3detections = 0;
 
         int zoneDetected = 0;
-        int slideLength = 850;
+        int slideLength = 500;
         Pose2d firstPlacement = new Pose2d();
         Pose2d yellowPixelPlacement = new Pose2d();
         Pose2d firstWhitePixel = new Pose2d();
@@ -78,8 +78,8 @@ public class CHIMP_B_Clo_Door_Edge extends LinearOpMode {
         Pose2d startPos = wBot.startingPosition;
         Pose2d startPos2 = wBot.startingPosition2;
         Pose2d laneAlignment = wBot.DoorAlignmentBoard;
-        Pose2d doorStack = wBot.doorStack;
-        Pose2d turn2Board = wBot.Turn2BoardMid;
+        //Pose2d doorStack = wBot.doorStack;
+        //Pose2d turn2Board = wBot.Turn2BoardMid;
         Pose2d parkPrepare = wBot.parkPrepare;
         Pose2d parkFinish = wBot.parkFinish;
 
@@ -140,7 +140,7 @@ public class CHIMP_B_Clo_Door_Edge extends LinearOpMode {
         if (zoneDetected == 1) {
             firstPlacement = wBot.firstPlacementLeft;
             yellowPixelPlacement = wBot.PerpendicularBoardLeft;
-            firstWhitePixel = wBot.PerpendicularBoardRight;
+            firstWhitePixel = wBot.PerpendicularBoardMid;
         } else if (zoneDetected == 2) {
             firstPlacement = wBot.firstPlacementMid;
             yellowPixelPlacement = wBot.PerpendicularBoardMid;
@@ -149,7 +149,7 @@ public class CHIMP_B_Clo_Door_Edge extends LinearOpMode {
         {
             firstPlacement = wBot.firstPlacementRight;
             yellowPixelPlacement = wBot.PerpendicularBoardRight;
-            firstWhitePixel = wBot.PerpendicularBoardLeft;
+            firstWhitePixel = wBot.PerpendicularBoardMid;
         }
         waitForStart();
         //PosesAndActions firstExtendation = new PosesAndActions(wBot.startExtendFirstPlacementAfter, "");
@@ -188,8 +188,8 @@ public class CHIMP_B_Clo_Door_Edge extends LinearOpMode {
         while(opModeIsActive()){
             timeForAuton.reset();
             wBot.clawVAngle.setPosition(0.3);
-            wBot.slideRAngle.setPosition(0.3);
-            wBot.slideLAngle.setPosition(0.3);
+            wBot.slideRAngle.setPosition(0.12);
+            wBot.slideLAngle.setPosition(0.12);
             posesToGoTo.add(new PosesAndActions(startPos, ""));
             posesToGoTo.add(new PosesAndActions(startPos2, ""));
             posesToGoTo.add(new PosesAndActions(firstPlacement, ""));
@@ -197,23 +197,43 @@ public class CHIMP_B_Clo_Door_Edge extends LinearOpMode {
             follower.init(posesToGoTo, isTest, true);
             follower.goToPoints(true);
             if(zoneDetected == 1) {
-                slideLength = 340;
+                slideLength = 600;
             }
             wBot.clawExtensionManager(slideLength, 0);
             sleep(1000);
             wBot.openRightClaw();
+            wBot.perpendicularBoardPlacement(0.2, 0);
             sleep(1000);//TEMP GAP FOR TESTING ONLY
-            wBot.perpendicularBoardPlacement(firstBoardSlideAngle, 700);
 
             posesToGoTo.clear();
-            //posesToGoTo.add(new PosesAndActions(turn2Board, ""));
-            posesToGoTo.add(new PosesAndActions(yellowPixelPlacement, ""));
+
+            posesToGoTo.add(new PosesAndActions(wBot.whitePickupBMid, ""));
             follower.reinit(posesToGoTo);
             follower.goToPoints(true);
+            wBot.clawVAngle.setPosition(0.5);
+            wBot.perpendicularBoardPlacement(0.1, 1000);
+            sleep(800);
+            wBot.closeRightClaw();
+            wBot.perpendicularBoardPlacement(0.2, 0);
+            posesToGoTo.clear();
+
+            //posesToGoTo.add(new PosesAndActions(, ""));
+            posesToGoTo.add(new PosesAndActions(wBot.DoorAlignmentBoard, ""));
+            posesToGoTo.add(new PosesAndActions(yellowPixelPlacement, ""));
+
+            follower.reinit(posesToGoTo);
+            follower.goToPoints(true);
+            wBot.perpendicularBoardPlacement(firstBoardSlideAngle, 700);
 
             sleep(500);//AnotherTESTGAP
 
             wBot.openLeftClaw();
+            sleep(500);
+            posesToGoTo.clear();
+            posesToGoTo.add(new PosesAndActions(firstWhitePixel, ""));
+            follower.reinit(posesToGoTo);
+            follower.goToPoints(true);
+            wBot.openRightClaw();
             sleep(1000);
             wBot.slideToTarget(0,-1);
             sleep(300);

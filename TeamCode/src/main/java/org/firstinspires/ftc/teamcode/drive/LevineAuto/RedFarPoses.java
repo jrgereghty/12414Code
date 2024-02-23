@@ -14,10 +14,10 @@ public class RedFarPoses {
 
     //Purple Pixel Placement
     //NOT ADJUSTED
-    public static double xPosLeftSpikeMark = 20, yPosLeftSpikeMark = 35 * sideMultipliery, headingLeftSpikeMark = Math.toRadians(180);//x,40,y35,y = 180 Left
+    public static double xPosLeftSpikeMark = -20, yPosLeftSpikeMark = 35 * sideMultipliery, headingLeftSpikeMark = Math.toRadians(180);//x,40,y35,y = 180 Left
     //x=44.5,
-    public static double xPosMiddleSpikeMark = 12, yPosMiddleSpikeMark = 49 * sideMultipliery, headingMiddleSpikeMark = Math.toRadians(90);
-    public static double xPosRightSpikeMark = 40, yPosRightSpikeMark = 35 * sideMultipliery, headingRightSpikeMark = Math.toRadians(180);
+    public static double xPosMiddleSpikeMark = -12, yPosMiddleSpikeMark = 49 * sideMultipliery, headingMiddleSpikeMark = Math.toRadians(90);
+    public static double xPosRightSpikeMark = -40, yPosRightSpikeMark = 35 * sideMultipliery, headingRightSpikeMark = Math.toRadians(180);
     public static double xPosTurn2BoardMid = 12, yPosTurn2BoardMid = 49 * sideMultipliery, headingTurn2BoardMid = Math.toRadians(0);
     //x=20,y35, H = 180 Right
     //x=13 ,y=49, heading = 270 Mid

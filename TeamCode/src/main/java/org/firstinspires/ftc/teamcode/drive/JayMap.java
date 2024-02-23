@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.LevineLocalization.PointFollower;
 import org.firstinspires.ftc.teamcode.LevineLocalization.PosesAndActions;
 import org.firstinspires.ftc.teamcode.CenterStageAuton.OpenCVDetectTeamProp;
 import org.firstinspires.ftc.teamcode.drive.LevineAuto.BlueClosePoses;
+import org.firstinspires.ftc.teamcode.drive.LevineAuto.BlueFarPoses;
 import org.firstinspires.ftc.teamcode.drive.LevineAuto.RedClosePoses;
 
 import java.util.ArrayList;
@@ -40,10 +41,13 @@ public class JayMap {
     public Pose2d firstPlacementLeft, firstPlacementMid, firstPlacementRight;
     public Pose2d Turn2BoardLeft, Turn2BoardMid, Turn2BoardRight;
     public Pose2d PerpendicularBoardLeft, PerpendicularBoardMid, PerpendicularBoardRight;
+    public Pose2d UnPerpendicularBoardLeft, UnPerpendicularBoardMid, UnPerpendicularBoardRight;
+
     public Pose2d DoorAlignmentBoard, TrussAlignmentBoard;
     public Pose2d doorStack, trussStack, emergencyStack;
     public Pose2d parkPrepare, parkFinish;
     public Pose2d reset4Left;//Legacy
+    public Pose2d whitePickupBMid;
 
     //Define all hardware
     public VoltageSensor batteryVoltageSensor;
@@ -338,6 +342,24 @@ public class JayMap {
 
 
                 //ParkP
+                break;
+            case "B_Far_Door_Mid":
+                startingPosition = new Pose2d(BlueFarPoses.xPosStartingPos, BlueFarPoses.yPosStartingPos, BlueFarPoses.headingStartingPos);
+                startingPosition2 = new Pose2d(BlueFarPoses.xPosStartingPos2, BlueFarPoses.yPosStartingPos2, BlueFarPoses.headingStartingPos);
+                firstPlacementLeft = new Pose2d(BlueFarPoses.xPosLeftSpikeMark, BlueFarPoses.yPosLeftSpikeMark, BlueFarPoses.headingLeftSpikeMark);
+                firstPlacementMid = new Pose2d(BlueFarPoses.xPosMiddleSpikeMark, BlueFarPoses.yPosMiddleSpikeMark, BlueFarPoses.headingMiddleSpikeMark);
+                firstPlacementRight = new Pose2d(BlueFarPoses.xPosRightSpikeMark, BlueFarPoses.yPosRightSpikeMark, BlueFarPoses.headingRightSpikeMark);
+
+                whitePickupBMid = new Pose2d(BlueFarPoses.xPosWhitePickupMid, BlueFarPoses.yPosWhitePickupMid, BlueFarPoses.headingWhitePickup);
+                DoorAlignmentBoard = new Pose2d(BlueFarPoses.xPosDoorLaneAlignmentBoard, BlueFarPoses.yPosDoorLaneAlignmentBoard, BlueFarPoses.headingDoorLaneAlignmentBoard);
+
+
+                PerpendicularBoardLeft = new Pose2d(BlueFarPoses.xPosLeftBoardPlace, BlueFarPoses.yPosLeftBoardPlace, 0);
+                PerpendicularBoardMid = new Pose2d(BlueFarPoses.xPosMidBoardPlace, BlueFarPoses.yPosMidBoardPlace, 0);
+                PerpendicularBoardRight = new Pose2d(BlueFarPoses.xPosRightBoardPlace, BlueFarPoses.yPosRightBoardPlace,0);
+
+                parkPrepare = new Pose2d(BlueFarPoses.xPosStartParkMid, BlueFarPoses.yPosStartParkMid, RedClosePoses.faceBoard);
+                parkFinish = new Pose2d(BlueFarPoses.xPosEndParkEdge, BlueFarPoses.yPosEndParkMid, RedClosePoses.faceBoard);
                 break;
         }
     }
