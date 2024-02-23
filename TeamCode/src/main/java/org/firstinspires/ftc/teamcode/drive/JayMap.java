@@ -154,6 +154,8 @@ public class JayMap {
         slideRAngle.setPosition(slideAngle);slideLAngle.setPosition(slideAngle);slide.setTargetPosition(intendedSlideLength);slide.setPower(1);}
     public void slideToTarget(int intendedSlideLength, double power){slide.setTargetPosition(intendedSlideLength);slide.setPower(power);}
     public void resetCLaw4Park(){closeLeftClaw();closeRightClaw();clawVAngle.setPosition(0.9);}
+    public void setAllSlidePoses(int intendedSlideLength, double intendedSlideAngle, double slidePower){slideToTarget(intendedSlideLength, slidePower);slideLAngle.setPosition(intendedSlideAngle);slideRAngle.setPosition(intendedSlideAngle);}
+    public void setSlideAngle( double intendedSlideAngle){slideLAngle.setPosition(intendedSlideAngle);slideRAngle.setPosition(intendedSlideAngle);}
 
     public void init() {
         frontLeft = this.opMode.hardwareMap.dcMotor.get("frontLeft");

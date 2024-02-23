@@ -216,13 +216,7 @@ public class CHIMP_R_Clo_Door_Mid extends LinearOpMode {
             sleep(1000);
             wBot.slideToTarget(0,-1);
             sleep(300);
-            posesToGoTo.clear();
-            posesToGoTo.add(new PosesAndActions(parkPrepare, ""));
-            posesToGoTo.add(new PosesAndActions(parkFinish, ""));
-            follower.reinit(posesToGoTo);
-            follower.goToPoints(true);
-            wBot.resetCLaw4Park();
-            sleep(20000);
+
 /*
             posesToGoTo.clear();
             posesToGoTo.add(new PosesAndActions(wBot.boardBack, ""));
@@ -230,6 +224,7 @@ public class CHIMP_R_Clo_Door_Mid extends LinearOpMode {
             follower.reinit(posesToGoTo);
             follower.goToPoints(true);
             sleep(1000);
+            */
             posesToGoTo.clear();
             posesToGoTo.add(new PosesAndActions(wBot.boardBack, ""));
             posesToGoTo.add(new PosesAndActions(laneAlignment, ""));
@@ -241,19 +236,36 @@ public class CHIMP_R_Clo_Door_Mid extends LinearOpMode {
             follower.reinit(posesToGoTo);
             follower.goToPoints(true);
             sleep(1000);
-
+            wBot.clawExtensionManager(1100,2);
+            sleep(1000);
+            wBot.closeLeftClaw();
+            wBot.closeRightClaw();
+            sleep(700);
+            wBot.slideRAngle.setPosition(0.4);
+            wBot.slideLAngle.setPosition(0.4);
+            wBot.slideToTarget(0,-1);
             posesToGoTo.clear();
             posesToGoTo.add(new PosesAndActions(laneAlignment, ""));
             follower.reinit(posesToGoTo);
             follower.goToPoints(true);
 
             posesToGoTo.clear();
-            posesToGoTo.add(new PosesAndActions(wBot.boardBack, ""));
+            //posesToGoTo.add(new PosesAndActions(wBot.boardBack, ""));
             posesToGoTo.add(new PosesAndActions(firstWhitePixel, ""));
             follower.reinit(posesToGoTo);
             follower.goToPoints(true);
+            wBot.perpendicularBoardPlacement(0.5, 600);
+            wBot.openLeftClaw();
+            wBot.openRightClaw();
 
- */
+
+            posesToGoTo.clear();
+            posesToGoTo.add(new PosesAndActions(parkPrepare, ""));
+            posesToGoTo.add(new PosesAndActions(parkFinish, ""));
+            follower.reinit(posesToGoTo);
+            follower.goToPoints(true);
+            wBot.resetCLaw4Park();
+            sleep(20000);
 
             /*
             sleep(MonkeyMap.sleepTimeExtendSlides);

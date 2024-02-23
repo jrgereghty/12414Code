@@ -23,15 +23,15 @@ public class RedClosePoses {
 
     //Poses For board Placing
     public static double xPosLeftBoardPlace = 44.5, yPosLeftBoardPlace = 33.5 * sideMultipliery;//revert after tuning, x value
-    public static double xPosMidBoardPlace = 44.5, yPosMidBoardPlace = 36 * sideMultipliery;
+    public static double xPosMidBoardPlace = 44.5, yPosMidBoardPlace = 38 * sideMultipliery;
     public static double xPosRightBoardPlace = 45.5, yPosRightBoardPlace = 46 * sideMultipliery;
     public static double PerpendicularBoardPlacementHeading = Math.toRadians(0);
     //x=44.5, 38.5, H=0 Mid 2
     public static double xPosBoardBack = 40, yPosBoardBack = 11 * sideMultipliery;
 
     //Middle 2+ Poses
-    public static double xPosDoorLaneAlignmentBoard = 40, yPosDoorLaneAlignmentBoard = 14 * sideMultipliery, headingDoorLaneAlignmentBoard = Math.toRadians(180);//Return here after grabbing whites
-    public static double xPosWhitePickupMid = -45, yPosWhitePickupMid = 14 * sideMultipliery, headingWhitePickupMid = Math.toRadians(180);
+    public static double xPosDoorLaneAlignmentBoard = 40, yPosDoorLaneAlignmentBoard = 12 * sideMultipliery, headingDoorLaneAlignmentBoard = Math.toRadians(180);//Return here after grabbing whites
+    public static double xPosWhitePickupMid = -45, yPosWhitePickupMid = 12 * sideMultipliery, headingWhitePickupMid = Math.toRadians(180);
 
     //Placement from door poses and headings
     public static double xPosDoorSidePlace = 51, yPosDoorSidePlace = 20 * sideMultipliery;
