@@ -133,10 +133,13 @@ public class TeleOp extends OpMode {
         if (gamepad2.right_stick_x <= -0.05) {
             jayBot.hPos += -gamepad2.right_stick_x * 0.01;
         }
+        /*
         if (gamepad2.start) {
            double newHPos = AprilTagAutoAlignmentManager.calculateAngleToTag(jayBot.bonoboCam);
            jayBot.setToAngle(newHPos);
         }
+
+         */
 
 
         if (jayBot.hPos > 1) {

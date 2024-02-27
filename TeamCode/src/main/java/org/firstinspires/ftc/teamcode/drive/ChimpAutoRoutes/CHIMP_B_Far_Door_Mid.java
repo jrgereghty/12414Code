@@ -202,19 +202,23 @@ public class CHIMP_B_Far_Door_Mid extends LinearOpMode {
             wBot.clawExtensionManager(slideLength, 0);
             sleep(1000);
             wBot.openRightClaw();
-            wBot.perpendicularBoardPlacement(0.2, 0);
+
             sleep(1000);//TEMP GAP FOR TESTING ONLY
+            wBot.setAllSlidePoses(0,0.4,-1);
 
             posesToGoTo.clear();
 
             posesToGoTo.add(new PosesAndActions(wBot.whitePickupBMid, ""));
             follower.reinit(posesToGoTo);
             follower.goToPoints(true);
-            wBot.clawVAngle.setPosition(0.5);
-            wBot.perpendicularBoardPlacement(0.1, 1000);
-            sleep(800);
+            wBot.clawVAngle.setPosition(0.35);
+            wBot.setAllSlidePoses(400,0.15, 1);
+            sleep(300);
+            wBot.slideToTarget(1200,1);
+            sleep(1000);
             wBot.closeRightClaw();
-            wBot.perpendicularBoardPlacement(0.2, 0);
+            sleep(1000);
+            wBot.slideToTarget(0,-1);
             posesToGoTo.clear();
 
             //posesToGoTo.add(new PosesAndActions(, ""));
@@ -228,13 +232,17 @@ public class CHIMP_B_Far_Door_Mid extends LinearOpMode {
             sleep(500);//AnotherTESTGAP
 
             wBot.openLeftClaw();
-            sleep(500);
+            sleep(200);
+            wBot.slideToTarget(400,-1);
             posesToGoTo.clear();
             posesToGoTo.add(new PosesAndActions(firstWhitePixel, ""));
             follower.reinit(posesToGoTo);
             follower.goToPoints(true);
+            wBot.slideToTarget(700,1);
+            sleep(300);
             wBot.openRightClaw();
-            sleep(1000);
+            sleep(500);
+
             wBot.slideToTarget(0,-1);
             sleep(300);
             posesToGoTo.clear();

@@ -6,8 +6,6 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CenterStageAuton.OpenCVDetectTeamProp;
@@ -18,9 +16,9 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "71B_Far_Door_Edge")
+@Autonomous(name = "71R_Far_Door_Edge_REVERSECOLOR")
 
-public class B_Far_Door_Edge_Experimental extends LinearOpMode {
+public class R_Far_Door_Edge_Experimental extends LinearOpMode {
 
 
     OpenCvCamera webcam;
@@ -55,17 +53,17 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
 
 
 
-        Pose2d stackReady = new Pose2d(-45, 10, Math.toRadians(180));
+        Pose2d stackReady = new Pose2d(-45, -12, Math.toRadians(180));
         //Pose2d stackReady2 = new Pose2d(-45, 9.5, Math.toRadians(180));
-        Pose2d laneAlignment = new Pose2d(36, 9, Math.toRadians(180));
-        Pose2d startPose = new Pose2d(-34.50, 63.5, Math.toRadians(270.00));
-        Pose2d parkPrepare = new Pose2d(45, 10, Math.toRadians(0));
-        Pose2d parkFinish = new Pose2d(53, 10, Math.toRadians(0));
+        Pose2d laneAlignment = new Pose2d(36, -11, Math.toRadians(180));
+        Pose2d startPose = new Pose2d(-34.50, -63.5, Math.toRadians(90));
+        Pose2d parkPrepare = new Pose2d(45, -10, Math.toRadians(0));
+        Pose2d parkFinish = new Pose2d(53, -10, Math.toRadians(0));
 
         drive.setPoseEstimate(startPose);
 
         Trajectory start2leftspike = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Pose2d(-48, 30, Math.toRadians(0)))
+                .lineToSplineHeading(new Pose2d(-48, -30, Math.toRadians(0)))
                 .addDisplacementMarker(4, ()->{
                     wBot.clawExtensionManager(800,1);
         })
@@ -80,7 +78,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                 })
                 .build();
         Trajectory back79 = drive.trajectoryBuilder(stackReady)
-                .lineTo(new Vector2d(36,11))
+                .lineTo(new Vector2d(36,-13))
                 .addDisplacementMarker(1, ()->{
                     wBot.slideToTarget(1000,0.3);
                 })
@@ -89,7 +87,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                 })
                 .build();
         Trajectory white2boardpart2left = drive.trajectoryBuilder(back79.end())
-                .lineToSplineHeading(new Pose2d(50, 16, Math.toRadians(69)))//54.7
+                .lineToSplineHeading(new Pose2d(50, -16, Math.toRadians(-69)))//54.7
                 .addDisplacementMarker(1, ()->{
                     wBot.setAllSlidePoses(0,0.8,-1);
                 })
@@ -98,7 +96,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                 })
                 .build();
         Trajectory white2boardpart2leftPerpendicular = drive.trajectoryBuilder(back79.end())
-                .lineToSplineHeading(new Pose2d(44.5, 39, Math.toRadians(0)))//54.7
+                .lineToSplineHeading(new Pose2d(44.5, -33, Math.toRadians(0)))//54.7
                 .addDisplacementMarker(1, ()->{
                     wBot.setAllSlidePoses(0,0.8,-1);
                 })
@@ -111,7 +109,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                 })
                 .build();
         Trajectory white2boardpart2midPerpendicular = drive.trajectoryBuilder(back79.end())
-                .lineToSplineHeading(new Pose2d(44.5, 35, Math.toRadians(0)))//54.7
+                .lineToSplineHeading(new Pose2d(44.5, -37, Math.toRadians(0)))//54.7
                 .addDisplacementMarker(1, ()->{
                     wBot.setAllSlidePoses(0,0.8,-1);
                 })
@@ -124,7 +122,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                 })
                 .build();
         Trajectory white2boardpart2rightPerpendicular = drive.trajectoryBuilder(back79.end())
-                .lineToSplineHeading(new Pose2d(44.5, 28, Math.toRadians(0)))//54.7
+                .lineToSplineHeading(new Pose2d(44.5, -32, Math.toRadians(0)))//54.7
                 .addDisplacementMarker(1, ()->{
                     wBot.setAllSlidePoses(0,0.8,-1);
                 })
@@ -138,7 +136,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                 .build();
 //Second Spike Mark - - - - - - - -  - - - - - - - -  - - - - -
         Trajectory start2midspike = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Pose2d(-56, 26, Math.toRadians(0.00)))
+                .lineToSplineHeading(new Pose2d(-56, -26, Math.toRadians(0.00)))
                 .addDisplacementMarker(1, ()->{
                     wBot.clawExtensionManager(500,0);
                 })
@@ -154,14 +152,14 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                 .build();
 
         Trajectory start2rightspike = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Pose2d(-48, 10, Math.toRadians(90)))//change angle @####@##@#@#@#@-34,54
+                .lineToSplineHeading(new Pose2d(-48, -10, Math.toRadians(270)))//change angle @####@##@#@#@#@-34,54
                 .addDisplacementMarker(1, ()->{
                     wBot.clawExtensionManager(300,0);
                 })
                 .build();
 
         Trajectory leftplace = drive.trajectoryBuilder(back79.end())
-                .splineToConstantHeading(new Vector2d(48,22), Math.toRadians(45)) //left 6
+                .splineToConstantHeading(new Vector2d(48,-22), Math.toRadians(45)) //left 6
                 .build();
 
 
@@ -175,7 +173,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                 })
                 .build();
         Trajectory white2boardpart2Mid = drive.trajectoryBuilder(back79.end())
-                .lineToSplineHeading(new Pose2d(50, 16, Math.toRadians(45)))
+                .lineToSplineHeading(new Pose2d(50, -16, Math.toRadians(-45)))
                 //.addDisplacementMarker(1, ()->{
                  //   wBot.setAllSlidePoses(300,0.7,-1);
                // })
@@ -184,12 +182,12 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                 })
                 .build();
         Trajectory white2boardpart2Right = drive.trajectoryBuilder(back79.end())
-                .lineToSplineHeading(new Pose2d(50, 16, Math.toRadians(38)))
+                .lineToSplineHeading(new Pose2d(50, -16, Math.toRadians(-38)))
                 .addDisplacementMarker(1, ()->{
                     wBot.setAllSlidePoses(300,0.7,-1);
                 })
                 .addDisplacementMarker(10, ()->{
-                    wBot.setAllSlidePoses(600,0.25,1);
+                    wBot.setAllSlidePoses(700,0.6,1);
                 })
                 .build();
 
@@ -227,20 +225,20 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
 
 
         Trajectory return2midSetLeft = drive.trajectoryBuilder(white2boardpart2left.end())
-                .lineToSplineHeading(new Pose2d(48, 16, Math.toRadians(70)))
+                .lineToSplineHeading(new Pose2d(48, -16, Math.toRadians(70)))
                 .build();
         Trajectory return2midLeft = drive.trajectoryBuilder(return2midSetLeft.end())
-                .lineToSplineHeading(new Pose2d(36, 9, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(36, -9, Math.toRadians(180)))
                 .build();
         Trajectory return2midLeftP = drive.trajectoryBuilder(white2boardpart2leftPerpendicular.end())
-                .lineToSplineHeading(new Pose2d(36, 9, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(36, -9, Math.toRadians(180)))
                 .build();
         Trajectory return2midMid = drive.trajectoryBuilder(white2boardpart2midPerpendicular.end())
-                .lineToSplineHeading(new Pose2d(36, 9, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(36, -9, Math.toRadians(180)))
                 .build();
 
         Trajectory return2midRight = drive.trajectoryBuilder(white2boardpart2rightPerpendicular.end())
-                .lineToSplineHeading(new Pose2d(36, 9, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(36, -9, Math.toRadians(180)))
                 .build();
 
         Trajectory return2whites = drive.trajectoryBuilder(laneAlignment)
@@ -370,7 +368,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
         }
         waitForStart();
 
-        if (zoneDetected == 1) {
+        if (zoneDetected == 3) {
             wBot.clawVAngle.setPosition(0.35);
             wBot.setSlideAngle(0.2);
             /*
@@ -423,9 +421,9 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
 
             drive.followTrajectory(return2whites);
             wBot.slideToTarget(750,1);
-            wBot.clawHAngle.setPosition(0.53);
+            //wBot.clawHAngle.setPosition(0.53);
             sleep(400);
-            wBot.clawHAngle.setPosition(0.56);
+            //wBot.clawHAngle.setPosition(0.56);
             wBot.closeRightClaw();
             wBot.closeLeftClaw();
             sleep(100);
@@ -469,7 +467,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
             drive.followTrajectory(start2midspike);
             //sleep(100);
 
-            wBot.openRightClaw();//place
+            wBot.openLeftClaw();//place
             // to white pixels, turned towards spike
             //sleep(100);
             drive.followTrajectory(spike2whitemid);
@@ -481,7 +479,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
             wBot.setSlideAngle(0.103);
             //wBot.setSlideAngle(0.08);
             sleep(500);
-            wBot.closeRightClaw(); // +1, hopefully
+            wBot.closeLeftClaw(); // +1, hopefully
             sleep(300);
 
 
@@ -520,7 +518,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
             //sleep(400);
             drive.followTrajectory(back79);
             wBot.clawVAngle.setPosition(0.2);
-            wBot.clawHAngle.setPosition(0.37);
+            wBot.clawHAngle.setPosition(0.63);
 
             //Placement again
             drive.followTrajectory(white2boardpart2Right);
@@ -616,7 +614,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
 
 
 //___333333333333333333333333333333333333333333333333333333333333333333333333
-        } else if (zoneDetected == 3) {
+        } else if (zoneDetected == 1) {
             wBot.clawVAngle.setPosition(0.35);
             wBot.setSlideAngle(0.2);
 

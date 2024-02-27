@@ -36,7 +36,7 @@ public class BlueFarPoses {
     public static double xPosBoardBack = 39, yPosBoardBack = 12 * sideMultipliery;
 
     //Middle 2+ Poses
-    public static double xPosDoorLaneAlignmentBoard = 40, yPosDoorLaneAlignmentBoard = 10 * sideMultipliery, headingDoorLaneAlignmentBoard = Math.toRadians(180);//Return here after grabbing whites
+    public static double xPosDoorLaneAlignmentBoard = 40, yPosDoorLaneAlignmentBoard = 12 * sideMultipliery, headingDoorLaneAlignmentBoard = Math.toRadians(180);//Return here after grabbing whites
     public static double xPosWhitePickupMid = -45, yPosWhitePickupMid = 12 * sideMultipliery, headingWhitePickupMid = Math.toRadians(180);
 
     //Placement from door poses and headings
