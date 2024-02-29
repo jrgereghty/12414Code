@@ -152,8 +152,8 @@ public class JayMap {
         clawHAngle.setPosition(angle2);
     }
     public void initSlideToPos(){slide.setTargetPosition(0);slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
-    public void clawExtensionManager(int slideLength, int stackHeight){double slidePos = (slide.getCurrentPosition() / 537.7 * 4 * Math.PI / 41.1) * 41.1 + 38.5;double slideAngle = getSlideAngle(slidePos);
-        clawVAngle.setPosition(getClawVAngle1(slidePos));slideLAngle.setPosition(slideAngle);slideRAngle.setPosition(slideAngle);//Save 384.5
+    public void clawExtensionManager(int slideLength, int stackHeight){double slidePos = (slide.getCurrentPosition() / 537.7 * 4 * Math.PI / 41.1) * 41.1 + 38.5;double slideAngle = getSlideAngleAuton(slidePos, stackHeight);
+        clawVAngle.setPosition(getClawVAngle1Auton(slidePos, stackHeight));slideLAngle.setPosition(slideAngle);slideRAngle.setPosition(slideAngle);//Save 384.5
     slide.setTargetPosition(slideLength);slide.setPower(1);}
     public void perpendicularBoardPlacement(double slideAngle, int intendedSlideLength){clawVAngle.setPosition(getClawVAngle2(slideAngle));
         slideRAngle.setPosition(slideAngle);slideLAngle.setPosition(slideAngle);slide.setTargetPosition(intendedSlideLength);slide.setPower(1);}
