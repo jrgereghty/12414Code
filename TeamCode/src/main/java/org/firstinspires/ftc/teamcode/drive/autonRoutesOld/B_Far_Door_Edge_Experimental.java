@@ -179,7 +179,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                 //.addDisplacementMarker(1, ()->{
                  //   wBot.setAllSlidePoses(300,0.7,-1);
                // })
-                .addDisplacementMarker(4, ()->{
+                .addDisplacementMarker(6, ()->{
                     wBot.setAllSlidePoses(1100,0.6,1);
                 })
                 .build();
@@ -387,12 +387,12 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
             drive.followTrajectory(spike2whiteleft);
             sleep(100);
             //clawVAngle.setPosition(0.28);
-            wBot.clawVAngle.setPosition(0.34);
+            wBot.clawVAngle.setPosition(0.335);
             //sleep(400);
             wBot.slideToTarget(750,1);
-            wBot.setSlideAngle(0.103);
+            wBot.setSlideAngle(0.132);
             //wBot.setSlideAngle(0.08);
-            sleep(500);
+            sleep(400);
             wBot.closeRightClaw(); // +1, hopefully
             sleep(300);
 
@@ -416,7 +416,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
 
 
 
-            wBot.setSlideAngle(0.014);//0.053// pickup angle
+            wBot.setSlideAngle(0.02);//0.053// pickup angle
 
             wBot.clawVAngle.setPosition(0.3);
             wBot.clawHAngle.setPosition(0.5);
@@ -431,7 +431,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
             sleep(100);
             //sleep(400);
             drive.followTrajectory(back79);
-            wBot.clawVAngle.setPosition(0.2);
+            wBot.clawVAngle.setPosition(0.25);
             wBot.clawHAngle.setPosition(0.37);
 
             //Placement again
@@ -446,10 +446,11 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
 
 
 
-            sleep(300);
+
             wBot.slideToTarget(0,-1);
             wBot.resetCLaw4Park();
             wBot.clawHAngle.setPosition(0.5);
+            sleep(30000);
 
             //drive.followTrajectory(leftParkPrepare);
             //drive.followTrajectory(parkEnding);
