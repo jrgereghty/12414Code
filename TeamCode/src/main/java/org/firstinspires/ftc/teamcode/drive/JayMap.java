@@ -68,7 +68,7 @@ public class JayMap {
     public boolean clawROpen = false;
     public boolean rightBumper2Last = false;
 
-    public boolean intake = true;
+    public boolean intake = false;
     public boolean ps2Last = false;
 
     // slidePos is a fraction of the total possible slide extension.
@@ -80,9 +80,10 @@ public class JayMap {
     public double rotation;
     public double drivePower;
     public double slidePower;
-    public static double pos = 0.8;
-    public static double hPos = 0.5;
-    public static double vPos = 1;
+    public static double pos;
+    public static double hPos;
+    public static double vPos;
+    public Telemetry telemetry;
     public static double stackNum = 0;
 
     public JayMap(OpMode opMode) {
@@ -104,19 +105,19 @@ public class JayMap {
     }
 
     public static double getSlideAngle(double slideLength) {
-        return (Math.toDegrees(Math.acos(22.5 / slideLength)) / 47.8 - 1.4);
-    }
-
-    public static double getSlideAngle(double slideLength, double stackHeight) {
-        return (Math.toDegrees(Math.acos((22.5-0.5*stackHeight) / slideLength)) / 47.8 - 1.4);
+        return (Math.toDegrees(Math.acos(22.5 / slideLength)) / 47.8 - 1.2);
     }
 
     public static double getClawVAngle1(double slideLength) {
-        return (-Math.toDegrees(Math.asin(22.5 / slideLength)) / 428.57 + 0.4);
+        return (-Math.toDegrees(Math.asin(22.5 / slideLength)) / 428.57 + 0.45);
     }
 
-    public static double getClawVAngle1(double slideLength, double stackHeight) {
-        return (-Math.toDegrees(Math.asin((22.5-0.5*stackHeight) / slideLength)) / 428.57 + 0.4);
+    public static double getSlideAngleAuton(double slideLength, int numPixels) {
+        return (Math.toDegrees(Math.acos((22.5 - 1.27 * numPixels) / slideLength)) / 47.8 - 1.2);
+    }
+
+    public static double getClawVAngle1Auton(double slideLength, int numPixels) {
+        return (-Math.toDegrees(Math.asin((22.5 - 1.27 * numPixels) / slideLength)) / 428.57 + 0.45);
     }
 
     public static double getClawVAngle2(double slideAngle) {
@@ -151,8 +152,8 @@ public class JayMap {
         clawHAngle.setPosition(angle2);
     }
     public void initSlideToPos(){slide.setTargetPosition(0);slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
-    public void clawExtensionManager(int slideLength, int stackHeight){double slidePos = (slide.getCurrentPosition() / 537.7 * 4 * Math.PI / 41.1) * 41.1 + 38.5;double slideAngle = getSlideAngle(slidePos, stackHeight);
-        clawVAngle.setPosition(getClawVAngle1(slidePos, stackHeight));slideLAngle.setPosition(slideAngle);slideRAngle.setPosition(slideAngle);//Save 384.5
+    public void clawExtensionManager(int slideLength, int stackHeight){double slidePos = (slide.getCurrentPosition() / 537.7 * 4 * Math.PI / 41.1) * 41.1 + 38.5;double slideAngle = getSlideAngle(slidePos);
+        clawVAngle.setPosition(getClawVAngle1(slidePos));slideLAngle.setPosition(slideAngle);slideRAngle.setPosition(slideAngle);//Save 384.5
     slide.setTargetPosition(slideLength);slide.setPower(1);}
     public void perpendicularBoardPlacement(double slideAngle, int intendedSlideLength){clawVAngle.setPosition(getClawVAngle2(slideAngle));
         slideRAngle.setPosition(slideAngle);slideLAngle.setPosition(slideAngle);slide.setTargetPosition(intendedSlideLength);slide.setPower(1);}
@@ -162,16 +163,20 @@ public class JayMap {
     public void setSlideAngle( double intendedSlideAngle){slideLAngle.setPosition(intendedSlideAngle);slideRAngle.setPosition(intendedSlideAngle);}
 
     public void init() {
+        vPos = 1;
+        hPos = 0.5;
+        pos = 0.8;
+
         frontLeft = this.opMode.hardwareMap.dcMotor.get("frontLeft");
-        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         frontRight = this.opMode.hardwareMap.dcMotor.get("frontRight");
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         backLeft = this.opMode.hardwareMap.dcMotor.get("backLeft");
-        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         backRight = this.opMode.hardwareMap.dcMotor.get("backRight");
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -212,9 +217,7 @@ public class JayMap {
         clawR.scaleRange(0.20, 0.595);
         clawR.setPosition(0);
 
-
-
-        Telemetry telemetry = new MultipleTelemetry(this.opMode.telemetry, FtcDashboard.getInstance().getTelemetry());
+        telemetry = new MultipleTelemetry(this.opMode.telemetry, FtcDashboard.getInstance().getTelemetry());
 
         VoltageSensor batteryVoltageSensor = this.opMode.hardwareMap.voltageSensor.iterator().next();
 
