@@ -29,6 +29,9 @@ public class ActionRunnerCenterStageAuton {
             case("Close Left Claw"):
                 jayBot.closeLeftClaw();
                 break;
+            case("Slide Reset"):
+                jayBot.slideToTarget(0,-1);
+                break;
             case("Close Right Claw"):
                 jayBot.closeRightClaw();
                 break;

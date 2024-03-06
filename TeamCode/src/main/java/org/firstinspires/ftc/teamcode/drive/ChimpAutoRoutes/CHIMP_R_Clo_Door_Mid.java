@@ -145,7 +145,7 @@ public class CHIMP_R_Clo_Door_Mid extends LinearOpMode {
             firstPlacement = wBot.firstPlacementMid;
             yellowPixelPlacement = wBot.PerpendicularBoardMid;
             firstWhitePixel = wBot.PerpendicularBoardRight;
-        } else if (zoneDetected == 3)
+        } else //if (zoneDetected == 3)
         {
             firstPlacement = wBot.firstPlacementRight;
             yellowPixelPlacement = wBot.PerpendicularBoardRight;
@@ -155,7 +155,7 @@ public class CHIMP_R_Clo_Door_Mid extends LinearOpMode {
         //PosesAndActions firstExtendation = new PosesAndActions(wBot.startExtendFirstPlacementAfter, "");
         int firstPlaceSlidesPos = 0;
         double correctorPosFirstPlace = 0;
-        double firstBoardSlideAngle = 0.35;
+        double firstBoardSlideAngle = 0.38;
         //Pose2d parkPrepare = wBot.
         //Change Poses
 /*
@@ -191,14 +191,16 @@ public class CHIMP_R_Clo_Door_Mid extends LinearOpMode {
             wBot.slideRAngle.setPosition(0.3);
             wBot.slideLAngle.setPosition(0.3);
             posesToGoTo.add(new PosesAndActions(startPos, ""));
-            posesToGoTo.add(new PosesAndActions(startPos2, ""));
+            if(!(zoneDetected == 3)){
+                posesToGoTo.add(new PosesAndActions(startPos2, ""));
+            }
             posesToGoTo.add(new PosesAndActions(firstPlacement, ""));
             follower.init(posesToGoTo, isTest, true);
             follower.goToPoints(true);
             if(zoneDetected == 3) {
                 slideLength = 450;
             }
-            wBot.clawExtensionManager(slideLength, 0);
+            wBot.clawExtensionManager(slideLength, 3);
             sleep(1000);
             wBot.openRightClaw();
             sleep(1000);//TEMP GAP FOR TESTING ONLY
@@ -225,6 +227,7 @@ public class CHIMP_R_Clo_Door_Mid extends LinearOpMode {
             follower.goToPoints(true);
             sleep(1000);
             */
+            /*
             posesToGoTo.clear();
             posesToGoTo.add(new PosesAndActions(wBot.boardBack, ""));
             posesToGoTo.add(new PosesAndActions(laneAlignment, ""));
@@ -257,6 +260,8 @@ public class CHIMP_R_Clo_Door_Mid extends LinearOpMode {
             wBot.perpendicularBoardPlacement(0.5, 600);
             wBot.openLeftClaw();
             wBot.openRightClaw();
+
+             */
 
 
             posesToGoTo.clear();

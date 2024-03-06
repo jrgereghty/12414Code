@@ -167,6 +167,16 @@ public class TeleOp extends OpMode {
             jayBot.hangRight.setPower(0);
         }
 
+        if (!jayBot.bLast && gamepad1.b){
+            jayBot.planeLaunch = !jayBot.planeLaunch;
+        }
+        if (jayBot.planeLaunch) {
+            jayBot.plane.setPosition(1);
+        } else {
+            jayBot.plane.setPosition(0);
+        }
+        jayBot.bLast = gamepad1.b;
+
         telemetry.addData("slidePos", jayBot.slidePos);
         telemetry.addData("halfSpeed", jayBot.halfSpeedToggle);
         telemetry.addData("drivingReverse", jayBot.drivingReverse);

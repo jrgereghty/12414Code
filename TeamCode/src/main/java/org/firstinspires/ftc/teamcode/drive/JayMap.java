@@ -36,7 +36,7 @@ public class JayMap {
     //Define opMode
 
     public OpMode opMode;
-    public Pose2d startingPosition, startingPosition2, boardBack;
+    public Pose2d startingPosition, startingPosition2,startingPosition3, boardBack;
     public Pose2d testPosition;
     public Pose2d firstPlacementLeft, firstPlacementMid, firstPlacementRight;
     public Pose2d Turn2BoardLeft, Turn2BoardMid, Turn2BoardRight;
@@ -52,15 +52,19 @@ public class JayMap {
     //Define all hardware
     public VoltageSensor batteryVoltageSensor;
     public DcMotor frontLeft, frontRight, backLeft, backRight, hangLeft, hangRight, slide;
-    public Servo clawHAngle, clawVAngle, slideLAngle, slideRAngle, clawL, clawR;
+    public Servo clawHAngle, clawVAngle, slideLAngle, slideRAngle, clawL, clawR, plane;
     public WebcamName bonoboCam;
     public BNO055IMU gyro;//Can we do it?
 
     public boolean halfSpeedToggle = true;
     public boolean aLast = false;
 
+
     public boolean drivingReverse = false;
     public boolean yLast = false;
+
+    public boolean planeLaunch = false;
+    public boolean bLast = false;
 
     public boolean clawLOpen = false;
     public boolean leftBumper2Last = false;
@@ -113,11 +117,11 @@ public class JayMap {
     }
 
     public static double getSlideAngleAuton(double slideLength, int numPixels) {
-        return (Math.toDegrees(Math.acos((22.5 - 1.27 * numPixels) / slideLength)) / 47.8 - 1.2);
+        return (Math.toDegrees(Math.acos((22.5 - 1 * numPixels) / slideLength)) / 47.8 - 1.2);
     }
 
     public static double getClawVAngle1Auton(double slideLength, int numPixels) {
-        return (-Math.toDegrees(Math.asin((22.5 - 1.27 * numPixels) / slideLength)) / 428.57 + 0.45);
+        return (-Math.toDegrees(Math.asin((22.5 - 1.01 * numPixels) / slideLength)) / 428.57 + 0.45);
     }
 
     public static double getClawVAngle2(double slideAngle) {
@@ -133,11 +137,13 @@ public class JayMap {
     }
 
     public void openLeftClaw() {
-        clawL.setPosition(0.5);
-    }
+        if(!intake){clawL.setPosition(0.35);}
+        else{clawL.setPosition(0.5);}
+    }//Was 0.5
 
     public void openRightClaw() {
-        clawR.setPosition(0.5);
+        if(!intake){clawR.setPosition(0.35);}
+        else{clawR.setPosition(0.5);}
     }
 
     public void setIntakeMode() {
@@ -151,10 +157,14 @@ public class JayMap {
     public void setToAngle(double angle2) {
         clawHAngle.setPosition(angle2);
     }
-    public void initSlideToPos(){slide.setTargetPosition(0);slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);}
+    public void initSlideToPos(){slide.setTargetPosition(0);slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slide.setPower(1);}
     public void clawExtensionManager(int slideLength, int stackHeight){double slidePos = (slideLength / 537.7 * 4 * Math.PI / 41.1) * 41.1 + 38.5;double slideAngle = getSlideAngleAuton(slidePos, stackHeight);
         clawVAngle.setPosition(getClawVAngle1Auton(slidePos, stackHeight));slideLAngle.setPosition(slideAngle);slideRAngle.setPosition(slideAngle);//Save 384.5
     slide.setTargetPosition(slideLength);slide.setPower(1);}
+    public void clawExtensionManager2(int slideLength, int stackHeight, double power){double slidePos = (slideLength / 537.7 * 4 * Math.PI / 41.1) * 41.1 + 38.5;double slideAngle = getSlideAngleAuton(slidePos, stackHeight);
+        clawVAngle.setPosition(getClawVAngle1Auton(slidePos, stackHeight));slideLAngle.setPosition(slideAngle);slideRAngle.setPosition(slideAngle);//Save 384.5
+        slide.setTargetPosition(slideLength);slide.setPower(power);}
     public void perpendicularBoardPlacement(double slideAngle, int intendedSlideLength){clawVAngle.setPosition(getClawVAngle2(slideAngle));
         slideRAngle.setPosition(slideAngle);slideLAngle.setPosition(slideAngle);slide.setTargetPosition(intendedSlideLength);slide.setPower(1);}
     public void slideToTarget(int intendedSlideLength, double power){slide.setTargetPosition(intendedSlideLength);slide.setPower(power);}
@@ -189,20 +199,24 @@ public class JayMap {
         hangRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         slide = this.opMode.hardwareMap.dcMotor.get("slide");
-        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         slideLAngle = this.opMode.hardwareMap.servo.get("slideLAngle");
         slideLAngle.setDirection(Servo.Direction.REVERSE);
-        slideLAngle.setPosition(0.8);
+        slideLAngle.setPosition(1);//0.8
 
         slideRAngle = this.opMode.hardwareMap.servo.get("slideRAngle");
-        slideRAngle.setPosition(0.8);
+        slideRAngle.setPosition(1);//0.8
 
         clawHAngle = this.opMode.hardwareMap.servo.get("clawHAngle");
         clawHAngle.scaleRange(0.04, 1);
         clawHAngle.setPosition(hPos);
+
+        plane = this.opMode.hardwareMap.servo.get("plane");
+        plane.scaleRange(0.34, 0.5);
+        plane.setPosition(0);
 
         clawVAngle = this.opMode.hardwareMap.servo.get("clawVAngle");
         clawVAngle.scaleRange(0, 0.7);
@@ -270,6 +284,7 @@ public class JayMap {
             case "B_Clo_Door_Edge":
                 startingPosition = new Pose2d(BlueClosePoses.xPosStartingPos, BlueClosePoses.yPosStartingPos, BlueClosePoses.headingStartingPos);
                 startingPosition2 = new Pose2d(BlueClosePoses.xPosStartingPos2, BlueClosePoses.yPosStartingPos2, BlueClosePoses.headingStartingPos);
+                startingPosition3 = new Pose2d(BlueClosePoses.xPosStartingPos3, BlueClosePoses.yPosStartingPos3, BlueClosePoses.headingStartingPos3);
                 firstPlacementLeft = new Pose2d(BlueClosePoses.xPosLeftSpikeMark, BlueClosePoses.yPosLeftSpikeMark, BlueClosePoses.headingLeftSpikeMark);
                 firstPlacementMid = new Pose2d(BlueClosePoses.xPosMiddleSpikeMark, BlueClosePoses.yPosMiddleSpikeMark, BlueClosePoses.headingMiddleSpikeMark);
                 firstPlacementRight = new Pose2d(BlueClosePoses.xPosRightSpikeMark, BlueClosePoses.yPosRightSpikeMark, BlueClosePoses.headingRightSpikeMark);

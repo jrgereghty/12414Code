@@ -75,8 +75,8 @@ public class OpenCVDetectTeamProp extends OpenCvPipeline {
         //Mat area4 = new Mat(fakehsv, new Rect(new Point(190,60), new Point(240,160)));
         //Mat area3 = new Mat(hsv, new Rect(x, y, width, height));
         Mat area4 = new Mat(fakehsv, zone1);
-        Imgproc.rectangle(hsv, new Point(0,180), new Point(320,240), black, Core.FILLED);
-        Imgproc.rectangle(hsv, new Point(0,0), new Point(320,60), black, Core.FILLED);
+        Imgproc.rectangle(hsv, new Point(0,160), new Point(320,240), black, Core.FILLED);
+        Imgproc.rectangle(hsv, new Point(0,0), new Point(320,80), black, Core.FILLED);
         Imgproc.rectangle(hsv, new Point(60,0), new Point(130,240), black, Core.FILLED);
         Imgproc.rectangle(hsv, new Point(190,0), new Point(240,240), black, Core.FILLED);
 

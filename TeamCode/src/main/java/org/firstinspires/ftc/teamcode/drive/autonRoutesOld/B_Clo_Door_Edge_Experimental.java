@@ -6,8 +6,6 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CenterStageAuton.OpenCVDetectTeamProp;
@@ -18,9 +16,9 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "71B_Far_Door_Edge")
+@Autonomous(name = "71B_Clo_Door_Edge")
 
-public class B_Far_Door_Edge_Experimental extends LinearOpMode {
+public class B_Clo_Door_Edge_Experimental extends LinearOpMode {
 
 
     OpenCvCamera webcam;
@@ -51,6 +49,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         wBot.init();
         wBot.initSlideToPos();
+        wBot.initForAuton("B_Clo_Door_Edge");
 
 
 
@@ -59,16 +58,16 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
         Pose2d stackPrepare = new Pose2d(-35, 10, Math.toRadians(180));
         //Pose2d stackReady2 = new Pose2d(-45, 9.5, Math.toRadians(180));
         Pose2d laneAlignment = new Pose2d(36, 10, Math.toRadians(180));
-        Pose2d startPose = new Pose2d(-34.50, 62.5, Math.toRadians(270.00));
+        Pose2d startPose = new Pose2d(12.5, 62.5, Math.toRadians(270.00));
         Pose2d parkPrepare = new Pose2d(45, 10, Math.toRadians(0));
         Pose2d parkFinish = new Pose2d(53, 10, Math.toRadians(0));
 
         drive.setPoseEstimate(startPose);
 
         Trajectory start2leftspike = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Pose2d(-48, 30, Math.toRadians(0)))
+                .lineToSplineHeading(wBot.firstPlacementLeft)
                 .addDisplacementMarker(4, ()->{
-                    //wBot.clawExtensionManager(800,0);
+
                     wBot.clawExtensionManager(800,0);
         })
                 .build();

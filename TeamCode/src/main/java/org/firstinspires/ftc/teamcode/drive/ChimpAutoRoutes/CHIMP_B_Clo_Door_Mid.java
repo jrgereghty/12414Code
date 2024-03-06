@@ -145,7 +145,7 @@ public class CHIMP_B_Clo_Door_Mid extends LinearOpMode {
             firstPlacement = wBot.firstPlacementMid;
             yellowPixelPlacement = wBot.PerpendicularBoardMid;
             firstWhitePixel = wBot.PerpendicularBoardRight;
-        } else if (zoneDetected == 3)
+        } else //if (zoneDetected == 3)
         {
             firstPlacement = wBot.firstPlacementRight;
             yellowPixelPlacement = wBot.PerpendicularBoardRight;
@@ -155,7 +155,7 @@ public class CHIMP_B_Clo_Door_Mid extends LinearOpMode {
         //PosesAndActions firstExtendation = new PosesAndActions(wBot.startExtendFirstPlacementAfter, "");
         int firstPlaceSlidesPos = 0;
         double correctorPosFirstPlace = 0;
-        double firstBoardSlideAngle = 0.30;
+        double firstBoardSlideAngle = 0.5;
         //Pose2d parkPrepare = wBot.
         //Change Poses
 /*
@@ -188,21 +188,27 @@ public class CHIMP_B_Clo_Door_Mid extends LinearOpMode {
         while(opModeIsActive()){
             timeForAuton.reset();
             wBot.clawVAngle.setPosition(0.3);
-            wBot.slideRAngle.setPosition(0.3);
-            wBot.slideLAngle.setPosition(0.3);
+            wBot.setSlideAngle(0.4);
             posesToGoTo.add(new PosesAndActions(startPos, ""));
-            posesToGoTo.add(new PosesAndActions(startPos2, ""));
+            if(!(zoneDetected == 1)){
+                posesToGoTo.add(new PosesAndActions(startPos2, ""));}
+
             posesToGoTo.add(new PosesAndActions(firstPlacement, ""));
+
             follower.init(posesToGoTo, isTest, true);
             follower.goToPoints(true);
             if(zoneDetected == 1) {
-                slideLength = 340;
+                slideLength = 450;
             }
             wBot.clawExtensionManager(slideLength, 0);
             sleep(1000);
             wBot.openRightClaw();
-            sleep(1000);//TEMP GAP FOR TESTING ONLY
-            wBot.perpendicularBoardPlacement(firstBoardSlideAngle, 700);
+            sleep(500);//TEMP GAP FOR TESTING ONLY
+            wBot.setSlideAngle(0.5);
+            sleep(500);
+            wBot.perpendicularBoardPlacement(firstBoardSlideAngle, 820);
+
+
 
             posesToGoTo.clear();
             //posesToGoTo.add(new PosesAndActions(turn2Board, ""));
@@ -223,7 +229,7 @@ public class CHIMP_B_Clo_Door_Mid extends LinearOpMode {
             follower.goToPoints(true);
             wBot.resetCLaw4Park();
             sleep(20000);
-/*
+            /*
             posesToGoTo.clear();
             posesToGoTo.add(new PosesAndActions(wBot.boardBack, ""));
             posesToGoTo.add(new PosesAndActions(laneAlignment, ""));

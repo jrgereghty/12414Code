@@ -145,7 +145,7 @@ public class CHIMP_R_Clo_Door_Edge extends LinearOpMode {
             firstPlacement = wBot.firstPlacementMid;
             yellowPixelPlacement = wBot.PerpendicularBoardMid;
             firstWhitePixel = wBot.PerpendicularBoardRight;
-        } else if (zoneDetected == 3)
+        } else// if (zoneDetected == 3)
         {
             firstPlacement = wBot.firstPlacementRight;
             yellowPixelPlacement = wBot.PerpendicularBoardRight;
@@ -155,7 +155,7 @@ public class CHIMP_R_Clo_Door_Edge extends LinearOpMode {
         //PosesAndActions firstExtendation = new PosesAndActions(wBot.startExtendFirstPlacementAfter, "");
         int firstPlaceSlidesPos = 0;
         double correctorPosFirstPlace = 0;
-        double firstBoardSlideAngle = 0.35;
+        double firstBoardSlideAngle = 0.5;
         //Pose2d parkPrepare = wBot.
         //Change Poses
 /*
@@ -191,18 +191,20 @@ public class CHIMP_R_Clo_Door_Edge extends LinearOpMode {
             wBot.slideRAngle.setPosition(0.3);
             wBot.slideLAngle.setPosition(0.3);
             posesToGoTo.add(new PosesAndActions(startPos, ""));
-            posesToGoTo.add(new PosesAndActions(startPos2, ""));
+            if(!(zoneDetected == 3)){
+                posesToGoTo.add(new PosesAndActions(startPos2, ""));
+            }
             posesToGoTo.add(new PosesAndActions(firstPlacement, ""));
             follower.init(posesToGoTo, isTest, true);
             follower.goToPoints(true);
             if(zoneDetected == 3) {
                 slideLength = 450;
             }
-            wBot.clawExtensionManager(slideLength, 0);
+            wBot.clawExtensionManager(slideLength, 3);
             sleep(1000);
             wBot.openRightClaw();
             sleep(1000);//TEMP GAP FOR TESTING ONLY
-            wBot.perpendicularBoardPlacement(firstBoardSlideAngle, 650);
+            wBot.perpendicularBoardPlacement(firstBoardSlideAngle, 800);
 
             posesToGoTo.clear();
             //posesToGoTo.add(new PosesAndActions(turn2Board, ""));
@@ -215,7 +217,54 @@ public class CHIMP_R_Clo_Door_Edge extends LinearOpMode {
             wBot.openLeftClaw();
             sleep(1000);
             wBot.slideToTarget(0,-1);
+            wBot.setSlideAngle(0.6);
             sleep(300);
+
+/*
+            posesToGoTo.clear();
+            posesToGoTo.add(new PosesAndActions(wBot.boardBack, ""));
+            posesToGoTo.add(new PosesAndActions(laneAlignment, ""));
+            follower.reinit(posesToGoTo);
+            follower.goToPoints(true);
+            sleep(1000);
+            */
+            /*
+            posesToGoTo.clear();
+            posesToGoTo.add(new PosesAndActions(wBot.boardBack, ""));
+            posesToGoTo.add(new PosesAndActions(laneAlignment, ""));
+            follower.reinit(posesToGoTo);
+            follower.goToPoints(true);
+            sleep(2000);
+            posesToGoTo.clear();
+            posesToGoTo.add(new PosesAndActions(doorStack, ""));//Monkey Operated Bot
+            follower.reinit(posesToGoTo);
+            follower.goToPoints(true);
+            sleep(1000);
+            wBot.clawExtensionManager(1100,2);
+            sleep(1000);
+            wBot.closeLeftClaw();
+            wBot.closeRightClaw();
+            sleep(700);
+            wBot.slideRAngle.setPosition(0.4);
+            wBot.slideLAngle.setPosition(0.4);
+            wBot.slideToTarget(0,-1);
+            posesToGoTo.clear();
+            posesToGoTo.add(new PosesAndActions(laneAlignment, ""));
+            follower.reinit(posesToGoTo);
+            follower.goToPoints(true);
+
+            posesToGoTo.clear();
+            //posesToGoTo.add(new PosesAndActions(wBot.boardBack, ""));
+            posesToGoTo.add(new PosesAndActions(firstWhitePixel, ""));
+            follower.reinit(posesToGoTo);
+            follower.goToPoints(true);
+            wBot.perpendicularBoardPlacement(0.5, 600);
+            wBot.openLeftClaw();
+            wBot.openRightClaw();
+
+             */
+
+
             posesToGoTo.clear();
             posesToGoTo.add(new PosesAndActions(parkPrepare, ""));
             posesToGoTo.add(new PosesAndActions(parkFinish, ""));

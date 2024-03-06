@@ -6,8 +6,6 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.CenterStageAuton.OpenCVDetectTeamProp;
@@ -18,9 +16,9 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "71B_Far_Door_Edge")
+@Autonomous(name = "Z_Red_Blue_Bounce")
 
-public class B_Far_Door_Edge_Experimental extends LinearOpMode {
+public class A_Mid_Edge_Truss extends LinearOpMode {
 
 
     OpenCvCamera webcam;
@@ -59,7 +57,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
         Pose2d stackPrepare = new Pose2d(-35, 10, Math.toRadians(180));
         //Pose2d stackReady2 = new Pose2d(-45, 9.5, Math.toRadians(180));
         Pose2d laneAlignment = new Pose2d(36, 10, Math.toRadians(180));
-        Pose2d startPose = new Pose2d(-34.50, 62.5, Math.toRadians(270.00));
+        Pose2d startPose = new Pose2d(-34.50, 63.5, Math.toRadians(270.00));
         Pose2d parkPrepare = new Pose2d(45, 10, Math.toRadians(0));
         Pose2d parkFinish = new Pose2d(53, 10, Math.toRadians(0));
 
@@ -100,42 +98,42 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                 })
                 .build();
         Trajectory white2boardpart2leftPerpendicular = drive.trajectoryBuilder(back79.end())
-                .lineToSplineHeading(new Pose2d(48.5, 42, Math.toRadians(0)))//54.7
+                .lineToSplineHeading(new Pose2d(44.5, 42, Math.toRadians(0)))//54.7
                 .addDisplacementMarker(1, ()->{
                     wBot.setAllSlidePoses(0,0.8,-1);
                 })
                 .addDisplacementMarker(15, ()->{
-                    wBot.setAllSlidePoses(400,0.6,0.7);
+                    wBot.setAllSlidePoses(400,0.43,1);
                     wBot.clawHAngle.setPosition(hPos);
                 })
                 .addDisplacementMarker(20, ()->{
-                    wBot.slideToTarget(890,0.7);
+                    wBot.slideToTarget(770,1);
                 })
                 .build();
         Trajectory white2boardpart2midPerpendicular = drive.trajectoryBuilder(back79.end())
-                .lineToSplineHeading(new Pose2d(48.5, 37.5, Math.toRadians(0)))//54.7
+                .lineToSplineHeading(new Pose2d(44.5, 35, Math.toRadians(0)))//54.7
                 .addDisplacementMarker(1, ()->{
                     wBot.setAllSlidePoses(0,0.8,-1);
                 })
                 .addDisplacementMarker(15, ()->{
-                    wBot.setAllSlidePoses(300,0.64,1);
+                    wBot.setAllSlidePoses(300,0.43,1);
                     wBot.clawHAngle.setPosition(hPos);
                 })
                 .addDisplacementMarker(20, ()->{
-                    wBot.slideToTarget(930,0.7);
+                    wBot.slideToTarget(700,1);
                 })
                 .build();
         Trajectory white2boardpart2rightPerpendicular = drive.trajectoryBuilder(back79.end())
-                .lineToSplineHeading(new Pose2d(48.5, 28, Math.toRadians(0)))//54.7
+                .lineToSplineHeading(new Pose2d(44.5, 28, Math.toRadians(0)))//54.7
                 .addDisplacementMarker(1, ()->{
                     wBot.setAllSlidePoses(0,0.8,-1);
                 })
                 .addDisplacementMarker(15, ()->{
-                    wBot.setAllSlidePoses(300,0.6,1);
+                    wBot.setAllSlidePoses(300,0.27,1);
                     wBot.clawHAngle.setPosition(hPos);
                 })
                 .addDisplacementMarker(20, ()->{
-                    wBot.slideToTarget(890,0.8);
+                    wBot.slideToTarget(670,1);
                 })
                 .build();
 //Second Spike Mark - - - - - - - -  - - - - - - - -  - - - - -
@@ -145,7 +143,17 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                     wBot.clawExtensionManager(500,1);
                 })
                 .build();
+
         Trajectory spike2whitemid = drive.trajectoryBuilder(start2midspike.end())
+                .lineToSplineHeading(stackReady)//new Pose2d(-45, 10, Math.toRadians(180))
+                .addDisplacementMarker(1, ()->{
+                    wBot.setAllSlidePoses(0,0.5,-1);
+                })
+                .addDisplacementMarker(9, ()->{
+                    wBot.setSlideAngle(0.1);//0.103
+                })
+                .build();
+        Trajectory spike2BOING = drive.trajectoryBuilder(startPose)
                 .lineToSplineHeading(stackReady)//new Pose2d(-45, 10, Math.toRadians(180))
                 .addDisplacementMarker(1, ()->{
                     wBot.setAllSlidePoses(0,0.5,-1);
@@ -156,7 +164,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                 .build();
 
         Trajectory start2rightspike = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(new Pose2d(-47, 10, Math.toRadians(90)))//change angle @####@##@#@#@#@-34,54
+                .lineToSplineHeading(new Pose2d(-48, 10, Math.toRadians(90)))//change angle @####@##@#@#@#@-34,54
                 .addDisplacementMarker(1, ()->{
                     wBot.clawExtensionManager(300,0);
                 })
@@ -350,8 +358,9 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
                 updateTelemetry(telemetry);
 
                 if(Zone1detections > Zone2detections && Zone1detections > Zone3detections){zoneDetected=1;}
-                else if(Zone2detections > Zone1detections && Zone2detections > Zone3detections){zoneDetected=2;}
-                else if(Zone3detections > Zone1detections && Zone3detections > Zone2detections){zoneDetected=3;}
+                else if(Zone2detections > Zone1detections && Zone2detections > Zone3detections){zoneDetected=1;}
+                else if(Zone3detections > Zone1detections && Zone3detections > Zone2detections){zoneDetected=1;}
+                zoneDetected = 1;
 
 
             }
@@ -364,30 +373,127 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
 
             wBot.clawVAngle.setPosition(0.35);
             wBot.setSlideAngle(0.2);
-            drive.followTrajectory(start2leftspike);
-            wBot.openRightClaw();//place
-            drive.followTrajectory(spike2whiteleft);
-            wBot.clawVAngle.setPosition(0.335);
-            wBot.clawExtensionManager2(750,3,0.6);
+            sleep(3000);
+            wBot.setSlideAngle(1);
+            sleep(20);
+            wBot.openLeftClaw();
+            wBot.openRightClaw();
+            sleep(700);
+
+
+
+
+            /*
+            sleep(3000);
+
+            wBot.clawExtensionManager(500,0);
+            sleep(3000);
+            wBot.clawExtensionManager(500,1);
+            sleep(3000);
+            wBot.clawExtensionManager(500,2);
+            sleep(7000);
+            wBot.clawExtensionManager(500,3);
+            sleep(7000);
+            wBot.clawExtensionManager(500,4);
+            sleep(7000);
+
+             */
+            /*
+            wBot.slideLAngle.setPosition(0.10);
+            wBot.slideRAngle.setPosition(0.10);
+
+             */
+            drive.followTrajectory(spike2BOING);
+            wBot.clawExtensionManager(750,4);
             sleep(300);
+            wBot.closeRightClaw();
+            wBot.closeLeftClaw();
+            sleep(300);
+            wBot.setSlideAngle(1);
+            sleep(30);
+            wBot.openLeftClaw();
+            wBot.openRightClaw();
+            sleep(3000);
+            // NEXT
+            wBot.clawExtensionManager(750,3);
+            sleep(300);
+            wBot.closeRightClaw();
+            wBot.closeLeftClaw();
+            sleep(300);
+            wBot.setSlideAngle(1);
+            sleep(30);
+            wBot.openLeftClaw();
+            wBot.openRightClaw();
+            sleep(3000);
+            // NEXT
+            wBot.clawExtensionManager(750,2);
+            sleep(300);
+            wBot.closeRightClaw();
+            wBot.closeLeftClaw();
+            sleep(300);
+            wBot.setSlideAngle(1);
+            sleep(30);
+            wBot.openLeftClaw();
+            wBot.openRightClaw();
+            sleep(3000);
+            // NEXT
+            wBot.clawExtensionManager(750,0);
+            sleep(300);
+            wBot.closeRightClaw();
+            wBot.closeLeftClaw();
+            sleep(300);
+            wBot.setSlideAngle(1);
+            sleep(30);
+            wBot.openLeftClaw();
+            wBot.openRightClaw();
+            sleep(3000);
+            // NEXT
+            sleep(20000);
+             // to white pixels, turned towards spike
+            //sleep(100);
+            drive.followTrajectory(spike2whiteleft);
+            sleep(100);
+            //clawVAngle.setPosition(0.28);
+            wBot.clawVAngle.setPosition(0.335);
+            //sleep(400);
+            //wBot.slideToTarget(750,1);
+            wBot.clawExtensionManager(750,4);
+
+            //wBot.setSlideAngle(0.08);
+            sleep(400);
             wBot.closeRightClaw(); // +1, hopefully
             sleep(300);
+            wBot.setSlideAngle(0.3);
+
+
             drive.followTrajectory(back79);
+
             wBot.clawVAngle.setPosition(0.13);
+            //wBot.clawHAngle.setPosition(0.25);
+            //drive.followTrajectory(white2boardpart2left);
             drive.followTrajectory(white2boardpart2leftPerpendicular);
             sleep(200);
             wBot.openLeftClaw();
             wBot.openRightClaw();
-
             sleep(200);
-            wBot.slideToTarget(0,-0.7);
-            //First CYCLE
+            //drive.followTrajectory(strafe18R);
+            //returning
+            //drive.followTrajectory(return2midSetLeft);
 
+            /*
+            wBot.slideToTarget(0,-1);
+            //drive.followTrajectory(return2midLeft);
             drive.followTrajectory(return2midLeftP);
-            wBot.setSlideAngle(0.07);//0.053// pickup angle
+
+
+
+            wBot.setSlideAngle(0.02);//0.053// pickup angle
+
             wBot.clawVAngle.setPosition(0.3);
             wBot.clawHAngle.setPosition(0.5);
+
             drive.followTrajectory(return2whites);
+            //wBot.slideToTarget(750,1);
             wBot.clawExtensionManager(750,2);
             wBot.clawHAngle.setPosition(0.53);
             sleep(400);
@@ -395,72 +501,25 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
             wBot.closeRightClaw();
             wBot.closeLeftClaw();
             sleep(100);
+            //sleep(400);
             drive.followTrajectory(back79);
             wBot.clawVAngle.setPosition(0.25);
             wBot.clawHAngle.setPosition(0.37);
+
             //Placement again
-            drive.followTrajectory(white2boardpart2rightPerpendicular);
-            sleep(200);
-            wBot.openLeftClaw();
+            drive.followTrajectory(white2boardpart2Mid);
+
+
+
             wBot.openRightClaw();
-            sleep(200);
-            wBot.slideToTarget(0,-0.7);
-            //Second CYCLE
-
-
-            drive.followTrajectory(return2midRight);
-            wBot.setSlideAngle(0.07);//0.053// pickup angle
-            wBot.clawVAngle.setPosition(0.3);
-            wBot.clawHAngle.setPosition(0.5);
-            drive.followTrajectory(return2whites);
-            wBot.clawExtensionManager(750,0);
-            wBot.clawHAngle.setPosition(0.53);
-            sleep(400);
-            wBot.clawHAngle.setPosition(0.56);
-            wBot.closeRightClaw();
-            wBot.closeLeftClaw();
-            sleep(100);
-            drive.followTrajectory(back79);
-            wBot.clawVAngle.setPosition(0.25);
-            wBot.clawHAngle.setPosition(0.37);
-            //Placement again
-            drive.followTrajectory(white2boardpart2rightPerpendicular);
-            sleep(200);
             wBot.openLeftClaw();
-            wBot.openRightClaw();
-            sleep(200);
-            wBot.slideToTarget(0,-0.7);
-
-            //THird Cycle
-            drive.followTrajectory(return2midRight);
-            wBot.setSlideAngle(0.07);//0.053// pickup angle
-            wBot.clawVAngle.setPosition(0.3);
-            wBot.clawHAngle.setPosition(0.5);
-            drive.followTrajectory(return2whites);
-            wBot.clawExtensionManager(750,0);
-            wBot.clawHAngle.setPosition(0.53);
-            sleep(400);
-            wBot.clawHAngle.setPosition(0.56);
-            wBot.closeRightClaw();
-            wBot.closeLeftClaw();
-            sleep(100);
-            drive.followTrajectory(back79);
-            wBot.clawVAngle.setPosition(0.25);
-            wBot.clawHAngle.setPosition(0.37);
-            //Placement again
-            drive.followTrajectory(white2boardpart2rightPerpendicular);
-            sleep(200);
-            wBot.openLeftClaw();
-            wBot.openRightClaw();
-            sleep(200);
-            wBot.slideToTarget(0,-0.7);
+            sleep(500);
 
 
 
 
 
-
-
+*/
             wBot.slideToTarget(0,-1);
             wBot.resetCLaw4Park();
             wBot.clawHAngle.setPosition(0.5);
@@ -493,11 +552,11 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
             //clawVAngle.setPosition(0.28);
             wBot.clawVAngle.setPosition(0.34);
             //sleep(400);
-            wBot.clawExtensionManager2(750,4,0.6);
+            wBot.clawExtensionManager(750,4);
             //wBot.setSlideAngle(0.08);
             sleep(500);
             wBot.closeRightClaw(); // +1, hopefully
-            sleep(500);
+            sleep(300);
 
 
             drive.followTrajectory(back79);
@@ -509,12 +568,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
             sleep(200);
             wBot.openLeftClaw();
             wBot.openRightClaw();
-            sleep(400);
-            wBot.slideToTarget(0,-1);
-            sleep(500);
-            wBot.resetCLaw4Park();
-            wBot.clawHAngle.setPosition(0.5);
-            sleep(30000);
+            sleep(200);
             //drive.followTrajectory(strafe18R);
             //returning
             //drive.followTrajectory(return2midSetLeft);
@@ -561,7 +615,6 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
 */
             sleep(400);
             wBot.slideToTarget(0,-1);
-            sleep(500);
             wBot.resetCLaw4Park();
             wBot.clawHAngle.setPosition(0.5);
 
@@ -659,11 +712,11 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
             //clawVAngle.setPosition(0.28);
             wBot.clawVAngle.setPosition(0.34);
             //sleep(400);
-            wBot.clawExtensionManager2(750,4,0.6);
+            wBot.clawExtensionManager(750,4);
             //wBot.setSlideAngle(0.08);
             sleep(500);
             wBot.closeRightClaw(); // +1, hopefully
-            sleep(600);
+            sleep(300);
 
 
             drive.followTrajectory(back79);
@@ -675,12 +728,7 @@ public class B_Far_Door_Edge_Experimental extends LinearOpMode {
             sleep(200);
             wBot.openLeftClaw();
             wBot.openRightClaw();
-            sleep(400);
-            wBot.slideToTarget(0,-1);
-            sleep(500);
-            wBot.resetCLaw4Park();
-            wBot.clawHAngle.setPosition(0.5);
-            sleep(30000);
+            sleep(200);
 
             /*
             //drive.followTrajectory(strafe18R);

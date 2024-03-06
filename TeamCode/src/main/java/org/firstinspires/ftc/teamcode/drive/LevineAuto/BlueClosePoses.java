@@ -8,11 +8,12 @@ public class BlueClosePoses {
     public static double sideMultiplierX = 1;
     public static double sideMultipliery = 1;
     public static double angleMultiplier = -1;
-    public static double xPosStartingPos = 12 * sideMultiplierX, yPosStartingPos = 62.5 * sideMultipliery, headingStartingPos = Math.toRadians(270);
+    public static double xPosStartingPos = 12 * sideMultiplierX, yPosStartingPos = 62 * sideMultipliery, headingStartingPos = Math.toRadians(270);
     public static double xPosStartingPos2 = 12 * sideMultiplierX, yPosStartingPos2 = 53 * sideMultipliery;
 
     //Purple Pixel Placement
-    public static double xPosLeftSpikeMark = 40, yPosLeftSpikeMark = 35 * sideMultipliery, headingLeftSpikeMark = Math.toRadians(180);//x,40,y35,y = 180 Left
+    public static double xPosStartingPos3 = 12 * sideMultiplierX, yPosStartingPos3 = 53 * sideMultipliery, headingStartingPos3 = Math.toRadians(180);
+    public static double xPosLeftSpikeMark = 24.5, yPosLeftSpikeMark = 55 * sideMultipliery, headingLeftSpikeMark = Math.toRadians(270);//x,40,y35,y = 180 Left
     //x=44.5,
     public static double xPosMiddleSpikeMark = 12, yPosMiddleSpikeMark = 49 * sideMultipliery, headingMiddleSpikeMark = Math.toRadians(270);
     public static double xPosRightSpikeMark = 27, yPosRightSpikeMark = 35 * sideMultipliery, headingRightSpikeMark = Math.toRadians(180);
@@ -22,9 +23,9 @@ public class BlueClosePoses {
 
 
     //Poses For board Placing
-    public static double xPosLeftBoardPlace = 44.5, yPosLeftBoardPlace = 39 * sideMultipliery;//revert after tuning, x value
-    public static double xPosMidBoardPlace = 44.5, yPosMidBoardPlace = 33 * sideMultipliery;
-    public static double xPosRightBoardPlace = 45.5, yPosRightBoardPlace = 27 * sideMultipliery;
+    public static double xPosLeftBoardPlace = 44.5, yPosLeftBoardPlace = 42 * sideMultipliery;//revert after tuning, x value
+    public static double xPosMidBoardPlace = 44.5, yPosMidBoardPlace = 33.5 * sideMultipliery;
+    public static double xPosRightBoardPlace = 45.5, yPosRightBoardPlace = 29 * sideMultipliery;
     public static double PerpendicularBoardPlacementHeading = Math.toRadians(0);
     //x=44.5, 38.5, H=0 Mid 2
     public static double xPosBoardBack = 40, yPosBoardBack = 11 * sideMultipliery;

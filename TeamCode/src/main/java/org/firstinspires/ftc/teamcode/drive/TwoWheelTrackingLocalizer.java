@@ -53,8 +53,8 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
 
     //Multiplier for foofy field (24 inch tiles)
 
-    public static double X_MULTIPLIER = 1; // Multiplier in the X direction 29
-    public static double Y_MULTIPLIER = 1; // Multiplier in the Y direction
+    public static double X_MULTIPLIER = 1.0199; // Multiplier in the X direction 29
+    public static double Y_MULTIPLIER = 1.0199; // Multiplier in the Y direction
 
     // Parallel/Perpendicular to the forward axis
     // Parallel wheel is parallel to the forward axis
