@@ -458,6 +458,7 @@ public class B_Clo_Door_Edge_Experimental extends LinearOpMode {
 
             drive.followTrajectory(laneAlignleft);
             wBot.openLeftClaw();
+            wBot.setToAngle(0.53);
             drive.followTrajectory(spike2white);
             wBot.clawVAngle.setPosition(0.34);
             wBot.clawExtensionManager2(950,1,0.6);
@@ -465,16 +466,17 @@ public class B_Clo_Door_Edge_Experimental extends LinearOpMode {
             wBot.closeRightClaw();
             wBot.closeLeftClaw();
             drive.followTrajectory(back79);
+            wBot.setToAngle(0.5);
             wBot.clawVAngle.setPosition(0.25);
             drive.followTrajectory(white2boardpart2rightPerpendicular);
             sleep(500);
             wBot.openRightClaw();
             wBot.openLeftClaw();
             sleep(200);
-            wBot.slideToTarget(0, 1);
+            wBot.slideToTarget(0, 0.4);
             sleep(500);
 
-
+/*
             drive.followTrajectory(laneAlignright);
             drive.followTrajectory(spike2white);
             wBot.clawVAngle.setPosition(0.34);
@@ -488,7 +490,7 @@ public class B_Clo_Door_Edge_Experimental extends LinearOpMode {
             sleep(500);
             wBot.openRightClaw();
             wBot.openLeftClaw();
-
+*/
             wBot.setAllSlidePoses(0, 0.3, 1);
             sleep(500);
             wBot.resetCLaw4Park();
